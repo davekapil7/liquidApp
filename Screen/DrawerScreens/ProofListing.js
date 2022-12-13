@@ -42,10 +42,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
-  // textStyle: {
-  //   textAlign: 'center',
-  //   margin: 10,
-  // },
+  textStyle: {
+    textAlign: 'center',
+    margin: 10,
+  },
   // textInputStyle: {
   //   flexDirection: 'row',
   //   height: 40,
