@@ -5,13 +5,15 @@ import {
   Text,
   View,
   StyleSheet,
-  // TouchableOpacity,
-  // Share,
+  TouchableOpacity,
+  Share,
 } from 'react-native';
 import axios from 'axios';
 import QRCode from 'react-native-qrcode-svg';
 
 const CreateProofScreen = () => {
+  // const [dId, setDid] = useState('');
+  // const [inputText, setInputText] = useState('');
   const [qrvalue, setQrvalue] = useState('');
   let myQRCode = useRef();
 
@@ -19,7 +21,7 @@ const CreateProofScreen = () => {
     const getData = async () => {
       const getDid = await axios.get(`http://142.93.213.49:8000/api/getDid`);
       console.log(getDid);
-      console.log(getDid?.data?.data?.items[0]['id'], 'a');
+      console.log(getDid?.data?.data?.items[0]['id']);
       if (getDid) {
         await axios
           .post('http://142.93.213.49:8000/api/createProof', {
@@ -28,8 +30,8 @@ const CreateProofScreen = () => {
           .then(function (responseJson) {
             // setQrvalue(responseJson?.data?.data?.proof?.proofValue);
             setQrvalue(
-              getDid?.data?.data?.items[0]['id']
-                ? JSON.stringify(getDid?.data?.data?.items[0]['id'])
+              responseJson?.data?.data
+                ? JSON.stringify(responseJson?.data?.data)
                 : 'data is not valid',
             );
             // const data = JSON.stringify(responseJson?.data?.data);
@@ -46,21 +48,21 @@ const CreateProofScreen = () => {
     getData();
   }, []);
 
-  // const shareQRCode = () => {
-  //   myQRCode.toDataURL(dataURL => {
-  //     console.log(JSON.stringify(dataURL));
-  //     let shareImageBase64 = {
-  //       title: 'Proof QR',
-  //       type: 'image/jpg',
-  //       // url: `data:image/png;base64,${dataURL}`,
-  //       message: `data:image/png;base64,${dataURL}`,
-  //       subject: 'Please verify the proof', //  for email
-  //     };
-  //     Share.share(shareImageBase64).catch(error =>
-  //       console.log(error, 'eeojkk'),
-  //     );
-  //   });
-  // };
+  const shareQRCode = () => {
+    myQRCode.toDataURL(dataURL => {
+      console.log(JSON.stringify(dataURL));
+      let shareImageBase64 = {
+        title: 'Proof QR',
+        type: 'image/jpg',
+        // url: `data:image/png;base64,${dataURL}`,
+        message: `data:image/png;base64,${dataURL}`,
+        subject: 'Please verify the proof', //  for email
+      };
+      Share.share(shareImageBase64).catch(error =>
+        console.log(error, 'eeojkk'),
+      );
+    });
+  };
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -87,9 +89,9 @@ const CreateProofScreen = () => {
           logoBackgroundColor="yellow"
         />
 
-        {/* <TouchableOpacity style={styles.buttonStyle} onPress={shareQRCode}>
+        <TouchableOpacity style={styles.buttonStyle} onPress={shareQRCode}>
           <Text style={styles.buttonTextStyle}>Share QR Code</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
