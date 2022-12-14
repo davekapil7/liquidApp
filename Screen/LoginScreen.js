@@ -98,8 +98,21 @@ const LoginScreen = () => {
 
   const handlebiomatric = async () => {
     // const biometryType = await rnBiometrics.isSensorAvailable()
+  //   rnBiometrics.isSensorAvailable()
+  //   .then((resultObject) => {
+  //     const { available, biometryType } = resultObject
 
+  //     console.log("%%%%%%%",biometryType , available);
+  //  if (available && biometryType === BiometryTypes.FaceID) {
+  //       console.log('FaceID is supported')
+  //     } else{
+  //       console.log("Not suppoted%%%%%");
+  //     }
+  //   })
+    // Touch ID
     rnBiometrics.isSensorAvailable().then(resultObject => {
+
+     
       console.log('Can access');
       let epochTimeSeconds = Math.round(new Date().getTime() / 1000).toString();
       let payload = epochTimeSeconds + 'some message';
@@ -129,6 +142,10 @@ const LoginScreen = () => {
         }
       });
 
+  });
+
+
+
       // rnBiometrics
       //   .createKeys()
       //   .then(createkery => console.log('@@@1111', createkery))
@@ -156,7 +173,7 @@ const LoginScreen = () => {
       //     //   verifySignatureWithServer(signature, payload);
       //     // }
       //   }).catch((e)=> console.log("$$$$",e))
-    });
+   
   };
 
   return (
