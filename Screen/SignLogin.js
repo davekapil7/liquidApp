@@ -46,15 +46,19 @@ const SignLoginScreen = ({navigation}) => {
 
     axios
       .post('http://142.93.213.49:8000/auth/verifySignupOtp', dataToSend)
-      .then(function (responseJson) {
+      .then(async function (responseJson) {
         setLoading(false);
         console.log(responseJson, 'ressss');
         console.log(responseJson?.data?.error);
         console.log(responseJson?.data?.data);
-        // If server response message same as Data Matched
+
         if (responseJson?.data?.data) {
-          AsyncStorage.setItem('login', 'true');
-          navigation.replace('DrawerNavigationRoutes');
+          const cData = await axios.get(`http://142.93.213.49:8000/auth/info`);
+          console.log(cData, 'profile');
+          if (cData?.data?.data?.details) {
+            AsyncStorage.setItem('login', 'true');
+            navigation.replace('DrawerNavigationRoutes');
+          }
         } else {
           setErrortext(responseJson?.data?.error);
           console.log('Please check your email id or password');
