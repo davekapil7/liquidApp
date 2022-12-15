@@ -14,6 +14,7 @@ import LoginScreen from './Screen/LoginScreen';
 import SignLoginScreen from './Screen/SignLogin';
 import RegisterScreen from './Screen/RegisterScreen';
 import DrawerNavigationRoutes from './Screen/DrawerNavigationRoutes';
+import CreateProofScreen from './Screen/DrawerScreens/CreateProofScreen';
 const Stack = createStackNavigator();
 
 const Auth = () => {
@@ -71,6 +72,20 @@ const App = () => {
           component={DrawerNavigationRoutes}
           // Hiding header for Navigation Drawer
           options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ProofScreenStack"
+          component={CreateProofScreen}
+          options={{
+            title: 'Proof Screen', //Set Header Title
+            headerStyle: {
+              backgroundColor: '#307ecc', //Set Header color
+            },
+            headerTintColor: '#fff', //Set Header text color
+            headerTitleStyle: {
+              fontWeight: 'bold', //Set Header text style
+            },
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

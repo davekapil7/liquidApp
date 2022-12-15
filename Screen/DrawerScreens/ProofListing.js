@@ -2,9 +2,12 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {SafeAreaView, Text, View, StyleSheet, ScrollView} from 'react-native';
 import axios from 'axios';
+import {useNavigation} from '@react-navigation/native';
 
 const ProofListingScreen = () => {
   const [listData, setListData] = useState();
+  const navigation = useNavigation();
+
   useEffect(() => {
     const getData = async () => {
       const getDid = await axios.get(`http://142.93.213.49:8000/api/getDid`);
@@ -17,8 +20,22 @@ const ProofListingScreen = () => {
     <SafeAreaView style={{flex: 1}}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
-          {listData?.map(res => {
-            return <Text style={styles.titleStyle}>{res?.id}</Text>;
+          {listData?.map((res, i) => {
+            console.log(res, 'test');
+            return (
+              <View key={i}>
+                <Text
+                  key={i}
+                  style={styles.titleStyle}
+                  onPress={() =>
+                    navigation.navigate('ProofScreenStack', {
+                      paramKey: res.id,
+                    })
+                  }>
+                  {res?.id}
+                </Text>
+              </View>
+            );
           })}
         </View>
       </ScrollView>
@@ -41,10 +58,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: 'center',
     margin: 10,
+    color: 'black',
   },
   textStyle: {
     textAlign: 'center',
     margin: 10,
+    color: 'red',
   },
   // textInputStyle: {
   //   flexDirection: 'row',

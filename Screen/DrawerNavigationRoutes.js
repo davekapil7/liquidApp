@@ -43,8 +43,7 @@ const HomeScreenStack = ({navigation}) => {
 
 const SettingScreenStack = ({navigation}) => {
   return (
-    <Stack.Navigator
-      initialRouteName="SettingsScreen"
+    <Stack.Navigator initialRouteName="SettingsScreen"
       screenOptions={{
         headerLeft: () => (
           <NavigationDrawerHeader navigationProps={navigation} />
@@ -56,7 +55,8 @@ const SettingScreenStack = ({navigation}) => {
         headerTitleStyle: {
           fontWeight: 'bold', //Set Header text style
         },
-      }}>
+      }}
+      >
       <Stack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
@@ -121,6 +121,7 @@ const ProofListStack = ({navigation}) => {
     </Stack.Navigator>
   );
 };
+
 
 const VerifyScreenStack = ({navigation}) => {
   return (
