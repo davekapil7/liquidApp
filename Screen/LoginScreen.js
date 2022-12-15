@@ -9,19 +9,26 @@ import {
   Keyboard,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import Loader from './Components/Loader';
 import axios from 'axios';
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = () => {
   const [userEmail, setUserEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [otpInput, setOtpInput] = useState(false);
+
+  const navigation = useNavigation();
+
+  const rnBiometrics = new ReactNativeBiometrics();
 
   const passwordInputRef = createRef();
   useEffect(() => {
@@ -51,6 +58,7 @@ const LoginScreen = ({navigation}) => {
         .then(function (responseJson) {
           setLoading(false);
           console.log(responseJson, 'ressss');
+
           // If server response message same as Data Matched
           if (responseJson?.data?.data === 'OTP SENT') {
             setOtpInput(true);
@@ -74,7 +82,7 @@ const LoginScreen = ({navigation}) => {
           if (responseJson?.data?.data === 'Authorized') {
             setOtpInput(false);
             AsyncStorage.setItem('login', 'true');
-            navigation.replace('DrawerNavigationRoutes');
+            navigation.navigate('DrawerNavigationRoutes');
           } else {
             setErrortext(responseJson?.data?.data?.error);
             console.log('Please check your email id or password');
@@ -86,6 +94,86 @@ const LoginScreen = ({navigation}) => {
           console.error(error);
         });
     }
+  };
+
+  const handlebiomatric = async () => {
+    // const biometryType = await rnBiometrics.isSensorAvailable()
+  //   rnBiometrics.isSensorAvailable()
+  //   .then((resultObject) => {
+  //     const { available, biometryType } = resultObject
+
+  //     console.log("%%%%%%%",biometryType , available);
+  //  if (available && biometryType === BiometryTypes.FaceID) {
+  //       console.log('FaceID is supported')
+  //     } else{
+  //       console.log("Not suppoted%%%%%");
+  //     }
+  //   })
+    // Touch ID
+    rnBiometrics.isSensorAvailable().then(resultObject => {
+
+     
+      console.log('Can access');
+      let epochTimeSeconds = Math.round(new Date().getTime() / 1000).toString();
+      let payload = epochTimeSeconds + 'some message';
+
+      rnBiometrics.biometricKeysExist().then(resultObject => {
+        const {keysExist} = resultObject;
+
+        if (keysExist) {
+          console.log('Keys exist');
+
+          rnBiometrics
+            .simplePrompt({
+              promptMessage: 'Sign in with Touch ID',
+              cancelButtonText: 'Close',
+            })
+            .then(res => {
+              if (res?.success) {
+                navigation.navigate('DrawerNavigationRoutes');
+              }
+            })
+            .catch(e => console.log('###', e));
+        } else {
+          console.log('Keys do not exist or were deleted');
+          Alert.alert(
+            'Fingerprint not exist or were deleted . Please add fingerprint in system ',
+          );
+        }
+      });
+
+  });
+
+
+
+      // rnBiometrics
+      //   .createKeys()
+      //   .then(createkery => console.log('@@@1111', createkery))
+      //   .catch(e => console.log('EE', e));
+
+      // rnBiometrics
+      //   .simplePrompt({
+      //     promptMessage: 'Sign in with Touch ID',
+      //     cancelButtonText: 'Close',
+      //   })
+      //   .then(rr => ('rrrr', rr))
+      //   .then(e => console.log('###', e));
+
+      // rnBiometrics
+      //   .createSignature({
+      //     promptMessage: 'Sign in',
+      //     payload: payload,
+      //   })
+      //   .then(resultObject => {
+      //     console.log("@@@@",resultObject);
+      //     const {success, signature} = resultObject;
+
+      //     // if (success) {
+      //     //   console.log(signature);
+      //     //   verifySignatureWithServer(signature, payload);
+      //     // }
+      //   }).catch((e)=> console.log("$$$$",e))
+   
   };
 
   return (
@@ -132,10 +220,11 @@ const LoginScreen = ({navigation}) => {
               <View style={styles.SectionStyle}>
                 <TextInput
                   style={styles.inputStyle}
+                  value={otp}
                   onChangeText={otp => setOtp(otp)}
                   placeholder="Enter OTP" //12345
                   placeholderTextColor="#8b9cb5"
-                  keyboardType="number"
+                  keyboardType="numeric"
                   ref={passwordInputRef}
                   onSubmitEditing={Keyboard.dismiss}
                   blurOnSubmit={false}
@@ -163,6 +252,11 @@ const LoginScreen = ({navigation}) => {
               onPress={() => navigation.navigate('RegisterScreen')}>
               New Here ? Register
             </Text>
+            <View style={{width: '100%', alignItems: 'center'}}>
+              <TouchableOpacity onPress={() => handlebiomatric()}>
+                <Image source={require('../finger_print.png')} />
+              </TouchableOpacity>
+            </View>
           </KeyboardAvoidingView>
         </View>
       </ScrollView>

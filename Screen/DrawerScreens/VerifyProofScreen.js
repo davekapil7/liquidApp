@@ -19,7 +19,6 @@ import axios from 'axios';
 const VerifyProofScreen = () => {
   const [qrvalue, setQrvalue] = useState('');
   const [opneScanner, setOpneScanner] = useState(false);
-  const [verify, setVerify] = useState(false);
 
   const onOpenlink = () => {
     // If scanned then function to open URL in Browser
@@ -63,20 +62,11 @@ const VerifyProofScreen = () => {
       setOpneScanner(true);
     }
     axios
-      .post(
-        'http://142.93.213.49:8000/api/verifyProof',
-
-        {
-          itemId: qrvalue,
-        },
-      )
+      .post('http://142.93.213.49:8000/api/verifyProof', JSON.parse(qrvalue))
       .then(function (responseJson) {
         // setLoading(false);
         if (responseJson) {
-          console.log(responseJson.status);
-          if (responseJson.status === 200) {
-            setVerify(true);
-          }
+          console.log(responseJson);
         } else {
           setErrortext(responseJson?.data?.error);
           console.log('Please check your email id or password');
@@ -112,10 +102,10 @@ const VerifyProofScreen = () => {
       ) : (
         <View style={styles.container}>
           <Text style={styles.titleText}>
-            Scan the barcode and verify your proof
+            Barcode and QR Code Scanner using Camera in React Native
           </Text>
           <Text style={styles.textStyle}>
-            {verify ? 'Proof Verified ' : ''}
+            {qrvalue ? 'Scanned Result: ' + qrvalue : ''}
           </Text>
           {qrvalue.includes('https://') ||
           qrvalue.includes('http://') ||
@@ -147,7 +137,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleText: {
-    marginTop: 100,
     fontSize: 22,
     textAlign: 'center',
     fontWeight: 'bold',

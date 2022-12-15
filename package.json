@@ -21,6 +21,7 @@
     "react": "18.1.0",
     "react-devtools": "^4.26.1",
     "react-native": "^0.70.6",
+    "react-native-biometrics": "^3.0.1",
     "react-native-camera-kit": "^13.0.0",
     "react-native-cli": "^2.0.1",
     "react-native-gesture-handler": "^2.8.0",
