@@ -98,82 +98,64 @@ const LoginScreen = () => {
 
   const handlebiomatric = async () => {
     // const biometryType = await rnBiometrics.isSensorAvailable()
-  //   rnBiometrics.isSensorAvailable()
-  //   .then((resultObject) => {
-  //     const { available, biometryType } = resultObject
+    //   rnBiometrics.isSensorAvailable()
+    //   .then((resultObject) => {
+    //     const { available, biometryType } = resultObject
 
-  //     console.log("%%%%%%%",biometryType , available);
-  //  if (available && biometryType === BiometryTypes.FaceID) {
-  //       console.log('FaceID is supported')
-  //     } else{
-  //       console.log("Not suppoted%%%%%");
-  //     }
-  //   })
+    //     console.log("%%%%%%%",biometryType , available);
+    //  if (available && biometryType === BiometryTypes.FaceID) {
+    //       console.log('FaceID is supported')
+    //     } else{
+    //       console.log("Not suppoted%%%%%");
+    //     }
+    //   })
     // Touch ID
-    rnBiometrics.isSensorAvailable().then(resultObject => {
+    const biometryType = await rnBiometrics.isSensorAvailable();
 
-     
+    await rnBiometrics.isSensorAvailable().then(resultObject => {
       console.log('Can access');
-      let epochTimeSeconds = Math.round(new Date().getTime() / 1000).toString();
-      let payload = epochTimeSeconds + 'some message';
+   
+      rnBiometrics.simplePrompt({promptMessage: 'Confirm fingerprint'}).then(resultObject => {
+        const {success} = resultObject;
 
-      rnBiometrics.biometricKeysExist().then(resultObject => {
-        const {keysExist} = resultObject;
-
-        if (keysExist) {
+        if (success) {
           console.log('Keys exist');
-
-          rnBiometrics
-            .simplePrompt({
-              promptMessage: 'Sign in with Touch ID',
-              cancelButtonText: 'Close',
-            })
-            .then(res => {
-              if (res?.success) {
-                navigation.navigate('DrawerNavigationRoutes');
-              }
-            })
-            .catch(e => console.log('###', e));
+                navigation.navigate('DrawerNavigationRoutes');           
         } else {
           console.log('Keys do not exist or were deleted');
           Alert.alert(
             'Fingerprint not exist or were deleted . Please add fingerprint in system ',
           );
         }
-      });
+    });
+   });
+    // rnBiometrics
+    //   .createKeys()
+    //   .then(createkery => console.log('@@@1111', createkery))
+    //   .catch(e => console.log('EE', e));
 
-  });
+    // rnBiometrics
+    //   .simplePrompt({
+    //     promptMessage: 'Sign in with Touch ID',
+    //     cancelButtonText: 'Close',
+    //   })
+    //   .then(rr => ('rrrr', rr))
+    //   .then(e => console.log('###', e));
 
+    // rnBiometrics
+    //   .createSignature({
+    //     promptMessage: 'Sign in',
+    //     payload: payload,
+    //   })
+    //   .then(resultObject => {
+    //     console.log("@@@@",resultObject);
+    //     const {success, signature} = resultObject;
 
-
-      // rnBiometrics
-      //   .createKeys()
-      //   .then(createkery => console.log('@@@1111', createkery))
-      //   .catch(e => console.log('EE', e));
-
-      // rnBiometrics
-      //   .simplePrompt({
-      //     promptMessage: 'Sign in with Touch ID',
-      //     cancelButtonText: 'Close',
-      //   })
-      //   .then(rr => ('rrrr', rr))
-      //   .then(e => console.log('###', e));
-
-      // rnBiometrics
-      //   .createSignature({
-      //     promptMessage: 'Sign in',
-      //     payload: payload,
-      //   })
-      //   .then(resultObject => {
-      //     console.log("@@@@",resultObject);
-      //     const {success, signature} = resultObject;
-
-      //     // if (success) {
-      //     //   console.log(signature);
-      //     //   verifySignatureWithServer(signature, payload);
-      //     // }
-      //   }).catch((e)=> console.log("$$$$",e))
-   
+    //     // if (success) {
+    //     //   console.log(signature);
+    //     //   verifySignatureWithServer(signature, payload);
+    //     // }
+    //   }).catch((e)=> console.log("$$$$",e))
   };
 
   return (
