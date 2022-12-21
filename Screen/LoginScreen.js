@@ -31,7 +31,8 @@ const LoginScreen = () => {
 
   const appstatus = useSelector(state => state?.appstate?.appState);
 
-  const rnBiometrics = new ReactNativeBiometrics();
+ // const rnBiometrics = new ReactNativeBiometrics()
+  const rnBiometrics = new ReactNativeBiometrics({ allowDeviceCredentials: true })
 
   const passwordInputRef = createRef();
   // useEffect(() => {
@@ -133,13 +134,17 @@ const LoginScreen = () => {
     //     }
     //   })
     // Touch ID
-    const biometryType = await rnBiometrics.isSensorAvailable();
+
+
+    // console.log("@@@@",check);
+    // const biometryType = await rnBiometrics.isSensorAvailable();
+
 
     await rnBiometrics.isSensorAvailable().then(resultObject => {
    
 
       rnBiometrics
-        .simplePrompt({promptMessage: 'Confirm fingerprint'})
+        .simplePrompt({promptMessage: 'Confirm fingerprint' })
         .then(resultObject => {
           const {success} = resultObject;
 
@@ -147,7 +152,6 @@ const LoginScreen = () => {
          
             navigation.navigate('DrawerNavigationRoutes');
           } else {
-       
             Alert.alert(
               'Fingerprint not exist or were deleted . Please add fingerprint in system ',
             );
@@ -224,7 +228,9 @@ const LoginScreen = () => {
             <TouchableOpacity
               style={styles.buttonStyle}
               activeOpacity={0.5}
-              onPress={handleSubmitPress}>
+             onPress={handleSubmitPress}
+             //onPress={handlebiomatric}
+              >
               {!otpInput ? (
                 <Text style={styles.buttonTextStyle}>GET OTP</Text>
               ) : (
