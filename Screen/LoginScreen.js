@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import Loader from './Components/Loader';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const LoginScreen = () => {
   const [userEmail, setUserEmail] = useState('');
@@ -28,17 +29,37 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
 
+  const appstatus = useSelector(state => state?.appstate?.appState);
+
   const rnBiometrics = new ReactNativeBiometrics();
 
   const passwordInputRef = createRef();
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const value = await AsyncStorage.getItem('access_token');
+  //     setAccessToken(value);
+  //     console.log(value, 'val');
+  //   };
+  //   fetchData();
+  // }, []);
+
   useEffect(() => {
-    const fetchData = async () => {
-      const value = await AsyncStorage.getItem('access_token');
-      setAccessToken(value);
-      console.log(value, 'val');
-    };
-    fetchData();
-  }, []);
+    AsyncStorage.getItem('login').then(value => {
+      console.log('Hello acyncn', value);
+      if (value === 'true') {
+        handlebiomatric();
+      }
+    });
+  }, [navigation]);
+
+  useEffect(() => {
+    AsyncStorage.getItem('login').then(value => {
+      console.log('Hello acynca', value);
+      if (value === 'true') {
+        handlebiomatric();
+      }
+    });
+  }, [appstatus]);
 
   const handleSubmitPress = () => {
     setErrortext('');
@@ -80,9 +101,11 @@ const LoginScreen = () => {
           setLoading(false);
           console.log(responseJson, 'ressss');
           if (responseJson?.data?.data === 'Authorized') {
+          
             setOtpInput(false);
             AsyncStorage.setItem('login', 'true');
-            navigation.navigate('DrawerNavigationRoutes');
+            handlebiomatric();
+
           } else {
             setErrortext(responseJson?.data?.data?.error);
             console.log('Please check your email id or password');
@@ -113,49 +136,28 @@ const LoginScreen = () => {
     const biometryType = await rnBiometrics.isSensorAvailable();
 
     await rnBiometrics.isSensorAvailable().then(resultObject => {
-      console.log('Can access');
    
-      rnBiometrics.simplePrompt({promptMessage: 'Confirm fingerprint'}).then(resultObject => {
-        const {success} = resultObject;
 
-        if (success) {
-          console.log('Keys exist');
-                navigation.navigate('DrawerNavigationRoutes');           
-        } else {
-          console.log('Keys do not exist or were deleted');
-          Alert.alert(
-            'Fingerprint not exist or were deleted . Please add fingerprint in system ',
-          );
-        }
+      rnBiometrics
+        .simplePrompt({promptMessage: 'Confirm fingerprint'})
+        .then(resultObject => {
+          const {success} = resultObject;
+
+          if (success) {
+         
+            navigation.navigate('DrawerNavigationRoutes');
+          } else {
+       
+            Alert.alert(
+              'Fingerprint not exist or were deleted . Please add fingerprint in system ',
+            );
+          }
+        })
+        .catch(e => {
+          Alert.alert('Fail login with senser . Please try with login');
+          AsyncStorage.removeItem('login');
+        });
     });
-   });
-    // rnBiometrics
-    //   .createKeys()
-    //   .then(createkery => console.log('@@@1111', createkery))
-    //   .catch(e => console.log('EE', e));
-
-    // rnBiometrics
-    //   .simplePrompt({
-    //     promptMessage: 'Sign in with Touch ID',
-    //     cancelButtonText: 'Close',
-    //   })
-    //   .then(rr => ('rrrr', rr))
-    //   .then(e => console.log('###', e));
-
-    // rnBiometrics
-    //   .createSignature({
-    //     promptMessage: 'Sign in',
-    //     payload: payload,
-    //   })
-    //   .then(resultObject => {
-    //     console.log("@@@@",resultObject);
-    //     const {success, signature} = resultObject;
-
-    //     // if (success) {
-    //     //   console.log(signature);
-    //     //   verifySignatureWithServer(signature, payload);
-    //     // }
-    //   }).catch((e)=> console.log("$$$$",e))
   };
 
   return (
@@ -234,11 +236,7 @@ const LoginScreen = () => {
               onPress={() => navigation.navigate('RegisterScreen')}>
               New Here ? Register
             </Text>
-            <View style={{width: '100%', alignItems: 'center'}}>
-              <TouchableOpacity onPress={() => handlebiomatric()}>
-                <Image source={require('../finger_print.png')} />
-              </TouchableOpacity>
-            </View>
+     
           </KeyboardAvoidingView>
         </View>
       </ScrollView>

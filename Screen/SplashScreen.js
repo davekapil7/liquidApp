@@ -20,9 +20,11 @@ const SplashScreen = ({navigation}) => {
       //If not then send for Authentication
       //else send to Home Screen
       AsyncStorage.getItem('login').then((value) =>
-        navigation.replace(
-          value === null ? 'Auth' : 'DrawerNavigationRoutes'
-        ),
+      navigation.replace('Auth')
+        // navigation.replace(
+        //   value === null ? 'Auth' : 'DrawerNavigationRoutes'
+        // ),
+        
       );
     }, 5000);
   }, []);

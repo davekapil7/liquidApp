@@ -13,10 +13,23 @@ import CustomSidebarMenu from './Components/CustomSidebarMenu';
 import NavigationDrawerHeader from './Components/NavigationDrawerHeader';
 import VerifyProofScreen from './DrawerScreens/VerifyProofScreen';
 
+
+import {useDispatch, useSelector} from 'react-redux';
+import { useEffect } from 'react';
+
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const HomeScreenStack = ({navigation}) => {
+
+  const appstatus = useSelector(state => state?.appstate?.appState);
+
+
+  useEffect(() =>{
+      if(appstatus === "background"){
+        navigation.replace("Auth")
+      }
+  },[appstatus])
   return (
     <Stack.Navigator initialRouteName="HomeScreen">
       <Stack.Screen
