@@ -14,6 +14,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from './Components/Loader';
 import axios from 'axios';
+import Toast from 'react-native-simple-toast';
 
 const SignLoginScreen = ({navigation}) => {
   const [userOtp, setUserOtp] = useState('');
@@ -58,15 +59,23 @@ const SignLoginScreen = ({navigation}) => {
           if (cData?.data?.data?.details) {
             AsyncStorage.setItem('login', 'true');
             navigation.replace('DrawerNavigationRoutes');
+            Toast.show('Successfully Registered', Toast.LONG, {
+              backgroundColor: 'blue',
+            });
           }
         } else {
           setErrortext(responseJson?.data?.error);
-          console.log('Please check your email id or password');
+          Toast.show('Please Enter Right OTP', Toast.LONG, {
+            backgroundColor: 'blue',
+          });
         }
       })
       .catch(function (error) {
         console.log(error);
         setLoading(false);
+        Toast.show('Please Enter Right OTP', Toast.LONG, {
+          backgroundColor: 'blue',
+        });
       });
   };
 

@@ -14,6 +14,7 @@ import {
 import Loader from './Components/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import Toast from 'react-native-simple-toast';
 // import { AsyncStorage } from 'react-native';
 
 const RegisterScreen = props => {
@@ -80,6 +81,7 @@ const RegisterScreen = props => {
         if (responseJson?.data?.data) {
           storeData(responseJson?.data?.data);
           setIsRegistraionSuccess(true);
+          Toast.show('OTP SENT', Toast.LONG, {backgroundColor: 'blue'});
           console.log('Registration Successful. Please Login to proceed');
         } else {
           setErrortext(responseJson?.data?.error);

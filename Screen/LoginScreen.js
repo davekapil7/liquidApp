@@ -17,7 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import Loader from './Components/Loader';
 import axios from 'axios';
-
+import Toast from 'react-native-simple-toast';
 const LoginScreen = () => {
   const [userEmail, setUserEmail] = useState('');
   const [otp, setOtp] = useState('');
@@ -42,10 +42,7 @@ const LoginScreen = () => {
 
   const handleSubmitPress = () => {
     setErrortext('');
-    // if (!userEmail) {
-    //   alert('Please fill Email');
-    //   return;
-    // }
+
     // if (!otp) {
     //   alert('Please fill OTP');
     //   return;
@@ -62,13 +59,20 @@ const LoginScreen = () => {
           // If server response message same as Data Matched
           if (responseJson?.data?.data === 'OTP SENT') {
             setOtpInput(true);
+            Toast.show('OTP SENT', Toast.LONG, {backgroundColor: 'blue'});
           } else {
             setErrortext(responseJson?.data?.error);
+            Toast.show('Please check your email', Toast.LONG, {
+              backgroundColor: 'blue',
+            });
             console.log('Please check your email id or password');
           }
         })
         .catch(function (error) {
           console.log(error);
+          Toast.show('Your Email Is Not Registered', Toast.LONG, {
+            backgroundColor: 'blue',
+          });
           setLoading(false);
         });
     } else {
@@ -80,11 +84,17 @@ const LoginScreen = () => {
           setLoading(false);
           console.log(responseJson, 'ressss');
           if (responseJson?.data?.data === 'Authorized') {
+            Toast.show('Login Successful', Toast.LONG, {
+              backgroundColor: 'blue',
+            });
             setOtpInput(false);
             AsyncStorage.setItem('login', 'true');
             navigation.navigate('DrawerNavigationRoutes');
           } else {
             setErrortext(responseJson?.data?.data?.error);
+            Toast.show('Please Enter Right OTP', Toast.LONG, {
+              backgroundColor: 'blue',
+            });
             console.log('Please check your email id or password');
           }
         })
@@ -92,27 +102,28 @@ const LoginScreen = () => {
           //Hide Loader
           setLoading(false);
           console.error(error);
+          Toast.show('Please Enter Right OTP', Toast.LONG, {
+            backgroundColor: 'blue',
+          });
         });
     }
   };
 
   const handlebiomatric = async () => {
     // const biometryType = await rnBiometrics.isSensorAvailable()
-  //   rnBiometrics.isSensorAvailable()
-  //   .then((resultObject) => {
-  //     const { available, biometryType } = resultObject
+    //   rnBiometrics.isSensorAvailable()
+    //   .then((resultObject) => {
+    //     const { available, biometryType } = resultObject
 
-  //     console.log("%%%%%%%",biometryType , available);
-  //  if (available && biometryType === BiometryTypes.FaceID) {
-  //       console.log('FaceID is supported')
-  //     } else{
-  //       console.log("Not suppoted%%%%%");
-  //     }
-  //   })
+    //     console.log("%%%%%%%",biometryType , available);
+    //  if (available && biometryType === BiometryTypes.FaceID) {
+    //       console.log('FaceID is supported')
+    //     } else{
+    //       console.log("Not suppoted%%%%%");
+    //     }
+    //   })
     // Touch ID
     rnBiometrics.isSensorAvailable().then(resultObject => {
-
-     
       console.log('Can access');
       let epochTimeSeconds = Math.round(new Date().getTime() / 1000).toString();
       let payload = epochTimeSeconds + 'some message';
@@ -141,39 +152,35 @@ const LoginScreen = () => {
           );
         }
       });
+    });
 
-  });
+    // rnBiometrics
+    //   .createKeys()
+    //   .then(createkery => console.log('@@@1111', createkery))
+    //   .catch(e => console.log('EE', e));
 
+    // rnBiometrics
+    //   .simplePrompt({
+    //     promptMessage: 'Sign in with Touch ID',
+    //     cancelButtonText: 'Close',
+    //   })
+    //   .then(rr => ('rrrr', rr))
+    //   .then(e => console.log('###', e));
 
+    // rnBiometrics
+    //   .createSignature({
+    //     promptMessage: 'Sign in',
+    //     payload: payload,
+    //   })
+    //   .then(resultObject => {
+    //     console.log("@@@@",resultObject);
+    //     const {success, signature} = resultObject;
 
-      // rnBiometrics
-      //   .createKeys()
-      //   .then(createkery => console.log('@@@1111', createkery))
-      //   .catch(e => console.log('EE', e));
-
-      // rnBiometrics
-      //   .simplePrompt({
-      //     promptMessage: 'Sign in with Touch ID',
-      //     cancelButtonText: 'Close',
-      //   })
-      //   .then(rr => ('rrrr', rr))
-      //   .then(e => console.log('###', e));
-
-      // rnBiometrics
-      //   .createSignature({
-      //     promptMessage: 'Sign in',
-      //     payload: payload,
-      //   })
-      //   .then(resultObject => {
-      //     console.log("@@@@",resultObject);
-      //     const {success, signature} = resultObject;
-
-      //     // if (success) {
-      //     //   console.log(signature);
-      //     //   verifySignatureWithServer(signature, payload);
-      //     // }
-      //   }).catch((e)=> console.log("$$$$",e))
-   
+    //     // if (success) {
+    //     //   console.log(signature);
+    //     //   verifySignatureWithServer(signature, payload);
+    //     // }
+    //   }).catch((e)=> console.log("$$$$",e))
   };
 
   return (
