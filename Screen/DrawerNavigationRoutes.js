@@ -12,6 +12,7 @@ import CreateProofScreen from './DrawerScreens/CreateProofScreen';
 import CustomSidebarMenu from './Components/CustomSidebarMenu';
 import NavigationDrawerHeader from './Components/NavigationDrawerHeader';
 import VerifyProofScreen from './DrawerScreens/VerifyProofScreen';
+import ProofListingScreen from './DrawerScreens/ProofListing';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -67,10 +68,37 @@ const SettingScreenStack = ({navigation}) => {
   );
 };
 
-const ProofScreenStack = ({navigation}) => {
+// const ProofScreenStack = ({navigation}) => {
+//   return (
+//     <Stack.Navigator
+//       initialRouteName="ProofScreen"
+//       screenOptions={{
+//         headerLeft: () => (
+//           <NavigationDrawerHeader navigationProps={navigation} />
+//         ),
+//         headerStyle: {
+//           backgroundColor: '#307ecc', //Set Header color
+//         },
+//         headerTintColor: '#fff', //Set Header text color
+//         headerTitleStyle: {
+//           fontWeight: 'bold', //Set Header text style
+//         },
+//       }}>
+//       <Stack.Screen
+//         name="ProofScreen"
+//         component={CreateProofScreen}
+//         options={{
+//           title: 'Create Proof', //Set Header Title
+//         }}
+//       />
+//     </Stack.Navigator>
+//   );
+// };
+
+const ProofListStack = ({navigation}) => {
   return (
     <Stack.Navigator
-      initialRouteName="ProofScreen"
+      initialRouteName="ProofList"
       screenOptions={{
         headerLeft: () => (
           <NavigationDrawerHeader navigationProps={navigation} />
@@ -85,9 +113,9 @@ const ProofScreenStack = ({navigation}) => {
       }}>
       <Stack.Screen
         name="ProofScreen"
-        component={CreateProofScreen}
+        component={ProofListingScreen}
         options={{
-          title: 'Create Proof', //Set Header Title
+          title: 'List Proof', //Set Header Title
         }}
       />
     </Stack.Navigator>
@@ -125,14 +153,14 @@ const VerifyScreenStack = ({navigation}) => {
 const DrawerNavigatorRoutes = props => {
   return (
     <Drawer.Navigator
-      // drawerContentOptions={{
-      //   activeTintColor: '#cee1f2',
-      //   color: '#cee1f2',
-      //   itemStyle: {marginVertical: 5, color: 'white'},
-      //   labelStyle: {
-      //     color: '#d8d8d8',
-      //   },
-      // }}
+      drawerContentOptions={{
+        activeTintColor: '#cee1f2',
+        color: '#cee1f2',
+        itemStyle: {marginVertical: 5, color: 'white'},
+        labelStyle: {
+          color: '#d8d8d8',
+        },
+      }}
       screenOptions={{headerShown: false}}
       drawerContent={CustomSidebarMenu}>
       <Drawer.Screen
@@ -140,10 +168,15 @@ const DrawerNavigatorRoutes = props => {
         options={{drawerLabel: 'Home Screen'}}
         component={HomeScreenStack}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="ProofScreenStack"
         options={{drawerLabel: 'Create Proof'}}
         component={ProofScreenStack}
+      /> */}
+      <Drawer.Screen
+        name="ProofListingStack"
+        options={{drawerLabel: 'Proof Listing'}}
+        component={ProofListStack}
       />
       <Drawer.Screen
         name="VerifyScreenStack"
