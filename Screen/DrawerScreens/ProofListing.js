@@ -1,36 +1,20 @@
 // Import React and Component
 import React, {useEffect, useState, useRef} from 'react';
-import {SafeAreaView, Text, View, StyleSheet, Pressable} from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  Button,
+} from 'react-native';
 import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
 
 import Carousel from 'react-native-snap-carousel';
 
-// const exampleItems = [
-//   {
-//     title: 'Item 1',
-//     text: 'Text 1',
-//   },
-//   {
-//     title: 'Item 2',
-//     text: 'Text 2',
-//   },
-//   {
-//     title: 'Item 3',
-//     text: 'Text 3',
-//   },
-//   {
-//     title: 'Item 4',
-//     text: 'Text 4',
-//   },
-//   {
-//     title: 'Item 5',
-//     text: 'Text 5',
-//   },
-// ];
-
 const ProofListingScreen = () => {
-  const [listData, setListData] = useState('');
+  const [listData, setListData] = useState([]);
   const navigation = useNavigation();
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -47,19 +31,42 @@ const ProofListingScreen = () => {
       style={{
         backgroundColor: '#C0C0C0',
         borderRadius: 5,
-        height: 180,
+        height: 350,
         padding: 30,
         marginLeft: 25,
         marginRight: 25,
       }}>
-      <Text style={{fontSize: 24, color: 'black'}}>{item.id}</Text>
+      <Text style={{fontSize: 18, color: 'black'}}>
+        Company Name: {item?.data?.credentialSubject?.company_name}
+      </Text>
+      <Text></Text>
+      <Text style={{fontSize: 18, color: 'black'}}>
+        Kerry ID: {item?.data?.credentialSubject?.kerry_id}
+      </Text>
+      <Text></Text>
+      <Text style={{fontSize: 18, color: 'black'}}>
+        Member Since: {item?.data?.credentialSubject?.member_since}
+      </Text>
+      <Text></Text>
+      <Text style={{fontSize: 18, color: 'black'}}>
+        Issuance Date: {new Date(item?.data?.issuanceDate).toLocaleDateString()}
+      </Text>
+      <Text></Text>
+      <Button
+        onPress={() =>
+          navigation.navigate('ProofScreenStack', {
+            paramKey: item.id,
+          })
+        }
+        title="Create Proof"
+        color="#841584"
+      />
     </Pressable>
   );
 
   useEffect(() => {
     const getData = async () => {
       const getDid = await axios.get(`http://142.93.213.49:8000/api/getDid`);
-      console.log(getDid, 'getDid')
       setListData(getDid?.data?.data?.items);
     };
     getData();
@@ -67,42 +74,34 @@ const ProofListingScreen = () => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white', paddingTop: 50}}>
-      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-        <Carousel
-          layout="default"
-          // layoutCardOffset={'18'}
-          ref={ref}
-          data={listData}
-          sliderWidth={300}
-          itemWidth={300}
-          renderItem={renderItem}
-          onSnapToItem={index => setActiveIndex(index)}
-        />
-      </View>
+      {listData?.length > 0 ? (
+        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+          <Carousel
+            layout="default"
+            // layoutCardOffset={'18'}
+            ref={ref}
+            data={listData}
+            sliderWidth={300}
+            itemWidth={300}
+            renderItem={renderItem}
+            onSnapToItem={index => setActiveIndex(index)}
+          />
+        </View>
+      ) : (
+        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+          <Text
+            style={{
+              fontSize: 18,
+              color: 'black',
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}>
+            There Are No DId Assigned To This Account!
+            <Text>Please Contact To The Team</Text>
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
-    // <SafeAreaView style={{flex: 1}}>
-    //   <ScrollView style={styles.scrollView}>
-    //     <View style={styles.container}>
-    //       {listData?.map((res, i) => {
-    //         console.log(res, 'test');
-    //         return (
-    //           <View key={i}>
-    //             <Text
-    //               key={i}
-    //               style={styles.titleStyle}
-    //               onPress={() =>
-    //                 navigation.navigate('ProofScreenStack', {
-    //                   paramKey: res.id,
-    //                 })
-    //               }>
-    //               {res?.id}
-    //             </Text>
-    //           </View>
-    //         );
-    //       })}
-    //     </View>
-    //   </ScrollView>
-    // </SafeAreaView>
   );
 };
 
@@ -128,14 +127,6 @@ const styles = StyleSheet.create({
     margin: 10,
     color: 'red',
   },
-  // textInputStyle: {
-  //   flexDirection: 'row',
-  //   height: 40,
-  //   marginTop: 20,
-  //   marginLeft: 35,
-  //   marginRight: 35,
-  //   margin: 10,
-  // },
   buttonStyle: {
     backgroundColor: '#51D8C7',
     borderWidth: 0,

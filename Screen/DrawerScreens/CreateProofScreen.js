@@ -1,11 +1,6 @@
 // Import React and Component
 import React, {useEffect, useState, useRef} from 'react';
-import {
-  SafeAreaView,
-  Text,
-  View,
-  StyleSheet,
-} from 'react-native';
+import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
 import axios from 'axios';
 import QRCode from 'react-native-qrcode-svg';
 
@@ -44,29 +39,33 @@ const CreateProofScreen = props => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={styles.container}>
-        <Text style={styles.titleStyle}>Proof Created!</Text>
-        <QRCode
-          getRef={ref => (myQRCode = ref)}
-          // ref={myQRCode}
-          //QR code value
-          value={qrvalue ? qrvalue : 'NA'}
-          //size of QR Code
-          size={250}
-          //Color of the QR Code (Optional)
-          color="black"
-          //Background Color of the QR Code (Optional)
-          backgroundColor="white"
-          //Center Logo size  (Optional)
-          logoSize={30}
-          //Center Logo margin (Optional)
-          logoMargin={2}
-          //Center Logo radius (Optional)
-          logoBorderRadius={15}
-          //Center Logo background (Optional)
-          logoBackgroundColor="yellow"
-        />
-      </View>
+      {qrvalue ? (
+        <View style={styles.container}>
+          <Text style={styles.titleStyle}>Proof Created!</Text>
+          <QRCode
+            getRef={ref => (myQRCode = ref)}
+            // ref={myQRCode}
+            //QR code value
+            value={qrvalue ? qrvalue : 'NA'}
+            //size of QR Code
+            size={250}
+            //Color of the QR Code (Optional)
+            color="black"
+            //Background Color of the QR Code (Optional)
+            backgroundColor="white"
+            //Center Logo size  (Optional)
+            logoSize={30}
+            //Center Logo margin (Optional)
+            logoMargin={2}
+            //Center Logo radius (Optional)
+            logoBorderRadius={15}
+            //Center Logo background (Optional)
+            logoBackgroundColor="yellow"
+          />
+        </View>
+      ) : (
+        <Text style={styles.titleStyle}>Loading...</Text>
+      )}
     </SafeAreaView>
   );
 };

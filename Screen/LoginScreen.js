@@ -19,6 +19,7 @@ import Loader from './Components/Loader';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
+import Toast from 'react-native-simple-toast';
 const LoginScreen = () => {
   const [userEmail, setUserEmail] = useState('');
   const [otp, setOtp] = useState('');
@@ -64,10 +65,7 @@ const LoginScreen = () => {
 
   const handleSubmitPress = () => {
     setErrortext('');
-    // if (!userEmail) {
-    //   alert('Please fill Email');
-    //   return;
-    // }
+
     // if (!otp) {
     //   alert('Please fill OTP');
     //   return;
@@ -84,13 +82,20 @@ const LoginScreen = () => {
           // If server response message same as Data Matched
           if (responseJson?.data?.data === 'OTP SENT') {
             setOtpInput(true);
+            Toast.show('OTP SENT', Toast.LONG, {backgroundColor: 'blue'});
           } else {
             setErrortext(responseJson?.data?.error);
+            Toast.show('Please check your email', Toast.LONG, {
+              backgroundColor: 'blue',
+            });
             console.log('Please check your email id or password');
           }
         })
         .catch(function (error) {
           console.log(error);
+          Toast.show('Your Email Is Not Registered', Toast.LONG, {
+            backgroundColor: 'blue',
+          });
           setLoading(false);
         });
     } else {
@@ -103,12 +108,18 @@ const LoginScreen = () => {
           console.log(responseJson, 'ressss');
           if (responseJson?.data?.data === 'Authorized') {
           
+            Toast.show('Login Successful', Toast.LONG, {
+              backgroundColor: 'blue',
+            });
             setOtpInput(false);
             AsyncStorage.setItem('login', 'true');
             handlebiomatric();
 
           } else {
             setErrortext(responseJson?.data?.data?.error);
+            Toast.show('Please Enter Right OTP', Toast.LONG, {
+              backgroundColor: 'blue',
+            });
             console.log('Please check your email id or password');
           }
         })
@@ -116,6 +127,9 @@ const LoginScreen = () => {
           //Hide Loader
           setLoading(false);
           console.error(error);
+          Toast.show('Please Enter Right OTP', Toast.LONG, {
+            backgroundColor: 'blue',
+          });
         });
     }
   };
