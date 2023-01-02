@@ -83,10 +83,9 @@ const Rootnavigation = () => {
       subscription.remove();
     };
   }, []);
-
-  useEffect(() => {}, [appstatus]);
+  console.log("@@@@@@@@",appState);
   return (
-    <NavigationContainer>
+    <NavigationContainer >
       <Stack.Navigator
         initialRouteName="SplashScreen">
         {/* SplashScreen which will come once for 5 Seconds */}

@@ -16,20 +16,18 @@ import RegisterScreen from './Screen/RegisterScreen';
 import DrawerNavigationRoutes from './Screen/DrawerNavigationRoutes';
 import CreateProofScreen from './Screen/DrawerScreens/CreateProofScreen';
 
-// Import redux 
-import { Provider } from 'react-redux';
+// Import redux
+import {Provider} from 'react-redux';
 import configureStore from './Store/store';
 import Rootnavigation from './Screen/Navigation';
 
-
 const Stack = createStackNavigator();
 
-const store = configureStore()
+const store = configureStore();
 
 const Auth = () => {
   // Stack Navigator for Login and Sign up Screen
   return (
-
     <Stack.Navigator initialRouteName="LoginScreen">
       <Stack.Screen
         name="LoginScreen"
@@ -61,8 +59,8 @@ const Auth = () => {
 
 const App = () => {
   return (
-<Provider store={store} >
-    <Rootnavigation />
+    <Provider store={store}>
+      <Rootnavigation />
     </Provider>
   );
 };
