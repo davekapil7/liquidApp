@@ -178,7 +178,11 @@ const LoginScreen = () => {
     });
   };
 
+
+  console.log("HEllo login ");
+
   return (
+    
     <View style={styles.mainBody}>
       <Loader loading={loading} />
       <ScrollView
