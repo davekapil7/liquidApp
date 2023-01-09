@@ -8,18 +8,18 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 // Import Screens
-import SplashScreen from './Screen/SplashScreen';
+import SplashScreen from './Src/SplashScreen';
 // import SplashScreen from './Screen/SplashScreen';
-import LoginScreen from './Screen/LoginScreen';
-import SignLoginScreen from './Screen/SignLogin';
-import RegisterScreen from './Screen/RegisterScreen';
-import DrawerNavigationRoutes from './Screen/DrawerNavigationRoutes';
-import CreateProofScreen from './Screen/DrawerScreens/CreateProofScreen';
+import LoginScreen from './Src/LoginScreen';
+import SignLoginScreen from './Src/SignLogin';
+import RegisterScreen from './Src/RegisterScreen';
+import DrawerNavigationRoutes from './Src/DrawerNavigationRoutes';
+import CreateProofScreen from './Src/DrawerScreens/CreateProofScreen';
 
 // Import redux
 import {Provider} from 'react-redux';
 import configureStore from './Store/store';
-import Rootnavigation from './Screen/Navigation';
+import Rootnavigation from './Src/Navigation';
 
 const Stack = createStackNavigator();
 
