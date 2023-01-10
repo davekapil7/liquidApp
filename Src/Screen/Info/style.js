@@ -13,6 +13,8 @@ export const styles = StyleSheet.create({
   },
   cardView: {
     backgroundColor: COLOR.GRAY[200],
+    paddingHorizontal:30,
+    
     padding: 10,
     borderRadius: 10,
     width: '85%',
@@ -58,7 +60,6 @@ export const styles = StyleSheet.create({
     backgroundColor: COLOR.WHITE[100],
     borderRadius: 10,
     paddingHorizontal: 15,
-    marginTop:15
   },
   numberView: {
     width: '100%',

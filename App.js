@@ -20,6 +20,7 @@ import CreateProofScreen from './Src/DrawerScreens/CreateProofScreen';
 import {Provider} from 'react-redux';
 import configureStore from './Store/store';
 import Rootnavigation from './Src/Navigation';
+import OnbordingScreen from './Src/Screen/OnbordingScreen/style';
 
 const Stack = createStackNavigator();
 
@@ -28,10 +29,16 @@ const store = configureStore();
 const Auth = () => {
   // Stack Navigator for Login and Sign up Screen
   return (
-    <Stack.Navigator initialRouteName="LoginScreen">
+    <Stack.Navigator initialRouteName="OnbodingScreen">
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="OnbodingScreen"
+        component={OnbordingScreen}
         options={{headerShown: false}}
       />
       <Stack.Screen

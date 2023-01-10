@@ -51,12 +51,12 @@ const LoginScreen = () => {
                 style={{
                   ...styles.iconView,
                   borderColor:
-                    type == STR.REGISTER ? COLOR.GREEN[100] : COLOR.GRAY[300],
+                    type == STR.REGISTER ? COLOR.GREEN[100]  : COLOR.GRAY[300],
                 }}>
                 <Icon
                   name="pencil"
                   type="octicon"
-                  color={COLOR.GRAY[300]}
+                  color={type == STR.REGISTER ?COLOR.GREEN[100]:COLOR.GRAY[300]}
                   size={25}
                 />
               </View>
@@ -64,13 +64,17 @@ const LoginScreen = () => {
               <Text style={styles.tabtitle}>{STR.REGISTER}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.tabbar}
+              style={{ ...styles.tabbar,
+                borderBottomColor:
+                  type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300],}}
               onPress={() => setType(STR.LOGIN)}>
-              <View style={styles.iconView}>
+              <View style={{ ...styles.iconView,
+                  borderColor:
+                    type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300],}}>
                 <Icon
                   name="user"
                   type="feather"
-                  color={COLOR.GRAY[300]}
+                  color={type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300]}
                   size={42}
                 />
               </View>
@@ -88,7 +92,21 @@ const LoginScreen = () => {
                 value={email}
               />
 
-              <View style={styles.numberView}>
+<TextInput
+                placeholder={"Enter Email"}
+                style={styles.textinputView}
+                onChangeText={text => setEmail(text)}
+                value={email}
+              />
+              <TextInput
+                placeholder={"Enter Mobile"}
+                style={styles.textinputView}
+                onChangeText={text => setEmail(text)}
+                value={email}
+              />
+
+
+              {/* <View style={styles.numberView}>
                 <View style={styles.prenumber}>
                   <TextInput
                     placeholder="+95"
@@ -120,7 +138,7 @@ const LoginScreen = () => {
                     style={{alignSelf: 'flex-end'}}
                   />
                 </TouchableOpacity>
-              </View>
+              </View> */}
 
               <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
 
@@ -130,8 +148,71 @@ const LoginScreen = () => {
             </View>
           )}
 
-          {/* {type === STR.LOGIN && 
-          } */}
+          {type === STR.LOGIN && 
+ <View style={styles.registerView}>
+ {/* <TextInput
+   placeholder={STR.FULLNAME}
+   style={styles.textinputView}
+   onChangeText={text => setEmail(text)}
+   value={email}
+ />
+
+<TextInput
+   placeholder={"Enter Email"}
+   style={styles.textinputView}
+   onChangeText={text => setEmail(text)}
+   value={email}
+ /> */}
+ <TextInput
+   placeholder={"Enter Mobile"}
+   style={styles.textinputView}
+   onChangeText={text => setEmail(text)}
+   value={email}
+ />
+
+
+ {/* <View style={styles.numberView}>
+   <View style={styles.prenumber}>
+     <TextInput
+       placeholder="+95"
+       value={prenumber}
+       onChangeText={text => setPrenumber(text)}
+     />
+   </View>
+
+   <TextInput
+     placeholder=""
+     value={number}
+     onChangeText={text => setNumber(text)}
+     style={{flex: 1}}
+   />
+ </View>
+
+ <Text style={styles.passtext}>{STR.PASSWORDMSG}</Text>
+
+ <View style={styles.passview}>
+   <TextInput
+     placeholder={STR.PASSWORD}
+     style={styles.passinput}
+     secureTextEntry={passvisible ? false : true}
+   />
+   <TouchableOpacity onPress={() => setPassvisible(!passvisible)}>
+     <Icon
+       name={passvisible ? 'eye' : 'eye-with-line'}
+       type="entypo"
+       style={{alignSelf: 'flex-end'}}
+     />
+   </TouchableOpacity>
+ </View> */}
+
+ <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
+
+ <TouchableOpacity style={styles.buttonView}>
+   <Text style={styles.bottontext}>{STR.CONTINUE}</Text>
+ </TouchableOpacity>
+</View>
+
+          }
         </View>
 
         {/* <Image source={IMG.LOGO} style={styles.image} />
