@@ -42,9 +42,7 @@ const Otpscreen = () => {
         //Hide Loader
        
         console.error(error);
-       Alert.alert('Please Enter Right OTP', Toast.LONG, {
-          backgroundColor: 'blue',
-        });
+       Alert.alert('Please Enter Right OTP');
       });
   }
 
