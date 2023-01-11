@@ -71,7 +71,7 @@ const LoginScreen = () => {
     //   return;
     // }
     setLoading(true);
-    if (userEmail && !otp) {
+    if (userEmail && !otp) { 
       let dataToSend = {email: userEmail};
       axios
         .post('http://142.93.213.49:8000/auth/login', dataToSend)

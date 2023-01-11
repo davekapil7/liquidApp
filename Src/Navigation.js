@@ -23,13 +23,16 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useRef, useState} from 'react';
 import OnbordingScreen from './Screen/OnbordingScreen';
 import InfoScreen from './Screen/Info';
+import Otpscreen from './Screen/Otp';
 
 const Stack = createStackNavigator();
 
 const Auth = () => {
   // Stack Navigator for Login and Sign up Screen
   return (
-    <Stack.Navigator initialRouteName="OnbordingScreen">
+    <Stack.Navigator
+     initialRouteName="LoginScreen"
+     >
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
@@ -43,6 +46,11 @@ const Auth = () => {
        <Stack.Screen
         name="InfoScreen"
         component={InfoScreen}
+        options={{headerShown: false}}
+      />
+       <Stack.Screen
+        name="Otpscreen"
+        component={Otpscreen}
         options={{headerShown: false}}
       />
       <Stack.Screen

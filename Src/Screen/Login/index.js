@@ -7,30 +7,107 @@ import {
   TextInput,
   Animated,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
+import axios from 'axios';
+import {useNavigation} from '@react-navigation/native';
 import {IMG} from '../../Constant/image';
 import {STR} from '../../Constant/string';
 import {styles} from './style';
 import {Header as HeaderRNE, HeaderProps, Icon} from '@rneui/themed';
 import {COLOR} from '../../Constant/color';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
+  const [name , setName] = useState("")
   const [prenumber, setPrenumber] = useState(91);
   const [number, setNumber] = useState();
   const [emailfocus, setemailfocus] = useState(false);
-  const [type, setType] = useState(STR.REGISTER);
+  const [type, setType] = useState(STR.LOGIN);
   const [passvisible, setPassvisible] = useState(false);
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const navigation = useNavigation();
+
+  const rnBiometrics = new ReactNativeBiometrics({
+    allowDeviceCredentials: true,
+  });
 
   useEffect(() => {
-    Animated.spring(fadeAnim, {
-      toValue: emailfocus ? 1 : 0,
-      duration: 5000,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
+    AsyncStorage.getItem('login').then(value => {
+      console.log('Hello acyncn', value);
+      if (value === 'true') {
+        handlebiomatric();
+      }
+    });
+  }, [navigation]);
+
+  const handlebiomatric = async () => {
+    // const biometryType = await rnBiometrics.isSensorAvailable()
+    //   rnBiometrics.isSensorAvailable()
+    //   .then((resultObject) => {
+    //     const { available, biometryType } = resultObject
+
+    //     console.log("%%%%%%%",biometryType , available);
+    //  if (available && biometryType === BiometryTypes.FaceID) {
+    //       console.log('FaceID is supported')
+    //     } else{
+    //       console.log("Not suppoted%%%%%");
+    //     }
+    //   })
+    // Touch ID
+
+    // console.log("@@@@",check);
+    // const biometryType = await rnBiometrics.isSensorAvailable();
+
+    await rnBiometrics.isSensorAvailable().then(resultObject => {
+      rnBiometrics
+        .simplePrompt({promptMessage: 'Confirm fingerprint'})
+        .then(resultObject => {
+          const {success} = resultObject;
+
+          if (success) {
+            navigation.navigate('DrawerNavigationRoutes');
+          } else {
+            Alert.alert(
+              'Fingerprint not exist or were deleted . Please add fingerprint in system ',
+            );
+          }
+        })
+        .catch(e => {
+          Alert.alert('Fail login with senser . Please try with login');
+          AsyncStorage.removeItem('login');
+        });
+    });
+  };
+
+  const handleLogin = () => {
+    if (email.length > 0) {
+      let dataToSend = {email: email};
+      axios
+        .post('http://142.93.213.49:8000/auth/login', dataToSend)
+        .then(function (responseJson) {
+          console.log(responseJson, 'ressss');
+
+          // If server response message same as Data Matched
+          if (responseJson?.data?.data === 'OTP SENT') {
+            // setOtpInput(true);
+            Alert.alert('OTP SENT');
+            navigation.navigate('Otpscreen');
+          } else {
+            Alert.alert('Please check your email');
+            console.log('Please check your email id or password');
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+
+    console.log('######', email);
+    //  navigation.navigate('Otpscreen')
+  };
 
   return (
     <SafeAreaView style={styles.safeContainer}>
@@ -51,12 +128,14 @@ const LoginScreen = () => {
                 style={{
                   ...styles.iconView,
                   borderColor:
-                    type == STR.REGISTER ? COLOR.GREEN[100]  : COLOR.GRAY[300],
+                    type == STR.REGISTER ? COLOR.GREEN[100] : COLOR.GRAY[300],
                 }}>
                 <Icon
                   name="pencil"
                   type="octicon"
-                  color={type == STR.REGISTER ?COLOR.GREEN[100]:COLOR.GRAY[300]}
+                  color={
+                    type == STR.REGISTER ? COLOR.GREEN[100] : COLOR.GRAY[300]
+                  }
                   size={25}
                 />
               </View>
@@ -64,13 +143,18 @@ const LoginScreen = () => {
               <Text style={styles.tabtitle}>{STR.REGISTER}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ ...styles.tabbar,
+              style={{
+                ...styles.tabbar,
                 borderBottomColor:
-                  type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300],}}
+                  type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300],
+              }}
               onPress={() => setType(STR.LOGIN)}>
-              <View style={{ ...styles.iconView,
+              <View
+                style={{
+                  ...styles.iconView,
                   borderColor:
-                    type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300],}}>
+                    type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300],
+                }}>
                 <Icon
                   name="user"
                   type="feather"
@@ -88,58 +172,24 @@ const LoginScreen = () => {
               <TextInput
                 placeholder={STR.FULLNAME}
                 style={styles.textinputView}
-                onChangeText={text => setEmail(text)}
-                value={email}
+                onChangeText={text => setName(text)}
+                value={name}
               />
 
-<TextInput
-                placeholder={"Enter Email"}
+              <TextInput
+                placeholder={'Enter Email'}
+                placeholderTextColor={COLOR.GRAY[300]}
                 style={styles.textinputView}
                 onChangeText={text => setEmail(text)}
                 value={email}
               />
               <TextInput
-                placeholder={"Enter Mobile"}
+                placeholder={'Enter Mobile'}
+                placeholderTextColor={COLOR.GRAY[300]}
                 style={styles.textinputView}
-                onChangeText={text => setEmail(text)}
-                value={email}
+                onChangeText={text => setNumber(text)}
+                value={number}
               />
-
-
-              {/* <View style={styles.numberView}>
-                <View style={styles.prenumber}>
-                  <TextInput
-                    placeholder="+95"
-                    value={prenumber}
-                    onChangeText={text => setPrenumber(text)}
-                  />
-                </View>
-
-                <TextInput
-                  placeholder=""
-                  value={number}
-                  onChangeText={text => setNumber(text)}
-                  style={{flex: 1}}
-                />
-              </View>
-
-              <Text style={styles.passtext}>{STR.PASSWORDMSG}</Text>
-
-              <View style={styles.passview}>
-                <TextInput
-                  placeholder={STR.PASSWORD}
-                  style={styles.passinput}
-                  secureTextEntry={passvisible ? false : true}
-                />
-                <TouchableOpacity onPress={() => setPassvisible(!passvisible)}>
-                  <Icon
-                    name={passvisible ? 'eye' : 'eye-with-line'}
-                    type="entypo"
-                    style={{alignSelf: 'flex-end'}}
-                  />
-                </TouchableOpacity>
-              </View> */}
-
               <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
 
               <TouchableOpacity style={styles.buttonView}>
@@ -148,9 +198,9 @@ const LoginScreen = () => {
             </View>
           )}
 
-          {type === STR.LOGIN && 
- <View style={styles.registerView}>
- {/* <TextInput
+          {type === STR.LOGIN && (
+            <View style={styles.registerView}>
+              {/* <TextInput
    placeholder={STR.FULLNAME}
    style={styles.textinputView}
    onChangeText={text => setEmail(text)}
@@ -163,88 +213,23 @@ const LoginScreen = () => {
    onChangeText={text => setEmail(text)}
    value={email}
  /> */}
- <TextInput
-   placeholder={"Enter Mobile"}
-   style={styles.textinputView}
-   onChangeText={text => setEmail(text)}
-   value={email}
- />
+              <TextInput
+                placeholder={'Enter Email'}
+                placeholderTextColor={COLOR.GRAY[300]}
+                style={styles.textinputView}
+                onChangeText={text => setEmail(text)}
+                value={email}
+              />
+              <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
 
-
- {/* <View style={styles.numberView}>
-   <View style={styles.prenumber}>
-     <TextInput
-       placeholder="+95"
-       value={prenumber}
-       onChangeText={text => setPrenumber(text)}
-     />
-   </View>
-
-   <TextInput
-     placeholder=""
-     value={number}
-     onChangeText={text => setNumber(text)}
-     style={{flex: 1}}
-   />
- </View>
-
- <Text style={styles.passtext}>{STR.PASSWORDMSG}</Text>
-
- <View style={styles.passview}>
-   <TextInput
-     placeholder={STR.PASSWORD}
-     style={styles.passinput}
-     secureTextEntry={passvisible ? false : true}
-   />
-   <TouchableOpacity onPress={() => setPassvisible(!passvisible)}>
-     <Icon
-       name={passvisible ? 'eye' : 'eye-with-line'}
-       type="entypo"
-       style={{alignSelf: 'flex-end'}}
-     />
-   </TouchableOpacity>
- </View> */}
-
- <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
-
- <TouchableOpacity style={styles.buttonView}>
-   <Text style={styles.bottontext}>{STR.CONTINUE}</Text>
- </TouchableOpacity>
-</View>
-
-          }
+              <TouchableOpacity
+                style={styles.buttonView}
+                onPress={() => handleLogin()}>
+                <Text style={styles.bottontext}>{STR.CONTINUE}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
-
-        {/* <Image source={IMG.LOGO} style={styles.image} />
-
-        <Text style={styles.title}>{STR.TITLE}</Text>
-        <Text style={styles.loginmsg}>{STR.LOGINMSG}</Text>
-
-        <TouchableOpacity onPress={() => setemailfocus(!emailfocus)}>
-          <Text>Click</Text>
-        </TouchableOpacity>
-        <View style={styles.inputContainer}>
-          <View style={styles.roundView}></View>
-          <View style={styles.inputView}>
-            <TextInput
-              placeholder="Enter you email"
-              value={email}
-              onChangeText={text => {
-                setemailfocus(true);
-              }}
-            />
-
-            <Animated.Text
-              style={{
-                position: 'absolute',
-                marginLeft: 27,
-                marginTop: emailfocus ? -10 : 0,
-              }}>
-              Hello
-            </Animated.Text>
-           
-          </View>
-        </View> */}
       </View>
     </SafeAreaView>
   );

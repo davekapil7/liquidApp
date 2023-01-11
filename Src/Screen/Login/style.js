@@ -58,7 +58,8 @@ export const styles = StyleSheet.create({
     backgroundColor: COLOR.WHITE[100],
     borderRadius: 10,
     paddingHorizontal: 15,
-    marginTop:15
+    marginTop:15,
+    color:COLOR.BLACK[100]
   },
   numberView: {
     width: '100%',
