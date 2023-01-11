@@ -21,7 +21,7 @@ import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
-  const [name , setName] = useState("")
+  const [name, setName] = useState('');
   const [prenumber, setPrenumber] = useState(91);
   const [number, setNumber] = useState();
   const [emailfocus, setemailfocus] = useState(false);
@@ -42,6 +42,60 @@ const LoginScreen = () => {
       }
     });
   }, [navigation]);
+
+  const handleregister = () => {
+    
+    if (!name) {
+      alert('Please fill Name');
+      return;
+    }
+    if (!email) {
+      alert('Please fill Email');
+      return;
+    }
+    if (!number) {
+      alert('Please fill Mobile');
+      return;
+    }
+    // if (!userAddress) {
+    //   alert('Please fill Address');
+    //   return;
+    // }
+    // if (!userPassword) {
+    //   alert('Please fill Password');
+    //   return;
+    // }
+    //Show Loader
+    //  setLoading(true);
+    let dataToSend = {
+      name: name,
+      email: email,
+      mobile: number,
+    };
+
+    console.log(dataToSend, 'test');
+
+    axios
+      .post('http://142.93.213.49:8000/auth/signup', dataToSend)
+      .then(function (responseJson) {
+     
+        console.log(responseJson?.data?.data);
+        // If server response message same as Data Matched
+        if (responseJson?.data?.data) {
+          //  storeData(responseJson?.data?.data);
+          // setType(STR.LOGIN)
+          navigation.navigate('Otpscreen');
+          Alert.alert('OTP SENT');
+          console.log('Registration Successful. Please Login to proceed');
+        } else {
+          // setErrortext(responseJson?.data?.error);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        //  setLoading(false);
+      });
+  };
 
   const handlebiomatric = async () => {
     // const biometryType = await rnBiometrics.isSensorAvailable()
@@ -192,7 +246,7 @@ const LoginScreen = () => {
               />
               <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
 
-              <TouchableOpacity style={styles.buttonView}>
+              <TouchableOpacity style={styles.buttonView} onPress={() =>handleregister()}>
                 <Text style={styles.bottontext}>{STR.CONTINUE}</Text>
               </TouchableOpacity>
             </View>
