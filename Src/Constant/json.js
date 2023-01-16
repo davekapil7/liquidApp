@@ -8,6 +8,69 @@ export const Logintab = [
     }
 ]
 
+export const tabbar = [
+    {
+        id : 1,
+        title : "ADD",
+        activename : "plussquare",
+        activetype : 'antdesign',
+        inactivename : "plus",
+        inactivetype : "antdesign",
+        nav : 'Addscreen'
+
+    },
+    {
+        id : 2,
+        title : "WALLET",
+        activename : "wallet",
+        activetype : 'ionicon',
+        inactivename : "wallet-outline",
+        inactivetype : "ionicon",
+        nav:"Walletscreen"
+
+    },
+    {
+        id : 3,
+        title : "CONTACTS",
+        activename : "user",
+        activetype : 'font-awesome',
+        inactivename : "user-o",
+        inactivetype : "font-awesome",
+        nav:"Contactscreen"
+
+    },
+    {
+        id : 4,
+        title : "SERVICES",
+        activename : "briefcase-variant",
+        activetype : 'material-community',
+        inactivename : "briefcase-variant-outline",
+        inactivetype : "material-community",
+        nav:"Servicescreen"
+
+    },
+]
+
+export const wallettype = [
+    {
+        id : 0,
+        title : "All",
+        iname : 'appstore-o',
+        itype : "antdesign"
+    },
+    {
+        id : 1,
+        title : "Certificates"
+    },
+    {
+        id :2,
+        title : "Testimonials"
+    },
+    {
+        id : 3,
+        title : "Professional"
+    },
+]
 export const Onbording = [
     {
         id : 1,

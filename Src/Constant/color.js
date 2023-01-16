@@ -16,4 +16,9 @@ export const COLOR = {
   GREEN :{
     100 : "#31c397"
   },
+  BLUE : {
+    100 : "#ecedf8",
+    200 : "#dadbf0",
+    300 : "#454dbc"
+  },
 };

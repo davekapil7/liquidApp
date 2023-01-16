@@ -21,5 +21,11 @@ export const STR = {
         PRIVACY : "Privacy Policy.",
         TERMCONDITION : "By continuing below you confirm that you have read and agree to LIQUID General Terms and Conditions and Privacy Policy."
 
-    }
+    },
+
+    WALLET : {
+        TITLE : "Wallet",
+        WELCOME : "Welcome,",
+        
+    },
 }

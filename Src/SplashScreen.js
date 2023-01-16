@@ -3,6 +3,7 @@ import {ActivityIndicator, View, StyleSheet, Image} from 'react-native';
 
 // import AsyncStorage from '@react-native-community/async-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { COLOR } from './Constant/color';
 
 const SplashScreen = ({navigation}) => {
   //State for ActivityIndicator animation
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#307ecc',
+    backgroundColor:COLOR.PRIMARY,
   },
   activityIndicator: {
     alignItems: 'center',

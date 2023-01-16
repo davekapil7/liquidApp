@@ -15,7 +15,7 @@ import {styles} from './style';
 import {Header as HeaderRNE, HeaderProps, Icon} from '@rneui/themed';
 import {COLOR} from '../../Constant/color';
 
-const InfoScreen = () => {
+const Contactscreen = () => {
   const [email, setEmail] = useState('');
   const [prenumber, setPrenumber] = useState(91);
   const [number, setNumber] = useState();
@@ -121,4 +121,4 @@ const InfoScreen = () => {
   );
 };
 
-export default InfoScreen;
+export default Contactscreen;

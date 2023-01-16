@@ -28,7 +28,7 @@ const HomeScreenStack = ({navigation}) => {
 
   useEffect(() =>{
       if(appstatus === "background"){
-        navigation.replace("Auth")
+        navigation.replace("LoginScreen")
       }
   },[appstatus])
   return (

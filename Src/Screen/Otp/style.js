@@ -10,7 +10,8 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   backgroundColor:COLOR.PRIMARY,
-    justifyContent:"center"
+  justifyContent:"flex-end"
+  //  justifyContent:"center"
    // justifyContent: 'center',
   },
   swiperView:{

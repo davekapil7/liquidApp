@@ -24,6 +24,7 @@ import {useEffect, useRef, useState} from 'react';
 import OnbordingScreen from './Screen/OnbordingScreen';
 import InfoScreen from './Screen/Info';
 import Otpscreen from './Screen/Otp';
+import TabNavigationRoute from './TabNavigation';
 
 const Stack = createStackNavigator();
 
@@ -31,7 +32,7 @@ const Auth = () => {
   // Stack Navigator for Login and Sign up Screen
   return (
     <Stack.Navigator
-     initialRouteName="OnbordingScreen"
+     initialRouteName="Otpscreen"
      >
       <Stack.Screen
         name="LoginScreen"
@@ -107,7 +108,9 @@ const Rootnavigation = () => {
   return (
     <NavigationContainer >
       <Stack.Navigator
-        initialRouteName="SplashScreen">
+       initialRouteName="SplashScreen"
+    //  initialRouteName='Tabnavigationroute'
+        >
         {/* SplashScreen which will come once for 5 Seconds */}
         <Stack.Screen
           name="SplashScreen"
@@ -122,9 +125,16 @@ const Rootnavigation = () => {
           options={{headerShown: false}}
         />
         {/* Navigation Drawer as a landing page */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="DrawerNavigationRoutes"
           component={DrawerNavigationRoutes}
+          // Hiding header for Navigation Drawer
+          options={{headerShown: false}}
+        /> */}
+
+<Stack.Screen
+          name="Tabnavigationroute"
+          component={TabNavigationRoute}
           // Hiding header for Navigation Drawer
           options={{headerShown: false}}
         />
