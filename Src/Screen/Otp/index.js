@@ -25,9 +25,9 @@ const Otpscreen = () => {
       .post('http://142.93.213.49:8000/auth/verify-otp', dataToSend)
       .then(function (responseJson) {
         console.log(responseJson, 'ressss');
+        console.log(responseJson.data, 'responce');
         if (responseJson?.data?.data === 'Authorized') {
-          Alert.alert('Login Successful');
-
+         
           AsyncStorage.setItem('login', 'true');
           handlebiomatric();
         } else {
@@ -68,7 +68,7 @@ const Otpscreen = () => {
           const {success} = resultObject;
 
           if (success) {
-            navigation.navigate('DrawerNavigationRoutes');
+            navigation.navigate('Tabnavigationroute');
           } else {
             Alert.alert(
               'Fingerprint not exist or were deleted . Please add fingerprint in system ',

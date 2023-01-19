@@ -16,10 +16,11 @@ const SplashScreen = ({navigation}) => {
       //If not then send for Authentication
       //else send to Home Screen
       AsyncStorage.getItem('login').then(
-        value => navigation.replace('Auth'),
-        // navigation.replace(
-        //   value === null ? 'Auth' : 'DrawerNavigationRoutes'
-        // ),
+        value =>
+        // navigation.replace('Auth'),
+        navigation.replace(
+          value === null ? 'Auth' : 'Tabnavigationroute'
+        ),
       );
     }, 5000);
   }, []);

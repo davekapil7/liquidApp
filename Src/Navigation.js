@@ -25,6 +25,7 @@ import OnbordingScreen from './Screen/OnbordingScreen';
 import InfoScreen from './Screen/Info';
 import Otpscreen from './Screen/Otp';
 import TabNavigationRoute from './TabNavigation';
+import Settingscreen from './Screen/Settings';
 
 const Stack = createStackNavigator();
 
@@ -32,8 +33,9 @@ const Auth = () => {
   // Stack Navigator for Login and Sign up Screen
   return (
     <Stack.Navigator
-     initialRouteName="Otpscreen"
-     >
+    //initialRouteName="Otpscreen"
+    initialRouteName='OnbordingScreen'
+    >
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
@@ -44,12 +46,12 @@ const Auth = () => {
         component={OnbordingScreen}
         options={{headerShown: false}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="InfoScreen"
         component={InfoScreen}
         options={{headerShown: false}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="Otpscreen"
         component={Otpscreen}
         options={{headerShown: false}}
@@ -104,13 +106,13 @@ const Rootnavigation = () => {
       subscription.remove();
     };
   }, []);
-  console.log("@@@@@@@@",appState);
+  console.log('@@@@@@@@', appState);
   return (
-    <NavigationContainer >
+    <NavigationContainer>
       <Stack.Navigator
-       initialRouteName="SplashScreen"
+      initialRouteName="SplashScreen"
     //  initialRouteName='Tabnavigationroute'
-        >
+      >
         {/* SplashScreen which will come once for 5 Seconds */}
         <Stack.Screen
           name="SplashScreen"
@@ -132,9 +134,15 @@ const Rootnavigation = () => {
           options={{headerShown: false}}
         /> */}
 
-<Stack.Screen
+        <Stack.Screen
           name="Tabnavigationroute"
           component={TabNavigationRoute}
+          // Hiding header for Navigation Drawer
+          options={{headerShown: false}}
+        />
+          <Stack.Screen
+          name="Settingscreen"
+          component={Settingscreen}
           // Hiding header for Navigation Drawer
           options={{headerShown: false}}
         />

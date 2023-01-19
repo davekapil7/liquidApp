@@ -60,15 +60,21 @@ export const wallettype = [
     },
     {
         id : 1,
-        title : "Certificates"
+        title : "Certificates",
+        iname : 'appstore-o',
+        itype : "antdesign"
     },
     {
         id :2,
-        title : "Testimonials"
+        title : "Testimonials",
+        iname : 'appstore-o',
+        itype : "antdesign"
     },
     {
         id : 3,
-        title : "Professional"
+        title : "Professional",
+        iname : 'appstore-o',
+        itype : "antdesign"
     },
 ]
 export const Onbording = [
@@ -98,5 +104,128 @@ export const Onbording = [
         img : IMG.ONBORDING,
         desc : "When an organisation want you to share data they will send a Verification request. Review the request and Accept or Decline.  You are in control!",
         desc2 : "That's all for now. Go ahead and explore the LIQUID Ecosystem!"
+    },
+]
+
+export const seetingjson = [
+    {
+        id : 1,
+        title : "Wallet Details",
+        subitem : [
+            {
+                sid : 1,
+                stitle : "did:elem:EiAOBkaOV2keoR1c-AAAA",
+                iname : "copy",
+                itype : "feather"
+            },
+            {
+                sid : 2,
+                stitle : "Access Recovery Phrase",
+                iname : "chevron-small-right",
+                itype : "entypo"
+            },
+            {
+                sid : 3,
+                stitle : "Access Recovery Phrase",
+                iname : "chevron-small-right",
+                itype : "entypo"
+            },
+            {
+                sid : 4,
+                stitle : "Delete My Wallet",
+                iname : "delete",
+                itype : "antdesign"
+            },
+
+        ]
+    },
+    {
+        id : 2,
+        title : "Email Addresses",
+        add : true,
+        subitem : [
+            {
+                sid : 1,
+                stitle : "minal@gail.com",
+                iname : null
+            },
+           
+
+        ]
+    },
+    {
+        id : 3,
+        title : "Security Settings",
+        subitem : [
+            {
+                sid : 1,
+                stitle : "Wallet Access Pin",
+                iname : "edit",
+                itype : "antdesign"
+            },
+            {
+                sid : 2,
+                stitle : "Touch ID",
+                iname : null,
+                toggle : true
+            },
+           
+
+        ]
+    },
+    {
+        id : 4,
+        title : "Backup Wallet",
+
+        subitem : [
+            {
+                sid : 1,
+                stitle : "Enable credential backup",
+                sdesc : "NOT CONNECTED",
+                iname : null,
+                toggle : true
+            },
+            {
+                sid : 2,
+                stitle : "RECOVER CREDENTIALS",
+                iname : null
+            },
+        ]
+    },
+    {
+        id : 4,
+        title : "About ceal",
+        subitem : [
+            {
+                sid : 1,
+                stitle : "Frequently Asked Questions (FAQs)",
+                iname : null
+            },
+            {
+                sid : 2,
+                stitle : "Terms and Conditions",
+                iname : null,
+            },
+            {
+                sid : 3,
+                stitle : "Privacy Policy",
+                iname : null,
+            },
+            {
+                sid : 4,
+                stitle : "Report a problem",
+                iname : null,
+            },
+            {
+                sid : 5,
+                stitle : "Provide Feedback",
+                iname : null,
+            },
+            {
+                sid : 6,
+                stitle : "VERSION 3.31.0",
+                iname : null,
+            },
+        ]
     },
 ]

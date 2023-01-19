@@ -7,10 +7,20 @@ import {Tabbar} from './Custometab';
 import Addscreen from './Screen/Addscreen';
 import Contactscreen from './Screen/Contactscreen';
 import Servicescreen from './Screen/Servicescreen';
+import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigationRoute() {
+  // const appstatus = useSelector(state => state?.appstate?.appState);
+
+
+  // useEffect(() =>{
+  //     if(appstatus === "background"){
+  //       navigation.replace("LoginScreen")
+  //     }
+  // },[appstatus])
+
   return (
     <Tab.Navigator
       tabBar={props => <Tabbar {...props} />}

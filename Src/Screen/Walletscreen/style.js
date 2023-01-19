@@ -18,11 +18,7 @@ export const styles = StyleSheet.create({
     color:COLOR.WHITE[100],
     fontWeight:"bold"
   },
-  titletext:{
-    fontSize:25,
-    color:COLOR.WHITE[100],
-    fontWeight:"bold"
-  },
+ 
   welcometext:{
     fontSize:17,
     marginTop:3,
@@ -32,7 +28,7 @@ export const styles = StyleSheet.create({
 
   container:{
     backgroundColor:COLOR.BLUE[100],marginTop:15,
-    flex:1,
+    flex:1,  
     borderTopLeftRadius:15,
     borderTopRightRadius:15,
     padding:8,
@@ -41,11 +37,12 @@ export const styles = StyleSheet.create({
   tabcontain:{
     flexDirection:"row",
     backgroundColor:COLOR.BLUE[200],
-    borderRadius:10
+    borderRadius:10,
+    height:40
    // paddingVertical:10
   },
   tabView:{
-    paddingHorizontal:10,
+    paddingHorizontal:15,
     paddingVertical:10
 
   },
