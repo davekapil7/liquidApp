@@ -116,25 +116,29 @@ export const seetingjson = [
                 sid : 1,
                 stitle : "did:elem:EiAOBkaOV2keoR1c-AAAA",
                 iname : "copy",
-                itype : "feather"
+                itype : "feather",
+                nav : "copy"
             },
             {
                 sid : 2,
                 stitle : "Access Recovery Phrase",
                 iname : "chevron-small-right",
-                itype : "entypo"
+                itype : "entypo",
+                nav : "recovery"
             },
             {
                 sid : 3,
-                stitle : "Access Recovery Phrase",
+                stitle : "Wallet Connection Management",
                 iname : "chevron-small-right",
-                itype : "entypo"
+                itype : "entypo",
+                nav : "wallet"
             },
             {
                 sid : 4,
                 stitle : "Delete My Wallet",
                 iname : "delete",
-                itype : "antdesign"
+                itype : "antdesign",
+                nav : "delete"
             },
 
         ]
@@ -146,7 +150,7 @@ export const seetingjson = [
         subitem : [
             {
                 sid : 1,
-                stitle : "minal@gail.com",
+                stitle : "user@gmail.com",
                 iname : null
             },
            
@@ -161,7 +165,8 @@ export const seetingjson = [
                 sid : 1,
                 stitle : "Wallet Access Pin",
                 iname : "edit",
-                itype : "antdesign"
+                itype : "antdesign",
+                nav : "Walletpin"
             },
             {
                 sid : 2,
@@ -188,7 +193,8 @@ export const seetingjson = [
             {
                 sid : 2,
                 stitle : "RECOVER CREDENTIALS",
-                iname : null
+                iname : null,
+                nav : "recover"
             },
         ]
     },
@@ -228,4 +234,43 @@ export const seetingjson = [
             },
         ]
     },
+]
+
+export const number = [
+    {
+        id : 1
+    },
+    {
+        id : 2
+    },
+    {
+        id : 3
+    },
+    {
+        id : 4
+    },
+    {
+        id : 5
+    },
+    {
+        id : 6
+    },
+    {
+        id : 7
+    },
+    {
+        id : 8
+    },
+    {
+        id : 9
+    },
+    {
+        id : null
+    },
+    {
+        id : 0
+    },
+    {
+        id : "return"
+    }
 ]

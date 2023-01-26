@@ -27,7 +27,7 @@ const Walletscreen = () => {
   };
 
   const scan = () => {
-    console.log('Under production....');
+    navigation.navigate("Scanscreen")
   };
   const setting = () => {
     console.log('Under production....');
@@ -58,7 +58,7 @@ const Walletscreen = () => {
           <View style={styles.headerContainer}>
             <View>
               <Text style={styles.titletext}>{STR.WALLET.TITLE}</Text>
-              <Text style={styles.welcometext}>{STR.WALLET.WELCOME} Minal</Text>
+              <Text style={styles.welcometext}>{STR.WALLET.WELCOME} User</Text>
             </View>
 
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -164,7 +164,7 @@ const Walletscreen = () => {
                     }}>
                     <View>
                       <Text style={{fontSize: 20, color: COLOR.BLACK[100]}}>
-                        Minal
+                        User
                       </Text>
                       <Text
                         style={{
@@ -172,7 +172,7 @@ const Walletscreen = () => {
                           marginTop: 10,
                           color: COLOR.BLACK[100],
                         }}>
-                        minal@gmail.com
+                        user@gmail.com
                       </Text>
                     </View>
                     <View

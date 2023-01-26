@@ -4,6 +4,9 @@ export const COLOR = {
    
     
   },
+  RED:{
+100 : "#ff4e58"
+  },
   PRIMARY: '#041473',
   BLACK: {
     100: '#000000',
@@ -19,6 +22,8 @@ export const COLOR = {
   BLUE : {
     100 : "#ecedf8",
     200 : "#dadbf0",
-    300 : "#454dbc"
+   //300 : "#454dbc"
+  300 : "#373E98",
+  400 : '#B4B8E5'
   },
 };

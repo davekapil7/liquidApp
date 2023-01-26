@@ -45,6 +45,8 @@
 	</array>
 	<key>NSFaceIDUsageDescription</key>
 <string>$(PRODUCT_NAME) requires FaceID access to allows you quick and secure access.</string>
+	<key>NSCameraUsageDescription</key>
+<string>Your message to user when the camera is accessed for the first time</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

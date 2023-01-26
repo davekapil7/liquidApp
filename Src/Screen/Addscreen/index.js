@@ -14,6 +14,7 @@ import {STR} from '../../Constant/string';
 import {styles} from './style';
 import {Header as HeaderRNE, HeaderProps, Icon} from '@rneui/themed';
 import {COLOR} from '../../Constant/color';
+import Theambackground from '../../Components/Theambackground';
 
 const Addscreen = () => {
   const [email, setEmail] = useState('');
@@ -34,90 +35,110 @@ const Addscreen = () => {
     }).start();
   }, [fadeAnim]);
 
+  const testimonial = () => {
+    console.log('Under Production...');
+  };
+
+  const credential = () => {
+    console.log('Under production...');
+  };
   return (
-    <SafeAreaView style={styles.safeContainer}>
-      <View style={styles.container}>
-        <View style={styles.cardView}>
+    <Theambackground
+      title="Add Credential"
+      subtitle="Request or self-issue new credentials"
+      scan={true}
+      setting={true}>
+      <View style={{height: '100%', alignItems: 'center'}}>
+        <View
+          style={{
+            backgroundColor: COLOR.WHITE[100],
+            width: '95%',
+            borderRadius: 10,
+            alignItems: 'center',
+          }}>
           <Text
-            style={{
-              fontSize: 27,
-              fontWeight: 'bold',
-              color: COLOR.BLACK[100],
-              textAlign: 'center',
-            }}>
-            {STR.INFO.TITLE}
+            style={{fontSize: 25, color: COLOR.BLACK[100], fontWeight: '500'}}>
+            Self-issue credential
           </Text>
-
           <Text
             style={{
-              fontSize: 18,
+              fontSize: 15,
+              color: COLOR.BLACK[100],
+              width: '70%',
+              textAlign: 'center',
+              marginTop: 15,
               fontWeight: '400',
-              color: COLOR.BLACK[100],
-              marginTop: 15,
-
-              textAlign: 'center',
             }}>
-            {STR.INFO.SECURELY}
-          </Text>
-
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '400',
-              color: COLOR.BLACK[100],
-              marginTop: 15,
-
-              textAlign: 'center',
-            }}>
-            {STR.INFO.CERTIFICATE}
-          </Text>
-
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '600',
-              color: COLOR.BLACK[100],
-              marginTop: 15,
-
-              textAlign: 'center',
-            }}>
-            {STR.INFO.PROTECT}
-          </Text>
-
-          <Text
-            style={{
-              fontSize: 14,
-              fontWeight: '300',
-              color: COLOR.BLACK[100],
-
-              textAlign: 'center',
-            }}>
-            {STR.INFO.TERMCONDITION}
+            Receive a new credential that you self-issue and verify on your own
           </Text>
 
           <TouchableOpacity
             style={{
               width: '90%',
-              backgroundColor: COLOR.GREEN[100],
-              height: 40,
-              marginTop: 15,
-              borderRadius: 25,
               alignItems: 'center',
-              justifyContent: 'center',
+              backgroundColor: COLOR.BLUE[300],
+              borderRadius: 5,
+              paddingVertical: 6,
+              marginTop: 10,
             }}
-            onPress={() => navigation.navigate('LoginScreen')}>
+            onPress={() => credential()}>
             <Text
               style={{
-                fontSize: 15,
+                fontSize: 18,
                 color: COLOR.WHITE[100],
-                fontWeight: '400',
+                fontWeight: '700',
               }}>
-              CONTINUE
+              SELF-ISSUE CREDENTIAL
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View
+          style={{
+            backgroundColor: COLOR.WHITE[100],
+            width: '95%',
+            borderRadius: 10,
+            alignItems: 'center',
+            marginTop: 15,
+          }}>
+          <Text
+            style={{fontSize: 25, color: COLOR.BLACK[100], fontWeight: '500'}}>
+            Give Testimonial
+          </Text>
+          <Text
+            style={{
+              fontSize: 15,
+              color: COLOR.BLACK[100],
+              width: '70%',
+              textAlign: 'center',
+              marginTop: 15,
+              fontWeight: '400',
+            }}>
+            Send a good word for a business or colleague you worked with
+          </Text>
+
+          <TouchableOpacity
+            style={{
+              width: '90%',
+              alignItems: 'center',
+              backgroundColor: COLOR.BLUE[300],
+              borderRadius: 5,
+              paddingVertical: 6,
+              marginTop: 10,
+            }}
+            onPress={() => testimonial()}>
+            <Text
+              style={{
+                fontSize: 18,
+                color: COLOR.WHITE[100],
+                fontWeight: '700',
+              }}>
+              SEND TESTIMONIAL
             </Text>
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </Theambackground>
   );
 };
 

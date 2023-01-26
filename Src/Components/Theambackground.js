@@ -18,10 +18,10 @@ import {Header as HeaderRNE, HeaderProps, Icon} from '@rneui/themed';
 import {COLOR} from '../Constant/color';
 import {Dimensions} from 'react-native';
 
-const Theambackground = ({children, scan, setting, back, title, subtitle}) => {
+const Theambackground = ({children, scan,scanscreen, setting, back, title, subtitle}) => {
   const navigation = useNavigation();
   const handlescan = () => {
-    console.log('Under production....');
+    navigation.navigate("Scanscreen")
   };
   const handlesetting = () => {
     navigation.navigate('Settingscreen');
@@ -53,14 +53,14 @@ const Theambackground = ({children, scan, setting, back, title, subtitle}) => {
                 alignItems: 'center',
               }}>
                 {back && 
-              <View style={{}}>
+              <TouchableOpacity onPress={()=>navigation.goBack()}>
                 <Icon
                   name="chevron-back"
                   type="ionicon"
                   color={COLOR.WHITE[100]}
                   size={35}
                 />
-              </View>
+              </TouchableOpacity>
               }
               <View style={{width: '80%'}}>
                 <Text
@@ -107,17 +107,17 @@ const Theambackground = ({children, scan, setting, back, title, subtitle}) => {
                 )}
               </View>
             </View>
-
+              
             <View
               style={{
                 backgroundColor: COLOR.BLUE[100],
 
                 marginTop: 15,
                 height: '100%',
-                borderTopLeftRadius: 15,
-                borderTopRightRadius: 15,
-                padding: 8,
-                paddingTop: 15,
+                borderTopLeftRadius: scanscreen ? 0 : 15,
+                borderTopRightRadius: scanscreen ? 0 : 15,
+                padding: scanscreen ? 0 : 8,
+                paddingTop: scanscreen ? 0 : 15,
               }}>
               {children}
             </View>

@@ -26,6 +26,12 @@ import InfoScreen from './Screen/Info';
 import Otpscreen from './Screen/Otp';
 import TabNavigationRoute from './TabNavigation';
 import Settingscreen from './Screen/Settings';
+import WalletconnectionScreen from './Screen/Settings/Walletconnection';
+import EmailAddScreen from './Screen/Settings/Emailaddress';
+import Walletscreen from './Screen/Walletscreen';
+import WalletPinscreen from './Screen/Settings/WalletPin';
+import RecoverScreen from './Screen/Settings/Recover';
+import Scanscreen from './Screen/Scanscreen';
 
 const Stack = createStackNavigator();
 
@@ -110,8 +116,8 @@ const Rootnavigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-      initialRouteName="SplashScreen"
-    //  initialRouteName='Tabnavigationroute'
+   //initialRouteName="SplashScreen"
+      initialRouteName='Tabnavigationroute'
       >
         {/* SplashScreen which will come once for 5 Seconds */}
         <Stack.Screen
@@ -143,6 +149,36 @@ const Rootnavigation = () => {
           <Stack.Screen
           name="Settingscreen"
           component={Settingscreen}
+          // Hiding header for Navigation Drawer
+          options={{headerShown: false}}
+        />
+         <Stack.Screen
+          name="Walletconnection"
+          component={WalletconnectionScreen}
+          // Hiding header for Navigation Drawer
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="EmailAddress"
+          component={EmailAddScreen}
+          // Hiding header for Navigation Drawer
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Recoverscreen"
+          component={RecoverScreen}
+          // Hiding header for Navigation Drawer
+          options={{headerShown: false}}
+        />
+         <Stack.Screen
+          name="Scanscreen"
+          component={Scanscreen}
+          // Hiding header for Navigation Drawer
+          options={{headerShown: false}}
+        />
+         <Stack.Screen
+          name="Walletpinscreen"
+          component={WalletPinscreen}
           // Hiding header for Navigation Drawer
           options={{headerShown: false}}
         />

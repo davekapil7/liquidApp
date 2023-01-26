@@ -14,6 +14,7 @@ import {STR} from '../../Constant/string';
 import {styles} from './style';
 import {Header as HeaderRNE, HeaderProps, Icon} from '@rneui/themed';
 import {COLOR} from '../../Constant/color';
+import Theambackground from '../../Components/Theambackground';
 
 const Contactscreen = () => {
   const [email, setEmail] = useState('');
@@ -34,90 +35,63 @@ const Contactscreen = () => {
     }).start();
   }, [fadeAnim]);
 
+  const testimonial = () => {
+    console.log('Under Production...');
+  };
+
+  const credential = () => {
+    console.log('Under production...');
+  };
   return (
-    <SafeAreaView style={styles.safeContainer}>
-      <View style={styles.container}>
-        <View style={styles.cardView}>
+    <Theambackground
+      title="Contacts"
+      subtitle="List of all your contacts"
+      scan={true}
+      setting={true}>
+      <View style={{height: '100%', alignItems: 'center'}}>
+        <Icon
+          name="file-certificate-outline"
+          type="material-community"
+          size={90}
+          color={COLOR.BLUE[300]}
+        />
+
+        <Text
+          style={{
+            marginTop: 15,
+            fontSize: 25,
+            color: COLOR.BLACK[100],
+            fontWeight: '600',
+          }}>
+          No contacts yet
+        </Text>
+        <Text
+          style={{
+            width: '80%',
+            textAlign: 'center',
+            fontSize: 17,
+            marginTop: 10,
+            color: COLOR.BLACK[100],
+            fontWeight: '300',
+          }}>
+          Create your own business card to start exchanging with others!
+        </Text>
+
+        <TouchableOpacity
+          style={{
+            backgroundColor: COLOR.BLUE[300],
+            padding: 5,
+            paddingHorizontal: 15,
+            borderRadius: 5,
+            marginTop: 15,
+          }}>
           <Text
-            style={{
-              fontSize: 27,
-              fontWeight: 'bold',
-              color: COLOR.BLACK[100],
-              textAlign: 'center',
-            }}>
-            {STR.INFO.TITLE}
+            style={{fontSize: 15, color: COLOR.WHITE[100], fontWeight: '700'}}>
+            CREATE BUSINESS CARD
           </Text>
-
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '400',
-              color: COLOR.BLACK[100],
-              marginTop: 15,
-
-              textAlign: 'center',
-            }}>
-            {STR.INFO.SECURELY}
-          </Text>
-
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '400',
-              color: COLOR.BLACK[100],
-              marginTop: 15,
-
-              textAlign: 'center',
-            }}>
-            {STR.INFO.CERTIFICATE}
-          </Text>
-
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '600',
-              color: COLOR.BLACK[100],
-              marginTop: 15,
-
-              textAlign: 'center',
-            }}>
-            {STR.INFO.PROTECT}
-          </Text>
-
-          <Text
-            style={{
-              fontSize: 14,
-              fontWeight: '300',
-              color: COLOR.BLACK[100],
-
-              textAlign: 'center',
-            }}>
-            {STR.INFO.TERMCONDITION}
-          </Text>
-
-          <TouchableOpacity
-            style={{
-              width: '90%',
-              backgroundColor: COLOR.GREEN[100],
-              height: 40,
-              marginTop: 15,
-              borderRadius: 25,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onPress={() => navigation.navigate('LoginScreen')}>
-            <Text
-              style={{
-                fontSize: 15,
-                color: COLOR.WHITE[100],
-                fontWeight: '400',
-              }}>
-              CONTINUE
-            </Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </Theambackground>
   );
 };
 
