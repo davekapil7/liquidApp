@@ -15,19 +15,26 @@ import {useNavigation} from '@react-navigation/native';
 import {IMG} from '../../Constant/image';
 import {STR} from '../../Constant/string';
 import {styles} from './style';
-import {Header as HeaderRNE, HeaderProps, Icon} from '@rneui/themed';
+import {
+  Header as HeaderRNE,
+  HeaderProps,
+  Icon,
+  BottomSheet,
+} from '@rneui/themed';
 import {COLOR} from '../../Constant/color';
 import {wallettype} from '../../Constant/json';
 
 const Walletscreen = () => {
   const navigation = useNavigation();
   const [selectedtype, setSelectedType] = useState(0);
+
+  const [shareopen, setShareopen] = useState(false);
   const getmycredential = () => {
-    console.log('Under production....');
+    navigation.navigate("Addscreen")
   };
 
   const scan = () => {
-    navigation.navigate("Scanscreen")
+    navigation.navigate('Scanscreen');
   };
   const setting = () => {
     console.log('Under production....');
@@ -35,11 +42,11 @@ const Walletscreen = () => {
   };
 
   const share = () => {
-    console.log('Under production....');
+    setShareopen(true);
   };
 
   const editdetail = () => {
-    console.log('Under production....');
+    navigation.navigate("Editdetail")
   };
 
   return (
@@ -290,6 +297,88 @@ const Walletscreen = () => {
           </View>
         </LinearGradient>
       </ScrollView>
+
+      <BottomSheet
+        isVisible={shareopen}
+        containerStyle={{
+          backgroundColor: 'rgba(255, 255, 255,0.6)',
+          //alignItems:"center",
+          justifyContent: 'center',
+        }}>
+        <View
+          style={{
+            backgroundColor: COLOR.WHITE[100],
+            alignSelf: 'center',
+            width: '85%',
+            borderRadius: 25,
+            alignItems: 'center',
+            padding: 5,
+            elevation: 5,
+            shadowColor: 'black',
+          }}>
+          <Text style={{fontSize: 20, color: COLOR.BLUE[300]}}>Share</Text>
+          <Text
+            style={{
+              fontSize: 17,
+              marginTop: 15,
+              textAlign: 'center',
+              color: COLOR.BLACK[100],
+              lineHeight: 24,
+            }}>
+            Present this QR Code to the liquid App scanner so other may save
+            your contact details on their app, or to any camera application to
+            view it on a browser
+          </Text>
+
+          <Image
+            source={IMG.QRCODE}
+            style={{width: 250, height: 250, resizeMode: 'stretch'}}
+          />
+
+          <TouchableOpacity
+            style={{
+              width: '70%',
+              marginTop: 15,
+              backgroundColor: COLOR.BLUE[300],
+              alignItems: 'center',
+              height: 50,
+              justifyContent: 'center',
+              borderRadius: 10,
+            }}>
+            <Text
+              style={{
+                fontSize: 20,
+                color: COLOR.WHITE[100],
+                fontWeight: 'bold',
+              }}>
+              SHARE VIA WEB LINKS
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              width: '70%',
+              marginTop: 15,
+              borderWidth: 1,
+              borderColor: COLOR.BLUE[300],
+              backgroundColor: COLOR.WHITE[100],
+              alignItems: 'center',
+              height: 50,
+              justifyContent: 'center',
+              borderRadius: 10,
+            }}
+            onPress={()=>setShareopen(false)}>
+            <Text
+              style={{
+                fontSize: 20,
+                color: COLOR.BLUE[300],
+                fontWeight: 'bold',
+              }}>
+              CLOSE WINDOW
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </BottomSheet>
     </View>
   );
 };

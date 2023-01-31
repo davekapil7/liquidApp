@@ -36,11 +36,11 @@ const Addscreen = () => {
   }, [fadeAnim]);
 
   const testimonial = () => {
-    console.log('Under Production...');
+   navigation.navigate("Testimonial")
   };
 
   const credential = () => {
-    console.log('Under production...');
+    navigation.navigate("Selfissue")
   };
   return (
     <Theambackground

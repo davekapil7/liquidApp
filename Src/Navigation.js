@@ -32,6 +32,9 @@ import Walletscreen from './Screen/Walletscreen';
 import WalletPinscreen from './Screen/Settings/WalletPin';
 import RecoverScreen from './Screen/Settings/Recover';
 import Scanscreen from './Screen/Scanscreen';
+import Editdetail from './Screen/Walletscreen/Editdetails';
+import Selfissue from './Screen/Addscreen/Selfissue';
+import Testimonial from './Screen/Addscreen/Testimonial';
 
 const Stack = createStackNavigator();
 
@@ -39,9 +42,8 @@ const Auth = () => {
   // Stack Navigator for Login and Sign up Screen
   return (
     <Stack.Navigator
-    //initialRouteName="Otpscreen"
-    initialRouteName='OnbordingScreen'
-    >
+      //initialRouteName="Otpscreen"
+      initialRouteName="OnbordingScreen">
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
@@ -116,8 +118,8 @@ const Rootnavigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-   //initialRouteName="SplashScreen"
-      initialRouteName='Tabnavigationroute'
+        initialRouteName="SplashScreen"
+        //   initialRouteName='Tabnavigationroute'
       >
         {/* SplashScreen which will come once for 5 Seconds */}
         <Stack.Screen
@@ -146,13 +148,25 @@ const Rootnavigation = () => {
           // Hiding header for Navigation Drawer
           options={{headerShown: false}}
         />
-          <Stack.Screen
+        <Stack.Screen
+          name="Selfissue"
+          component={Selfissue}
+          // Hiding header for Navigation Drawer
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Testimonial"
+          component={Testimonial}
+          // Hiding header for Navigation Drawer
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="Settingscreen"
           component={Settingscreen}
           // Hiding header for Navigation Drawer
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Walletconnection"
           component={WalletconnectionScreen}
           // Hiding header for Navigation Drawer
@@ -170,13 +184,19 @@ const Rootnavigation = () => {
           // Hiding header for Navigation Drawer
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Scanscreen"
           component={Scanscreen}
           // Hiding header for Navigation Drawer
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
+          name="Editdetail"
+          component={Editdetail}
+          // Hiding header for Navigation Drawer
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="Walletpinscreen"
           component={WalletPinscreen}
           // Hiding header for Navigation Drawer
