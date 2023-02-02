@@ -140,6 +140,13 @@ export const seetingjson = [
                 itype : "antdesign",
                 nav : "delete"
             },
+            {
+                sid : 5,
+                stitle : "Logout",
+                iname : "delete",
+                itype : "antdesign",
+                nav : "logout"
+            },
 
         ]
     },

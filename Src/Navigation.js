@@ -119,7 +119,7 @@ const Rootnavigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="SplashScreen"
-        //   initialRouteName='Tabnavigationroute'
+      //   initialRouteName='Tabnavigationroute'
       >
         {/* SplashScreen which will come once for 5 Seconds */}
         <Stack.Screen

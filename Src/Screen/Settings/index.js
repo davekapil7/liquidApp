@@ -12,6 +12,7 @@ import {COLOR} from '../../Constant/color';
 import Theambackground from '../../Components/Theambackground';
 import {seetingjson} from '../../Constant/json';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Settingscreen = () => {
   const navigation = useNavigation();
 
@@ -39,6 +40,11 @@ const Settingscreen = () => {
     setSheet(false);
   };
 
+  const logout = () => {
+    AsyncStorage.removeItem('login')
+    navigation.navigate("Auth")
+  }
+
   const click = (nav, parameter) => {
     switch (nav) {
       case 'copy':
@@ -55,6 +61,10 @@ const Settingscreen = () => {
       case 'delete':
         setSheet(true);
         break;
+
+        case 'logout':
+          logout()
+          break;
 
       case 'Walletpin':
         navigation.navigate('Walletpinscreen', {params: 'Wallet'});
