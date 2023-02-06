@@ -4,7 +4,8 @@ import {COLOR} from '../../Constant/color';
 export const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-   // backgroundColor: COLOR.PRIMARY,
+    height:"100%",
+   //backgroundColor: COLOR.PRIMARY,
   },
   headerContainer:{
     marginTop:25,
@@ -27,8 +28,12 @@ export const styles = StyleSheet.create({
   },
 
   container:{
-    backgroundColor:COLOR.BLUE[100],marginTop:15,
+   backgroundColor:COLOR.BLUE[100],
+  // backgroundColor:"pink",
+    marginTop:15,
     flex:1,  
+    height:"100%",
+
     borderTopLeftRadius:15,
     borderTopRightRadius:15,
     padding:8,

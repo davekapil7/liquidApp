@@ -6,6 +6,7 @@ import {
   Image,
   TextInput,
   Animated,
+  Dimensions,
   TouchableOpacity,
   ScrollView,
   Share,
@@ -23,14 +24,17 @@ import {
 } from '@rneui/themed';
 import {COLOR} from '../../Constant/color';
 import {wallettype} from '../../Constant/json';
+import Carousel from 'react-native-snap-carousel';
+import Certificate from './Certificate';
 
+const HEIGHT = Dimensions.get("screen").height
 const Walletscreen = () => {
   const navigation = useNavigation();
   const [selectedtype, setSelectedType] = useState(0);
 
   const [shareopen, setShareopen] = useState(false);
   const getmycredential = () => {
-    navigation.navigate("Addscreen")
+    navigation.navigate('Addscreen');
   };
 
   const scan = () => {
@@ -46,12 +50,12 @@ const Walletscreen = () => {
   };
 
   const editdetail = () => {
-    navigation.navigate("Editdetail")
+    navigation.navigate('Editdetail');
   };
 
   return (
     <View style={styles.safeContainer}>
-      <ScrollView style={{flex: 1}}>
+      <ScrollView style={{flex: 1,height:"100%"}}>
         <LinearGradient
           start={{x: 0.0, y: 0.4}}
           end={{x: 0.85, y: 0.5}}
@@ -61,7 +65,8 @@ const Walletscreen = () => {
           // locations={[0, 0.9]}
           // colors={['#5d0981', '#e30cd1']}
           colors={['#454dbc', '#bd59fa']}
-          style={{flex: 1}}>
+          style={{flex: 1,height:"100%"}}>
+            <View style={{flex:1,minHeight:HEIGHT}}>
           <View style={styles.headerContainer}>
             <View>
               <Text style={styles.titletext}>{STR.WALLET.TITLE}</Text>
@@ -144,156 +149,177 @@ const Walletscreen = () => {
                 </View>
               </ScrollView>
             </View>
-
-            {selectedtype === 0 && (
-              <View
-                style={{
-                  alignItems: 'flex-start',
-                  width: '100%',
-                  alignSelf: 'flex-start',
-                  flex: 1,
-                }}>
+            <View
+              style={{
+                flex: 1,
+                height: '100%',
+                width: '100%',
+              }}>
+              {selectedtype === 0 && (
                 <View
                   style={{
-                    backgroundColor: COLOR.WHITE[100],
+                    alignItems: 'flex-start',
                     width: '100%',
-                    borderRadius: 15,
-                    padding: 15,
-                    marginTop: 10,
+                    alignSelf: 'flex-start',
+                    flex: 1,
                   }}>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      borderBottomWidth: 0.5,
-                      paddingBottom: 15,
-                      borderBottomColor: COLOR.GRAY[100],
+                      backgroundColor: COLOR.WHITE[100],
+                      width: '100%',
+                      borderRadius: 15,
+                      padding: 15,
+                      marginTop: 10,
                     }}>
-                    <View>
-                      <Text style={{fontSize: 20, color: COLOR.BLACK[100]}}>
-                        User
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          marginTop: 10,
-                          color: COLOR.BLACK[100],
-                        }}>
-                        user@gmail.com
-                      </Text>
-                    </View>
                     <View
                       style={{
-                        width: 85,
-                        height: 85,
-                        borderRadius: 10,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: COLOR.BLUE[200],
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        borderBottomWidth: 0.5,
+                        paddingBottom: 15,
+                        borderBottomColor: COLOR.GRAY[100],
                       }}>
-                      <Icon
-                        name="emoji-happy"
-                        color={COLOR.BLUE[300]}
-                        size={30}
-                        type="entypo"
-                      />
+                      <View>
+                        <Text style={{fontSize: 20, color: COLOR.BLACK[100]}}>
+                          User
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            marginTop: 10,
+                            color: COLOR.BLACK[100],
+                          }}>
+                          user@gmail.com
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          width: 85,
+                          height: 85,
+                          borderRadius: 10,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: COLOR.BLUE[200],
+                        }}>
+                        <Icon
+                          name="emoji-happy"
+                          color={COLOR.BLUE[300]}
+                          size={30}
+                          type="entypo"
+                        />
+                      </View>
                     </View>
-                  </View>
 
-                  <TouchableOpacity
+                    <TouchableOpacity
+                      style={{
+                        alignSelf: 'flex-end',
+                        padding: 10,
+                        backgroundColor: COLOR.BLUE[300],
+                        marginTop: 10,
+                        borderRadius: 5,
+                        flexDirection: 'row',
+                      }}
+                      onPress={() => share()}>
+                      <Icon
+                        name="qrcode-scan"
+                        type="material-community"
+                        size={20}
+                        color={COLOR.WHITE[100]}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          fontSize: 15,
+                          color: COLOR.WHITE[100],
+                          fontWeight: '800',
+                        }}>
+                        SHARE
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{alignSelf: 'center', marginTop: 5}}
+                      onPress={() => editdetail()}>
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: COLOR.BLUE[300],
+                          fontWeight: '600',
+                        }}>
+                        EDIT DETAILS
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View
                     style={{
-                      alignSelf: 'flex-end',
-                      padding: 10,
-                      backgroundColor: COLOR.BLUE[300],
-                      marginTop: 10,
-                      borderRadius: 5,
-                      flexDirection: 'row',
-                    }}
-                    onPress={() => share()}>
+                      flex: 1,
+                      alignItems: 'center',
+                      width: '100%',
+                      marginTop: 25,
+                    }}>
                     <Icon
-                      name="qrcode-scan"
+                      name="file-certificate-outline"
                       type="material-community"
-                      size={20}
-                      color={COLOR.WHITE[100]}
+                      size={90}
+                      color={COLOR.BLUE[300]}
                     />
                     <Text
                       style={{
-                        marginLeft: 5,
-                        fontSize: 15,
-                        color: COLOR.WHITE[100],
-                        fontWeight: '800',
-                      }}>
-                      SHARE
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{alignSelf: 'center', marginTop: 5}}
-                    onPress={() => editdetail()}>
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: COLOR.BLUE[300],
+                        fontSize: 25,
+                        color: COLOR.BLACK[100],
                         fontWeight: '600',
                       }}>
-                      EDIT DETAILS
+                      Let's get your first credential
                     </Text>
-                  </TouchableOpacity>
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    width: '100%',
-                    marginTop: 25,
-                  }}>
-                  <Icon
-                    name="file-certificate-outline"
-                    type="material-community"
-                    size={90}
-                    color={COLOR.BLUE[300]}
-                  />
-                  <Text
-                    style={{
-                      fontSize: 25,
-                      color: COLOR.BLACK[100],
-                      fontWeight: '600',
-                    }}>
-                    Let's get your first credential
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 17,
-                      color: COLOR.BLACK[100],
-                      fontWeight: '400',
-                      marginTop: 15,
-                      width: '75%',
-                      textAlign: 'center',
-                    }}>
-                    You can self issue your own credential or receive a
-                    testimonial from your business partners or colleagues
-                  </Text>
-
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: COLOR.BLUE[300],
-                      marginTop: 20,
-                      padding: 5,
-                      paddingHorizontal: 15,
-                      borderRadius: 5,
-                    }}
-                    onPress={() => getmycredential()}>
                     <Text
                       style={{
-                        color: COLOR.WHITE[100],
-                        fontWeight: '700',
-                        fontSize: 15,
+                        fontSize: 17,
+                        color: COLOR.BLACK[100],
+                        fontWeight: '400',
+                        marginTop: 15,
+                        width: '75%',
+                        textAlign: 'center',
                       }}>
-                      GET MY FIRST CREDENTIAL
+                      You can self issue your own credential or receive a
+                      testimonial from your business partners or colleagues
                     </Text>
-                  </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={{
+                        backgroundColor: COLOR.BLUE[300],
+                        marginTop: 20,
+                        padding: 5,
+                        paddingHorizontal: 15,
+                        borderRadius: 5,
+                      }}
+                      onPress={() => getmycredential()}>
+                      <Text
+                        style={{
+                          color: COLOR.WHITE[100],
+                          fontWeight: '700',
+                          fontSize: 15,
+                        }}>
+                        GET MY FIRST CREDENTIAL
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            )}
+              )}
+
+              {selectedtype === 1 && (
+                <View
+                  style={{
+                    alignItems: 'flex-start',
+                    width: '100%',
+                    height:"100%",
+                    alignSelf: 'flex-start',
+                    flex: 1,
+                  }}>
+                  <Certificate />
+                 
+                </View>
+              )}
+            </View>
+          </View>
           </View>
         </LinearGradient>
       </ScrollView>
@@ -367,7 +393,7 @@ const Walletscreen = () => {
               justifyContent: 'center',
               borderRadius: 10,
             }}
-            onPress={()=>setShareopen(false)}>
+            onPress={() => setShareopen(false)}>
             <Text
               style={{
                 fontSize: 20,
