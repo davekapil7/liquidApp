@@ -9,6 +9,7 @@ import OtpInputs from 'react-native-otp-inputs';
 import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axiosInstance from '../../Constant/axios';
 const Otpscreen = () => {
   const navigation = useNavigation();
 
@@ -21,14 +22,15 @@ const Otpscreen = () => {
     console.log('HELLO');
     let dataToSend = {otp: otp};
     // console.log(dataToSend, 'fshsh');
-    axios
-      .post('http://142.93.213.49:8000/auth/verify-otp', dataToSend)
+    axiosInstance
+      .post('auth/verify-otp', dataToSend)
       .then(function (responseJson) {
         console.log(responseJson, 'ressss');
         console.log(responseJson.data, 'responce');
         if (responseJson?.data?.data === 'Authorized') {
          
           AsyncStorage.setItem('login', 'true');
+        //  navigation.navigate('Tabnavigationroute');
           handlebiomatric();
         } else {
           Alert.alert('Please Enter Right OTP');

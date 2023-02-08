@@ -18,6 +18,7 @@ import {Header as HeaderRNE, HeaderProps, Icon} from '@rneui/themed';
 import {COLOR} from '../../Constant/color';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
+import axiosInstance from '../../Constant/axios';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -44,7 +45,6 @@ const LoginScreen = () => {
   }, [navigation]);
 
   const handleregister = () => {
-    
     if (!name) {
       alert('Please fill Name');
       return;
@@ -78,7 +78,6 @@ const LoginScreen = () => {
     axios
       .post('http://142.93.213.49:8000/auth/signup', dataToSend)
       .then(function (responseJson) {
-     
         console.log(responseJson?.data?.data);
         // If server response message same as Data Matched
         if (responseJson?.data?.data) {
@@ -139,9 +138,10 @@ const LoginScreen = () => {
   const handleLogin = () => {
     if (email.length > 0) {
       let dataToSend = {email: email};
-      axios
-        .post('http://142.93.213.49:8000/auth/login', dataToSend)
-        .then(function (responseJson) {
+
+      axiosInstance
+        .post('/auth/login', dataToSend)
+           .then(function (responseJson) {
           console.log(responseJson, 'ressss');
 
           // If server response message same as Data Matched
@@ -157,6 +157,25 @@ const LoginScreen = () => {
         .catch(function (error) {
           console.log(error);
         });
+
+      // axios
+      //   .post('http://142.93.213.49:8000/auth/login', dataToSend)
+      //   .then(function (responseJson) {
+      //     console.log(responseJson, 'ressss');
+
+      //     // If server response message same as Data Matched
+      //     if (responseJson?.data?.data === 'OTP SENT') {
+      //       // setOtpInput(true);
+      //       Alert.alert('OTP SENT');
+      //       navigation.navigate('Otpscreen');
+      //     } else {
+      //       Alert.alert('Please check your email');
+      //       console.log('Please check your email id or password');
+      //     }
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
     }
 
     console.log('######', email);
@@ -246,7 +265,9 @@ const LoginScreen = () => {
               />
               <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
 
-              <TouchableOpacity style={styles.buttonView} onPress={() =>handleregister()}>
+              <TouchableOpacity
+                style={styles.buttonView}
+                onPress={() => handleregister()}>
                 <Text style={styles.bottontext}>{STR.CONTINUE}</Text>
               </TouchableOpacity>
             </View>

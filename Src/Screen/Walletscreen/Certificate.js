@@ -12,7 +12,9 @@ import {
   BottomSheet,
 } from '@rneui/themed';
 import axios from 'axios';
+
 import QRCode from 'react-native-qrcode-svg';
+import axiosInstance from '../../Constant/axios';
 
 const WIDTH = Dimensions.get('screen').width;
 
@@ -22,26 +24,56 @@ const Certificate = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [shareopen, setShareopen] = useState(false);
   const [id, setId] = useState();
+  const [apidata , setApidata] = useState([])
   const ref = useRef(null);
 
   useEffect(() => {
     const getData = async () => {
-      var myHeaders = new Headers();
-      myHeaders.append(
-        'Cookie',
-        'connect.sid=s%3AY3n2dqzNoEMs6ALedFyHtsePWk-1yTQ3.r23ydgE1Z6DO2S%2FjauP6TGr%2FPGR9hF6PWGq9GDP84Oo',
-      );
+      // var myHeaders = new Headers();
+      // myHeaders.append(
+      //   'Cookie',
+      //   'connect.sid=s%3AY3n2dqzNoEMs6ALedFyHtsePWk-1yTQ3.r23ydgE1Z6DO2S%2FjauP6TGr%2FPGR9hF6PWGq9GDP84Oo',
+      // );
 
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
-      };
+      // var requestOptions = {
+      //   method: 'GET',
+      //   headers: myHeaders,
+      //   redirect: 'follow',
+      // };
 
-      fetch('http://142.93.213.49:8000/api/getDid', requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
+      // fetch('http://142.93.213.49:8000/api/getDid', requestOptions)
+      //   .then(response => response.text())
+      //   .then(result => console.log(result))
+      //   .catch(error => console.log('error', error));
+
+
+      axiosInstance
+      .get(
+        'api/getDid',
+
+      )
+      .then(function (responseJson) {
+        // setLoading(false);
+
+       // console.log("$$$$$$$",responseJson);
+         if (responseJson.status === 200) {
+        //   console.log(responseJson.status);
+        //   if (responseJson.status === 200) {
+        //     Toast.show('Successfully Proof Created', Toast.LONG, {
+        //       backgroundColor: 'blue',
+        //     });
+        //     setVerify(true);
+        //   }
+        setApidata(responseJson?.data?.data?.items)
+        }
+      })
+      .catch(function (error) {
+      //  setErrortext(responseJson?.data?.error);
+        Toast.show('Somthing Went Wrong Scan Again', Toast.LONG, {
+          backgroundColor: 'blue',
+        });
+        // setLoading(false);
+      });
     };
     getData();
   }, []);
@@ -137,6 +169,7 @@ const Certificate = () => {
     },
   ];
 
+  console.log("@@@@@@@@@@@@@@@@@@@@",apidata);
   const openmodal = val => {
     console.log('HEllo', val);
     setId(val);
@@ -239,7 +272,7 @@ const Certificate = () => {
                   backgroundColor: COLOR.WHITE[100],
                 }}
                 onPress={() => openmodal(item?.id)}>
-                <Text>Share</Text>
+                <Text style={{color:COLOR.BLUE[300],fontSize:16}}>Share</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -256,7 +289,7 @@ const Certificate = () => {
         paddingTop: '30%',
         justifyContent: 'center',
       }}>
-      {proof.length < 1 ? (
+      {apidata?.length < 1 ? (
         <View style={{height: '100%', alignItems: 'center', width: '100%'}}>
           <Text
             style={{fontSize: 25, color: COLOR.BLACK[100], fontWeight: '700'}}>
@@ -288,7 +321,7 @@ const Certificate = () => {
           layout="default"
           // layoutCardOffset={'18'}
           ref={ref}
-          data={data}
+          data={apidata}
           sliderWidth={350}
           itemWidth={300}
           renderItem={renderItem}
