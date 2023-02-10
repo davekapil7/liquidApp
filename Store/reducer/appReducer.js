@@ -1,6 +1,7 @@
 
 const initialState = {
- appState : ""
+ appState : "",
+ cardList: [],
 };
 
 const appReducer = (state = initialState, action) => {
@@ -10,7 +11,12 @@ const appReducer = (state = initialState, action) => {
         ...state,
         appState: action.payload,
       };
-    
+    case "ADD_CARDS":
+      return {
+        ...state,
+        cardList: action.payload,
+      };
+
 
     default:
       return state;

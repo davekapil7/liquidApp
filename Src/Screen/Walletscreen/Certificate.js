@@ -11,7 +11,7 @@ import {
   Icon,
   BottomSheet,
 } from '@rneui/themed';
-import axios from 'axios';
+import { useSelector, useDispatch } from "react-redux";
 
 import QRCode from 'react-native-qrcode-svg';
 import axiosInstance from '../../Constant/axios';
@@ -24,31 +24,9 @@ const Certificate = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [shareopen, setShareopen] = useState(false);
   const [id, setId] = useState();
-  const [apidata, setApidata] = useState([])
   const ref = useRef(null);
 
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = async () => {
-    axiosInstance
-      .get(
-        'api/getDid',
-      )
-      .then(function (responseJson) {
-        if (responseJson.status === 200) {
-          setApidata(responseJson?.data?.data?.items)
-        }
-      })
-      .catch(function (error) {
-        //  setErrortext(responseJson?.data?.error);
-        // Toast.show('Somthing Went Wrong Scan Again', Toast.LONG, {
-        //   backgroundColor: 'blue',
-        // });
-        // setLoading(false);
-      });
-  };
+  const cardData = useSelector((state) => state.appstate.cardList);
 
   const createProof = async (id) => {
 
@@ -193,11 +171,11 @@ const Certificate = () => {
         paddingTop: '30%',
         justifyContent: 'center',
       }}>
-      {apidata?.length < 1 ? (
+      {cardData?.length < 1 ? (
         <View style={{ height: '100%', alignItems: 'center', width: '100%' }}>
           <Text
             style={{ fontSize: 25, color: COLOR.BLACK[100], fontWeight: '700' }}>
-            You don't have any proof
+            You don't have any wallet data
           </Text>
           <TouchableOpacity
             style={{
@@ -225,7 +203,7 @@ const Certificate = () => {
           layout="default"
           // layoutCardOffset={'18'}
           ref={ref}
-          data={apidata}
+          data={cardData}
           sliderWidth={350}
           itemWidth={300}
           renderItem={renderItem}
