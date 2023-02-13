@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Share,
+  Linking,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -63,6 +64,54 @@ const Walletscreen = () => {
         // setLoading(false);
       });
   };
+
+  const iAMSmartCall = async () => {
+    axiosInstance
+      .get(
+        'iamsmart/IAMSMART_login',{
+          params: {
+            source: 'android',
+            redirect_uri: 'http://liquid.com.hk'
+          }
+        }
+      )
+      .then(function (responseJson) {
+        if (responseJson.status === 200) {
+          // dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
+          console.log("Response for jump", responseJson.data.data);
+
+          let iAmSmartRes = responseJson?.data?.data;
+          if(iAmSmartRes.url && iAmSmartRes.url.length > 0) {
+            Linking.openURL(iAmSmartRes.url);
+          }
+        }
+      })
+      .catch(function (error) {
+        //  setErrortext(responseJson?.data?.error);
+        // Toast.show('Somthing Went Wrong Scan Again', Toast.LONG, {
+        //   backgroundColor: 'blue',
+        // });
+        // setLoading(false);
+      });
+  }
+
+  const ProfileButton = () => {
+    return (
+      <TouchableOpacity style={styles.button} onPress={() => iAMSmartCall()}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={require('../../../assets/Image/icon-dark-3x.png')}
+            style={styles.ImageIconStyle}
+          />
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.subtitle}>
+            Personal Data from iAM Smart
+          </Text>
+        </View>
+      </TouchableOpacity>
+    )
+  }
 
   const navigation = useNavigation();
   const [selectedtype, setSelectedType] = useState(0);
@@ -292,12 +341,14 @@ const Walletscreen = () => {
                         </Text>
                       </TouchableOpacity>
                     </View>
+                    <View style={{ alignSelf: 'center' }}>
+                      <ProfileButton />
+                    </View>
                     <View
                       style={{
                         flex: 1,
                         alignItems: 'center',
                         width: '100%',
-                        marginTop: 25,
                       }}>
                       <Icon
                         name="file-certificate-outline"

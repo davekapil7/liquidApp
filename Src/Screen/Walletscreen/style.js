@@ -51,5 +51,32 @@ export const styles = StyleSheet.create({
     paddingVertical:10
 
   },
+  button: {
+    flexDirection: 'row',
+    paddingTop: 4.375,
+    paddingBottom: 4.375,
+    borderWidth: 1,
+    borderColor: '#2b7367',
+    backgroundColor: '#2B7366',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: 17.5,
+    height: 60,
+    marginTop: 20,
+    marginBottom: 20,
+    width: '72%',
+    borderRadius: 10
+  },
+  imageContainer: {
+    width: '18%',
+    marginRight: 10
+  },
+  textContainer: {
+    width: '82%'
+  },
+  ImageIconStyle: {
+    height: '100%',
+    resizeMode: 'contain',
+  },
  
 });
