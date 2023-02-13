@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 // Import React and Component
 import React from 'react';
 
-import {AppState, StyleSheet, Text, View} from 'react-native';
+import {AppState, Linking, StyleSheet, Text, View} from 'react-native';
 
 // Import Navigators from React Navigation
 import {NavigationContainer} from '@react-navigation/native';
@@ -35,6 +35,7 @@ import Scanscreen from './Screen/Scanscreen';
 import Editdetail from './Screen/Walletscreen/Editdetails';
 import Selfissue from './Screen/Addscreen/Selfissue';
 import Testimonial from './Screen/Addscreen/Testimonial';
+import axiosInstance from './Constant/axios';
 
 const Stack = createStackNavigator();
 
@@ -109,12 +110,45 @@ const Rootnavigation = () => {
       setAppStateVisible(appState.current);
       console.log('AppState', appState.current);
     });
-
     return () => {
       subscription.remove();
     };
   }, []);
-  console.log('@@@@@@@@', appState);
+
+  useEffect(() => {
+    Linking.addEventListener('url', (url) => {
+      console.log('this is the url: ', url);
+      let linkUrl = url.url
+      if(linkUrl.includes('state')) {
+        console.log("the get auth token called", linkUrl.includes('state'));
+        // getAuthToken();
+      }
+    });
+  }, [])
+
+  const getAuthToken = async () => {
+
+    let dataToSend = {source: 'android'};
+
+    axiosInstance
+      .get(
+        'api/iamsmart/getAuthToken', dataToSend
+      )
+      .then(function (responseJson) {
+        console.log("Data response for reuqest", responseJson);
+        if (responseJson.status === 200) {
+          console.log("Request Profile Authority ", responseJson.data.data);
+        }
+      })
+      .catch(function (error) {
+        //  setErrortext(responseJson?.data?.error);
+        // Toast.show('Somthing Went Wrong Scan Again', Toast.LONG, {
+        //   backgroundColor: 'blue',
+        // });
+        // setLoading(false);
+      });
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator
