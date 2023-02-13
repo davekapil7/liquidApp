@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
+  ActivityIndicator,
   Image,
   TextInput,
   Animated,
@@ -28,7 +28,6 @@ import Carousel from 'react-native-snap-carousel';
 import Certificate from './Certificate';
 import { useSelector, useDispatch } from "react-redux";
 
-import axios from 'axios';
 import axiosInstance from '../../Constant/axios';
 
 
@@ -36,9 +35,14 @@ const HEIGHT = Dimensions.get("screen").height
 const Walletscreen = () => {
 
   const dispatch = useDispatch();
+  const [loader, setLoader] = useState(true);
 
   useEffect(() => {
+    setSelectedType(0);
     getData();
+    setTimeout(() => {
+      setLoader(false)
+    }, 1000);
   }, []);
 
   const getData = async () => {
@@ -83,6 +87,14 @@ const Walletscreen = () => {
   const editdetail = () => {
     navigation.navigate('Editdetail');
   };
+
+  if (loader) {
+    return (
+      <View style={{ width: '100 %', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#00ff00" />
+      </View>
+    )
+  }
 
   return (
     <View style={styles.safeContainer}>
