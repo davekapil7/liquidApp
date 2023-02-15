@@ -49,10 +49,11 @@ const Walletscreen = () => {
   const getData = async () => {
     axiosInstance
       .get(
-        'api/getDid',
+        'getDid',
       )
       .then(function (responseJson) {
         if (responseJson.status === 200) {
+          console.log("Card data", responseJson?.data?.data?.items);
           dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
         }
       })

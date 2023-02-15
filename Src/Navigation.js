@@ -121,7 +121,7 @@ const Rootnavigation = () => {
       let linkUrl = url.url
       if(linkUrl.includes('state')) {
         console.log("the get auth token called", linkUrl.includes('state'));
-        // getAuthToken();
+        getAuthToken();
       }
     });
   }, [])
@@ -132,12 +132,12 @@ const Rootnavigation = () => {
 
     axiosInstance
       .get(
-        'api/iamsmart/getAuthToken', dataToSend
+        'iamsmart/getAuthToken', dataToSend
       )
       .then(function (responseJson) {
         console.log("Data response for reuqest", responseJson);
         if (responseJson.status === 200) {
-          console.log("Request Profile Authority ", responseJson.data.data);
+          console.log("Request Profile Authority ", responseJson.data);
         }
       })
       .catch(function (error) {
