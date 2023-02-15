@@ -39,8 +39,9 @@ const Walletscreen = () => {
   const [loader, setLoader] = useState(true);
 
   useEffect(() => {
-    setSelectedType(0);
+    console.log("I am in wallet screen");
     getData();
+    setSelectedType(0);
     setTimeout(() => {
       setLoader(false)
     }, 1000);
@@ -49,9 +50,10 @@ const Walletscreen = () => {
   const getData = async () => {
     axiosInstance
       .get(
-        'getDid',
+        'api/getDid',
       )
       .then(function (responseJson) {
+        console.log("Response for getData", responseJson);
         if (responseJson.status === 200) {
           console.log("Card data", responseJson?.data?.data?.items);
           dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
@@ -72,7 +74,7 @@ const Walletscreen = () => {
         'iamsmart/IAMSMART_login',{
           params: {
             source: 'android',
-            redirect_uri: 'liquid://data'
+            redirect_uri: 'https://api.liquid.com.hk'
           }
         }
       )

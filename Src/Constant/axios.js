@@ -1,7 +1,7 @@
 import axios from "axios";
 //import config from "../config/config";
 //import http from "stream-http";
-const server_url = "https://api.liquid.com.hk/api";
+const server_url = "https://api.liquid.com.hk/api/";
 
 
 //const httpAgent = new http.Agent({ keepAlive: true });

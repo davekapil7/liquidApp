@@ -140,7 +140,7 @@ const LoginScreen = () => {
       let dataToSend = {email: email};
 
       axiosInstance
-        .post('/auth/login', dataToSend)
+        .post('auth/login', dataToSend)
            .then(function (responseJson) {
           console.log(responseJson, 'ressss');
 

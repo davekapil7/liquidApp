@@ -32,8 +32,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="liquid"
-              android:host="data" />
+                <data
+                    android:scheme="https"
+                    android:host="api.liquid.com.hk" />
         </intent-filter>
       </activity>
     </application>
