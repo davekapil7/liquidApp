@@ -74,7 +74,7 @@ const Walletscreen = () => {
         'iamsmart/IAMSMART_login',{
           params: {
             source: 'android',
-            redirect_uri: 'https://api.liquid.com.hk'
+            redirect_uri: 'https://api.liquid.com.hk/mobile/redirect'
           }
         }
       )
