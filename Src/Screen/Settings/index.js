@@ -1,5 +1,5 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {View, Text, TouchableOpacity, Switch} from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Switch } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 
 import {
@@ -8,10 +8,10 @@ import {
   Icon,
   BottomSheet,
 } from '@rneui/themed';
-import {COLOR} from '../../Constant/color';
+import { COLOR } from '../../Constant/color';
 import Theambackground from '../../Components/Theambackground';
-import {seetingjson} from '../../Constant/json';
-import {useNavigation} from '@react-navigation/native';
+import { seetingjson } from '../../Constant/json';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const Settingscreen = () => {
   const navigation = useNavigation();
@@ -43,6 +43,20 @@ const Settingscreen = () => {
   const logout = () => {
     AsyncStorage.removeItem('login')
     navigation.navigate("Auth")
+    axiosInstance
+      .get(
+        'auth/logout',
+      )
+      .then(function (responseJson) {
+        console.log("Logged out", responseJson);
+      })
+      .catch(function (error) {
+        //  setErrortext(responseJson?.data?.error);
+        // Toast.show('Somthing Went Wrong Scan Again', Toast.LONG, {
+        //   backgroundColor: 'blue',
+        // });
+        // setLoading(false);
+      });
   }
 
   const click = (nav, parameter) => {
@@ -51,7 +65,7 @@ const Settingscreen = () => {
         copy(parameter);
         break;
       case 'recovery':
-        navigation.navigate('Walletpinscreen', {params: 'recovery'});
+        navigation.navigate('Walletpinscreen', { params: 'recovery' });
         break;
 
       case 'wallet':
@@ -62,12 +76,12 @@ const Settingscreen = () => {
         setSheet(true);
         break;
 
-        case 'logout':
-          logout()
-          break;
+      case 'logout':
+        logout()
+        break;
 
       case 'Walletpin':
-        navigation.navigate('Walletpinscreen', {params: 'Wallet'});
+        navigation.navigate('Walletpinscreen', { params: 'Wallet' });
         break;
 
       case 'recover':
@@ -84,7 +98,7 @@ const Settingscreen = () => {
       scan={true}
       setting={false}
       back={true}>
-      <View style={{height: '100%', alignItems: 'center'}}>
+      <View style={{ height: '100%', alignItems: 'center' }}>
         {seetingjson.map((item, i) => {
           const subdata = item.subitem;
 
@@ -98,7 +112,7 @@ const Settingscreen = () => {
                 padding: 10,
               }}>
               <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text
                   style={{
                     fontSize: 16,
@@ -140,7 +154,7 @@ const Settingscreen = () => {
                       paddingVertical: 10,
                       borderBottomWidth:
                         sub.stitle == 'RECOVER CREDENTIALS' ||
-                        sub.stitle == 'VERSION 3.31.0'
+                          sub.stitle == 'VERSION 3.31.0'
                           ? 0
                           : 0.5,
                       borderBottomColor: COLOR.GRAY[200],
@@ -174,7 +188,7 @@ const Settingscreen = () => {
 
                     {sub.stitle == 'Touch ID' ? (
                       <Switch
-                        trackColor={{false: '#767577', true: 'red'}}
+                        trackColor={{ false: '#767577', true: 'red' }}
                         thumbColor={isTouch === true ? '#f5dd4b' : '#f4f3f4'}
                         //  thumbColor={"red"}
 
@@ -186,7 +200,7 @@ const Settingscreen = () => {
                       <>
                         {sub.stitle == 'Enable credential backup' ? (
                           <Switch
-                            trackColor={{false: '#767577', true: '#81b0ff'}}
+                            trackColor={{ false: '#767577', true: '#81b0ff' }}
                             thumbColor={isEnable ? '#f5dd4b' : '#f4f3f4'}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={() => setIsEnable(!isEnable)}
@@ -216,7 +230,7 @@ const Settingscreen = () => {
       </View>
 
       <BottomSheet isVisible={sheet}>
-        <View style={{flex: 1}} onPress={() => setSheet(false)}>
+        <View style={{ flex: 1 }} onPress={() => setSheet(false)}>
           <View
             style={{
               backgroundColor: COLOR.BLUE[300],
@@ -233,7 +247,7 @@ const Settingscreen = () => {
               }}>
               Are you sure you want to delete your wallet?
             </Text>
-            <Text style={{fontSize: 17, color: COLOR.GRAY[200], marginTop: 5}}>
+            <Text style={{ fontSize: 17, color: COLOR.GRAY[200], marginTop: 5 }}>
               This action is irreversible and all your credentials will be
               removed. Please backup your wallet beforehand if you intend to
               recover your credentials at a later time.

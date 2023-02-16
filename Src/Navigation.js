@@ -119,7 +119,7 @@ const Rootnavigation = () => {
     Linking.addEventListener('url', (url) => {
       console.log('this is the url: ', url);
       let linkUrl = url.url
-      if(linkUrl.includes('state')) {
+      if(linkUrl.includes('liquid')) {
         console.log("the get auth token called", linkUrl.includes('state'));
         getAuthToken();
       }
