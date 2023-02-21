@@ -4,11 +4,14 @@ import {ActivityIndicator, View, StyleSheet, Image} from 'react-native';
 // import AsyncStorage from '@react-native-community/async-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLOR } from './Constant/color';
+import { getCarddata } from './Function/Apicall';
+import { useSelector, useDispatch } from "react-redux";
 
 const SplashScreen = ({navigation}) => {
   //State for ActivityIndicator animation
   const [animating, setAnimating] = useState(true);
 
+  const dispatch = useDispatch()
   useEffect(() => {
     setTimeout(() => {
       setAnimating(false);
@@ -16,11 +19,22 @@ const SplashScreen = ({navigation}) => {
       //If not then send for Authentication
       //else send to Home Screen
       AsyncStorage.getItem('login').then(
-        value =>
+        value =>{
+        
+
+          if(value !== null){
+            console.log("Hello Splash");
+            getCarddata(dispatch)
+          }
+
+          navigation.replace(
+            value === null ? 'Auth' : 'Tabnavigationroute'
+          )
+
+        }
         // navigation.replace('Auth'),
-        navigation.replace(
-          value === null ? 'Auth' : 'Tabnavigationroute'
-        ),
+      
+        
       );
     }, 5000);
   }, []);

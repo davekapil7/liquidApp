@@ -10,14 +10,20 @@ import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../Constant/axios';
+import { useDispatch } from 'react-redux';
+import { getCarddata } from '../../Function/Apicall';
 const Otpscreen = () => {
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const [otp, setOtp] = useState();
 
   const rnBiometrics = new ReactNativeBiometrics({
     allowDeviceCredentials: true,
   });
+
+  const initialapicall = () => {
+    getCarddata(dispatch)
+  }
   const handleotp = () => {
     console.log('HELLO');
     let dataToSend = {otp: otp};
@@ -30,8 +36,10 @@ const Otpscreen = () => {
         if (responseJson?.data?.data === 'Authorized') {
          
           AsyncStorage.setItem('login', 'true');
-        //  navigation.navigate('Tabnavigationroute');
-          handlebiomatric();
+
+          initialapicall()
+          navigation.navigate('Tabnavigationroute');
+        //  handlebiomatric();
         } else {
           Alert.alert('Please Enter Right OTP');
           console.log('Please check your email id or password');

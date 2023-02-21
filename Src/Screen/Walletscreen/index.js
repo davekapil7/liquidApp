@@ -30,17 +30,19 @@ import Certificate from './Certificate';
 import { useSelector, useDispatch } from "react-redux";
 
 import axiosInstance from '../../Constant/axios';
+import { getCarddata } from '../../Function/Apicall';
 
 
 const HEIGHT = Dimensions.get("screen").height
 const Walletscreen = () => {
 
   const dispatch = useDispatch();
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     console.log("I am in wallet screen");
-    getData();
+
+   getData();
     setSelectedType(0);
     setTimeout(() => {
       setLoader(false)
