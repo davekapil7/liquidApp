@@ -18,18 +18,16 @@ export const getCarddata = (dispatch) => {
 }
 
 
-export const sendToverification = async (id, iv) => {
-  console.log("$$$$$$$", id, iv);
+export const sendToverification = async (email,id, iv) => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
   var raw = JSON.stringify({
-    "to": "pankajswami69@gmail.com",
+    "to": email,
     "data": {
       "email": "hsbc@gmail.com",
       "id": id,
       "iv": iv,
-
     }
   });
 
@@ -48,7 +46,6 @@ export const sendToverification = async (id, iv) => {
       const RESDATA = res?.data?.data
       const ARRkEY = Object.keys(RESDATA)
       const found = ARRkEY.findIndex(element => element === "accepted");
-      console.log(("@@@@@@@", found));
       if (found === -1) {
         return false
       } else {

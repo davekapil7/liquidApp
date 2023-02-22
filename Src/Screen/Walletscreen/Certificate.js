@@ -22,7 +22,7 @@ const WIDTH = Dimensions.get('screen').width;
 
 const HIGHT = Dimensions.get('screen').height;
 
-const Certificate = () => {
+const Certificate = ({ toMail, setMail }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [shareopen, setShareopen] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -105,11 +105,16 @@ const Certificate = () => {
           const id = objData?.id
           const iv = objData?.iv
           let stringData = JSON.stringify(objData);
-          const res = await sendToverification(id, iv)
-          setApiloader(false)
-          setEmailapproval(true)
-          setId(stringData);
-
+          const res = await sendToverification(toMail, id, iv)
+          console.log("Response from mail", res);
+          if (res) {
+            setApiloader(false)
+            setEmailapproval(true)
+            setId(stringData);
+            setMail("")
+          } else {
+            setMail("")
+          }
         }
       })
       .catch(function (error) {
@@ -141,7 +146,6 @@ const Certificate = () => {
 
     const emailid = emailIcon.findIndex(value => value === id)
 
-    console.log("@@@@@@@", item);
     if (loader) {
       return (
         <View style={{ width: '100 %', height: '100%' }}>
@@ -152,7 +156,7 @@ const Certificate = () => {
 
     return (
       <View style={{ width: '100%', height: 300 }}>
-        {emailid !== -1 &&
+        {toMail && toMail.length > 0 &&
           <View style={{ alignItems: "flex-start", marginBottom: -5, marginLeft: 25, }}>
             <TouchableOpacity onPress={() => handlemailicon(id)}>
               <Icon name='mail-unread-outline'
@@ -202,7 +206,7 @@ const Certificate = () => {
                   borderBottomLeftRadius: 25,
                   height: 40
                 }}
-                onPress={() => openmodal(item?.id)}>
+                  onPress={() => openmodal(item?.id)}>
                   <Text style={{ fontWeight: "600", color: "black" }}>SHARE</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{
@@ -465,10 +469,8 @@ const Certificate = () => {
         }}>
 
         <View style={{ width: "80%", alignItems: "flex-start", paddingLeft: 15, backgroundColor: "white", alignSelf: "center", paddingVertical: 30, borderRadius: 15 }}>
-          <Text style={{ fontSize: 18, color: COLOR.BLUE[300], fontWeight: "bold", textAlign: "center" }}>Your Mail have successfully send</Text>
+          <Text style={{ fontSize: 18, color: COLOR.BLUE[300], fontWeight: "bold", textAlign: "center" }}>Your Card have been successfully sent</Text>
         </View>
-
-
       </BottomSheet>
 
       <BottomSheet

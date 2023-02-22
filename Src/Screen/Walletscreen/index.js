@@ -38,16 +38,33 @@ const Walletscreen = () => {
 
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
+  const [toMail, setToMail] = useState('');
 
   useEffect(() => {
     console.log("I am in wallet screen");
 
-   getData();
+    getData();
     setSelectedType(0);
     setTimeout(() => {
       setLoader(false)
     }, 1000);
+
+    Linking.addEventListener('url', (url) => {
+      let linkUrl = url.url;
+      linkUrl = linkUrl + " ";
+      if (linkUrl.includes('email=')) {
+        let email = getStringBetween(linkUrl, 'email=', ' ');
+        console.log("Email =", email);
+        setToMail(email);
+        setSelectedType(1)
+      }
+    });
   }, []);
+
+  function getStringBetween(str, start, end) {
+    const result = str.match(new RegExp(start + "(.*)" + end));
+    return result[1];
+  }
 
   const getData = async () => {
     axiosInstance
@@ -73,12 +90,12 @@ const Walletscreen = () => {
   const iAMSmartCall = async () => {
     axiosInstance
       .get(
-        'iamsmart/IAMSMART_login',{
-          params: {
-            source: 'android',
-            redirect_uri: 'https://api.liquid.com.hk/mobile/redirect'
-          }
+        'iamsmart/IAMSMART_login', {
+        params: {
+          source: 'android',
+          redirect_uri: 'https://api.liquid.com.hk/mobile/redirect'
         }
+      }
       )
       .then(function (responseJson) {
         if (responseJson.status === 200) {
@@ -86,7 +103,7 @@ const Walletscreen = () => {
           console.log("Response for jump", responseJson.data.data);
 
           let iAmSmartRes = responseJson?.data?.data;
-          if(iAmSmartRes.url && iAmSmartRes.url.length > 0) {
+          if (iAmSmartRes.url && iAmSmartRes.url.length > 0) {
             Linking.openURL(iAmSmartRes.url);
           }
         }
@@ -413,7 +430,7 @@ const Walletscreen = () => {
                       alignSelf: 'flex-start',
                       flex: 1,
                     }}>
-                    <Certificate />
+                    <Certificate toMail={toMail} setMail={setToMail} />
 
                   </View>
                 )}

@@ -39,6 +39,10 @@ import axiosInstance from './Constant/axios';
 
 const Stack = createStackNavigator();
 
+const linking = {
+  prefixes: ["https://api.liquid.com.hk/", 'liquid://'],
+};
+
 const Auth = () => {
   // Stack Navigator for Login and Sign up Screen
   return (
@@ -117,7 +121,6 @@ const Rootnavigation = () => {
 
   function getStringBetween(str, start, end) {
     const result = str.match(new RegExp(start + "(.*)" + end));
-
     return result[1];
   }
 
@@ -126,7 +129,7 @@ const Rootnavigation = () => {
       console.log('this is the url: ', url);
       let linkUrl = url.url;
       linkUrl = linkUrl + " ";
-      if(linkUrl.includes('liquid')) {
+      if(linkUrl.includes('state=')) {
         let myState = getStringBetween(linkUrl, 'state=', '&code');
         let myCode = getStringBetween(linkUrl, '&code=', ' ');
         console.log("Substring", myState);
@@ -160,7 +163,7 @@ const Rootnavigation = () => {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer  linking={linking}>
       <Stack.Navigator
         initialRouteName="SplashScreen"
       //   initialRouteName='Tabnavigationroute'
