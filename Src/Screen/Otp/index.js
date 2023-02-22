@@ -38,8 +38,8 @@ const Otpscreen = () => {
           AsyncStorage.setItem('login', 'true');
 
           initialapicall()
-          navigation.navigate('Tabnavigationroute');
-        //  handlebiomatric();
+          // navigation.navigate('Tabnavigationroute');
+         handlebiomatric();
         } else {
           Alert.alert('Please Enter Right OTP');
           console.log('Please check your email id or password');

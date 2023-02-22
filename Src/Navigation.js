@@ -115,24 +115,34 @@ const Rootnavigation = () => {
     };
   }, []);
 
+  function getStringBetween(str, start, end) {
+    const result = str.match(new RegExp(start + "(.*)" + end));
+
+    return result[1];
+  }
+
   useEffect(() => {
     Linking.addEventListener('url', (url) => {
       console.log('this is the url: ', url);
-      let linkUrl = url.url
+      let linkUrl = url.url;
+      linkUrl = linkUrl + " ";
       if(linkUrl.includes('liquid')) {
-        console.log("the get auth token called", linkUrl.includes('state'));
-        getAuthToken();
+        let myState = getStringBetween(linkUrl, 'state=', '&code');
+        let myCode = getStringBetween(linkUrl, '&code=', ' ');
+        console.log("Substring", myState);
+        console.log("Subcode", myCode);
+        getAuthToken(myState, myCode);
       }
     });
   }, [])
 
-  const getAuthToken = async () => {
+  const getAuthToken = async (state, code) => {
 
-    let dataToSend = {source: 'android'};
+    let dataToSend = {state: state, code: code};
 
     axiosInstance
-      .get(
-        'iamsmart/getAuthToken', dataToSend
+      .post(
+        'iamsmart/getauthtokenformobile', dataToSend
       )
       .then(function (responseJson) {
         console.log("Data response for reuqest", responseJson);

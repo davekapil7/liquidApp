@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, Alert, Dimensions, ActivityIndicator, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Dimensions, ActivityIndicator, ImageBackground, Image } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import Carousel from 'react-native-snap-carousel';
@@ -29,7 +29,7 @@ const Certificate = () => {
   const [id, setId] = useState();
   const [emailApproval, setEmailapproval] = useState(false)
   const [emailIcon, setEmailicon] = useState([])
-  const [apiloader , setApiloader] = useState(false)
+  const [apiloader, setApiloader] = useState(false)
 
   const ref = useRef(null);
 
@@ -90,7 +90,7 @@ const Certificate = () => {
   }, [emailApproval === true]);
 
   const handlemailicon = async (id) => {
-   setApiloader(true)
+    setApiloader(true)
 
     let dataToSend = { item_id: id };
 
@@ -141,7 +141,7 @@ const Certificate = () => {
 
     const emailid = emailIcon.findIndex(value => value === id)
 
-    console.log("@@@@@@@", emailid);
+    console.log("@@@@@@@", item);
     if (loader) {
       return (
         <View style={{ width: '100 %', height: '100%' }}>
@@ -153,7 +153,7 @@ const Certificate = () => {
     return (
       <View style={{ width: '100%', height: 300 }}>
         {emailid !== -1 &&
-          <View style={{ alignItems: "flex-start", marginBottom: -5, marginLeft: 5, }}>
+          <View style={{ alignItems: "flex-start", marginBottom: -5, marginLeft: 25, }}>
             <TouchableOpacity onPress={() => handlemailicon(id)}>
               <Icon name='mail-unread-outline'
                 type='ionicon'
@@ -163,7 +163,69 @@ const Certificate = () => {
           </View>
         }
 
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, width: 350, height: 250 }}>
+          <Image source={require("../../../assets/Image/card/card5.png")}
+            style={{ width: "100%", height: "100%", resizeMode: "stretch" }} />
+          <View style={{ position: "absolute", width: "80%", height: "80%", margin: 25, alignSelf: "center" }}>
+            <Text style={{ color: COLOR.WHITE[100] }}>Kerry ID</Text>
+            <Text
+              style={{
+                fontSize: 20,
+                color: '#4C516D',
+                fontWeight: 'bold',
+              }}>
+              {item.data.credentialSubject?.filehash}
+            </Text>
+
+            <View style={{ position: "absolute", width: "100%", bottom: 25 }}>
+              <Text
+                style={{
+                  fontSize: 27,
+                  marginTop: 15,
+                  textTransform: 'uppercase',
+                  color: COLOR.WHITE[100],
+                  fontWeight: 'bold',
+                  width: '50%',
+                }}>
+                {item.data.credentialSubject?.Filename}
+              </Text>
+            </View>
+
+            <View style={{ position: "absolute", width: "100%", height: "100%", marginTop: -10, alignItems: "flex-end", justifyContent: "center" }}>
+              <View style={{ flexDirection: "row", }}>
+                <TouchableOpacity style={{
+                  width: 80,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderWidth: 1,
+                  borderTopLeftRadius: 25,
+                  borderBottomLeftRadius: 25,
+                  height: 40
+                }}
+                onPress={() => openmodal(item?.id)}>
+                  <Text style={{ fontWeight: "600", color: "black" }}>SHARE</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{
+                  width: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderWidth: 1,
+                  borderLeftWidth: 0,
+                  borderBottomRightRadius: 25,
+                  borderTopRightRadius: 25,
+                  height: 40
+                }}>
+                  <Icon name='chevron-small-down'
+                    type='entypo'
+
+                    size={35} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* <View style={{ flex: 1 }}>
           <ImageBackground source={require("../../../assets/Image/card/card5.png")}
             style={{ width: "100%", height: "100%" }} resizeMode='cover'>
             <View style={{ padding: 15, width: '100%' }}>
@@ -190,34 +252,7 @@ const Certificate = () => {
                   </View>
                 </View>
 
-                <View style={{}}>
-                  <View>
-                    <Text style={{ color: COLOR.WHITE[100], fontSize: 15 }}>
-                      Member since
-                    </Text>
-                    <Text
-                      style={{
-                        color: COLOR.WHITE[100],
-                        fontSize: 18,
-                        fontWeight: '700',
-                      }}>
-                      {memberformated}
-                    </Text>
-                  </View>
-                  <View style={{ marginTop: 11 }}>
-                    <Text style={{ color: COLOR.WHITE[100], fontSize: 15 }}>
-                      Issurance Date
-                    </Text>
-                    <Text
-                      style={{
-                        color: COLOR.WHITE[100],
-                        fontSize: 18,
-                        fontWeight: '700',
-                      }}>
-                      {insformated}
-                    </Text>
-                  </View>
-                </View>
+               
               </View>
 
               <View
@@ -237,19 +272,6 @@ const Certificate = () => {
                   }}>
                   {item.data.credentialSubject?.Filename}
                 </Text>
-
-                {/* <TouchableOpacity
-                  style={{
-                    width: '30%',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: 35,
-                    borderRadius: 10,
-                    backgroundColor: COLOR.WHITE[100],
-                  }}
-                  onPress={() => openmodal(item?.id)}>
-                  <Text style={{ color: COLOR.BLUE[300], fontSize: 16 }}>Share</Text>
-                </TouchableOpacity> */}
               </View>
               <View style={{ width: "100%", justifyContent: "center", alignItems: "center" }}>
 
@@ -282,7 +304,7 @@ const Certificate = () => {
               </View>
             </View>
           </ImageBackground>
-        </View>
+        </View> */}
         {/* <LinearGradient
           start={{ x: 0.0, y: 0.4 }}
           end={{ x: 0.85, y: 0.5 }}
@@ -429,11 +451,11 @@ const Certificate = () => {
       )}
       {apiloader &&
 
-      <View style={{flex:1 , position:"absolute",paddingTop:"30%",backgroundColor:"rgba(255, 255, 255,0.5)",width:"100%",height:"100%", }}>
-        <ActivityIndicator size={40}
-        color={COLOR.BLUE[300]}/>
-      </View>
-       }
+        <View style={{ flex: 1, position: "absolute", paddingTop: "30%", backgroundColor: "rgba(255, 255, 255,0.5)", width: "100%", height: "100%", }}>
+          <ActivityIndicator size={40}
+            color={COLOR.BLUE[300]} />
+        </View>
+      }
 
       <BottomSheet isVisible={emailApproval}
         containerStyle={{
@@ -454,7 +476,7 @@ const Certificate = () => {
         containerStyle={{
           backgroundColor: 'rgba(255, 255, 255,0.6)',
           //alignItems:"center",
-          flex:1,
+          flex: 1,
           justifyContent: 'center',
         }}>
         <TouchableOpacity

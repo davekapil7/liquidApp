@@ -40,7 +40,7 @@ export const sendToverification = async (id, iv) => {
     redirect: 'follow'
   };
 
-  const res =  fetch("https://api.liquid.com.hk/api/mail/mailForVerification", requestOptions)
+  const res =  fetch("https://api.liquid.com.hk/api/mail/transferDID", requestOptions)
     .then(response => response.text())
     .then(result => {
       const res = JSON.parse(result)
