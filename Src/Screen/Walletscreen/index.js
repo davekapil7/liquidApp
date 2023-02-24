@@ -72,7 +72,6 @@ const Walletscreen = () => {
         'api/getDid',
       )
       .then(function (responseJson) {
-        console.log("Response for getData", responseJson);
         if (responseJson.status === 200) {
           console.log("Card data", responseJson?.data?.data?.items);
           dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });

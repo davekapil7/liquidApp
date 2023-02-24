@@ -10,11 +10,13 @@ import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../Constant/axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getCarddata } from '../../Function/Apicall';
 const Otpscreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const cardData = useSelector((state) => state.appstate.cardList);
+
   const [otp, setOtp] = useState();
 
   const rnBiometrics = new ReactNativeBiometrics({
@@ -22,7 +24,9 @@ const Otpscreen = () => {
   });
 
   const initialapicall = () => {
-    getCarddata(dispatch)
+    if(cardData.length == 0) {
+      getCarddata(dispatch)
+    }
   }
   const handleotp = () => {
     console.log('HELLO');

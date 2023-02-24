@@ -3,11 +3,11 @@ import 'react-native-gesture-handler';
 // Import React and Component
 import React from 'react';
 
-import {AppState, Linking, StyleSheet, Text, View} from 'react-native';
+import { AppState, Linking, StyleSheet, Text, View } from 'react-native';
 
 // Import Navigators from React Navigation
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 // Import Screens
 import SplashScreen from './SplashScreen';
@@ -19,8 +19,8 @@ import DrawerNavigationRoutes from './DrawerNavigationRoutes';
 import CreateProofScreen from './DrawerScreens/CreateProofScreen';
 
 //Import Redux
-import {useDispatch, useSelector} from 'react-redux';
-import {useEffect, useRef, useState} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
 import OnbordingScreen from './Screen/OnbordingScreen';
 import InfoScreen from './Screen/Info';
 import Otpscreen from './Screen/Otp';
@@ -52,27 +52,27 @@ const Auth = () => {
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="OnbordingScreen"
         component={OnbordingScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="InfoScreen"
         component={InfoScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Otpscreen"
         component={Otpscreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="SignLoginScreen"
         component={SignLoginScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="RegisterScreen"
@@ -110,7 +110,7 @@ const Rootnavigation = () => {
       }
 
       appState.current = nextAppState;
-      dispatch({type: 'CHANGE_STATE', payload: appState.current});
+      dispatch({ type: 'CHANGE_STATE', payload: appState.current });
       setAppStateVisible(appState.current);
       console.log('AppState', appState.current);
     });
@@ -129,41 +129,85 @@ const Rootnavigation = () => {
       console.log('this is the url: ', url);
       let linkUrl = url.url;
       linkUrl = linkUrl + " ";
-      if(linkUrl.includes('state=')) {
+      if (linkUrl.includes('state=')) {
         let myState = getStringBetween(linkUrl, 'state=', '&code');
         let myCode = getStringBetween(linkUrl, '&code=', ' ');
-        console.log("Substring", myState);
-        console.log("Subcode", myCode);
-        getAuthToken(myState, myCode);
+        console.log("My state", typeof myState);
+        if (myState !== 'null') {
+          getAuthToken(myState, myCode);
+        } else {
+          getProfile()
+        }
       }
     });
   }, [])
 
   const getAuthToken = async (state, code) => {
 
-    let dataToSend = {state: state, code: code};
+    let dataToSend = { state: state, code: code };
 
     axiosInstance
       .post(
         'iamsmart/getauthtokenformobile', dataToSend
       )
       .then(function (responseJson) {
-        console.log("Data response for reuqest", responseJson);
         if (responseJson.status === 200) {
           console.log("Request Profile Authority ", responseJson.data);
+          if (responseJson.data.data.token && responseJson.data.data.token.length > 0) {
+            getProfileForMobile();
+          }
         }
       })
       .catch(function (error) {
-        //  setErrortext(responseJson?.data?.error);
-        // Toast.show('Somthing Went Wrong Scan Again', Toast.LONG, {
-        //   backgroundColor: 'blue',
-        // });
-        // setLoading(false);
+      });
+  }
+
+  const getProfileForMobile = () => {
+
+    axiosInstance
+      .get(
+        'iamsmart/profilerequest', {
+        params: {
+          source: 'android',
+        }
+      }
+      )
+      .then(function (responseJson) {
+        if (responseJson.status === 200) {
+          console.log("The Ticket Data ", responseJson.data);
+          if (responseJson.data.data.ticketID && responseJson.data.data.ticketID.length > 0) {
+            Linking.openURL('hk.gov.iamsmart.testapp://auth');
+          }
+        }
+      })
+      .catch(function (error) {
+      });
+  }
+
+  const getProfile = () => {
+
+    axiosInstance
+      .get(
+        'iamsmart/getProfile', {
+        params: {
+          source: 'android',
+        }
+      }
+      )
+      .then(function (responseJson) {
+        if (responseJson.status === 200) {
+          let profileData = JSON.stringify(responseJson.data.profile);
+          profileData = JSON.parse(profileData);
+          console.log("Profile Data", profileData);
+          dispatch({ type: 'ADD_PROFILE', payload: responseJson.data.data });
+        }
+      })
+      .catch(function (error) {
       });
   }
 
   return (
-    <NavigationContainer  linking={linking}>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator
         initialRouteName="SplashScreen"
       //   initialRouteName='Tabnavigationroute'
@@ -173,13 +217,13 @@ const Rootnavigation = () => {
           name="SplashScreen"
           component={SplashScreen}
           // Hiding header for Splash Screen
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         {/* Auth Navigator: Include Login and Signup */}
         <Stack.Screen
           name="Auth"
           component={Auth}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         {/* Navigation Drawer as a landing page */}
         {/* <Stack.Screen
@@ -193,61 +237,61 @@ const Rootnavigation = () => {
           name="Tabnavigationroute"
           component={TabNavigationRoute}
           // Hiding header for Navigation Drawer
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Selfissue"
           component={Selfissue}
           // Hiding header for Navigation Drawer
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Testimonial"
           component={Testimonial}
           // Hiding header for Navigation Drawer
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Settingscreen"
           component={Settingscreen}
           // Hiding header for Navigation Drawer
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Walletconnection"
           component={WalletconnectionScreen}
           // Hiding header for Navigation Drawer
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="EmailAddress"
           component={EmailAddScreen}
           // Hiding header for Navigation Drawer
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Recoverscreen"
           component={RecoverScreen}
           // Hiding header for Navigation Drawer
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Scanscreen"
           component={Scanscreen}
           // Hiding header for Navigation Drawer
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Editdetail"
           component={Editdetail}
           // Hiding header for Navigation Drawer
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Walletpinscreen"
           component={WalletPinscreen}
           // Hiding header for Navigation Drawer
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ProofScreenStack"

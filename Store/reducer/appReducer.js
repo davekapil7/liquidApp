@@ -2,6 +2,7 @@
 const initialState = {
  appState : "",
  cardList: [],
+ profileData: {},
 };
 
 const appReducer = (state = initialState, action) => {
@@ -16,7 +17,11 @@ const appReducer = (state = initialState, action) => {
         ...state,
         cardList: action.payload,
       };
-
+    case "ADD_PROFILE":
+      return {
+        ...state,
+        profileData: action.payload,
+      };
 
     default:
       return state;
