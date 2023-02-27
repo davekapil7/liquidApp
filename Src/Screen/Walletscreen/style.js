@@ -19,6 +19,35 @@ export const styles = StyleSheet.create({
     color:COLOR.WHITE[100],
     fontWeight:"bold"
   },
+  inputbox: {
+    width: '95%',
+    alignSelf:"center",
+    borderRadius: 10,
+    minHeight: 75,
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: COLOR.BLUE[400],
+    padding: 15,
+  },
+  lastbox: {
+    alignSelf:"center",
+    borderRadius: 10,
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: COLOR.BLUE[400],
+    marginBottom: 50, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    width: '80%', 
+    minHeight: 30, 
+    padding: 10
+  },
+  inputtitle: {
+    fontSize: 14,
+    color: COLOR.GRAY[100],
+    fontWeight: '700',
+  },
+  inputtext: {color: 'black', fontSize: 18},
  
   welcometext:{
     fontSize:17,

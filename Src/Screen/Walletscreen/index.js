@@ -32,6 +32,8 @@ import { useSelector, useDispatch } from "react-redux";
 import axiosInstance from '../../Constant/axios';
 import { getCarddata } from '../../Function/Apicall';
 
+const profile = { "Eme": { "birthDate": "20090801", "businessID": "2ce8db815f15dec858f24bfeb863a4", "emailAddr": "davekapil071@gmail.com", "enName": { "UnstructuredName": "JOHANSON, Christine" }, "gender": "F", "homeTelNumber": { "CountryCode": "852", "SubscriberNumber": "918719847380" }, "idNo": { "CheckDigit": "7", "Identification": "G996960" }, "mobileNumber": { "CountryCode": "852", "SubscriberNumber": "918719847380" }, "officeTelNumber": { "CountryCode": "852", "SubscriberNumber": "918719847380" } } }
+
 
 const HEIGHT = Dimensions.get("screen").height
 const Walletscreen = () => {
@@ -39,6 +41,9 @@ const Walletscreen = () => {
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
   const [toMail, setToMail] = useState('');
+
+
+  console.log("$$$$$", Object.keys(profile).length);
 
   useEffect(() => {
     console.log("I am in wallet screen");
@@ -134,6 +139,16 @@ const Walletscreen = () => {
     )
   }
 
+  const birthDayConverter = (dateString) => {
+    let year = dateString.substring(0, 4);
+    let month = dateString.substring(4, 6);
+    let day = dateString.substring(6, 8);
+
+    let date = new Date(year, month - 1, day);
+    console.log("Date length", date.toDateString());
+    return date.toDateString();
+  }
+
   const navigation = useNavigation();
   const [selectedtype, setSelectedType] = useState(0);
 
@@ -173,10 +188,6 @@ const Walletscreen = () => {
           start={{ x: 0.0, y: 0.4 }}
           end={{ x: 0.85, y: 0.5 }}
           locations={[0, 0.9]}
-          // start={{x: 0.0, y: 0.4}}
-          // end={{x: 0.8, y: 0.5}}
-          // locations={[0, 0.9]}
-          // colors={['#5d0981', '#e30cd1']}
           colors={['#454dbc', '#bd59fa']}
           style={{ flex: 1, height: "100%" }}>
           <View style={{ flex: 1, minHeight: HEIGHT }}>
@@ -302,7 +313,7 @@ const Walletscreen = () => {
                               marginTop: 10,
                               color: COLOR.BLACK[100],
                             }}>
-                            user@gmail.com
+                            ***@gmail.com
                           </Text>
                         </View>
                         <View
@@ -362,61 +373,110 @@ const Walletscreen = () => {
                         </Text>
                       </TouchableOpacity>
                     </View>
-                    <View style={{ alignSelf: 'center' }}>
-                      <ProfileButton />
-                    </View>
-                    <View
-                      style={{
-                        flex: 1,
-                        alignItems: 'center',
-                        width: '100%',
-                      }}>
-                      <Icon
-                        name="file-certificate-outline"
-                        type="material-community"
-                        size={90}
-                        color={COLOR.BLUE[300]}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 25,
-                          color: COLOR.BLACK[100],
-                          fontWeight: '600',
-                        }}>
-                        Let's get your first credential
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: 17,
-                          color: COLOR.BLACK[100],
-                          fontWeight: '400',
-                          marginTop: 15,
-                          width: '75%',
-                          textAlign: 'center',
-                        }}>
-                        You can self issue your own credential or receive a
-                        testimonial from your business partners or colleagues
-                      </Text>
+                    {Object.keys(profile).length > 0 ? (
+                      <View style={{ flex: 1, width: "100%", marginBottom: 35 }}>
 
-                      <TouchableOpacity
-                        style={{
-                          backgroundColor: COLOR.BLUE[300],
-                          marginTop: 20,
-                          padding: 5,
-                          paddingHorizontal: 15,
-                          borderRadius: 5,
-                        }}
-                        onPress={() => getmycredential()}>
-                        <Text
+                        <View style={styles.inputbox}>
+                          <Text style={styles.inputtitle}>FULL NAME</Text>
+                          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 2 }}>
+                            <Text style={styles.inputtext}>{profile.Eme.enName.UnstructuredName}</Text>
+                            <Image source={require("../../../assets/Image/phone.png")}
+                              style={{ width: 35, height: 35 }} />
+                          </View>
+                        </View>
+
+
+                        <View style={styles.inputbox}>
+                          <Text style={styles.inputtitle}>Birth date</Text>
+                          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 2 }}>
+                            <Text style={styles.inputtext}>{birthDayConverter(profile.Eme.birthDate)}</Text>
+                            <Image source={require("../../../assets/Image/phone.png")}
+                              style={{ width: 35, height: 35 }} />
+                          </View>
+                        </View>
+
+                        <View style={styles.inputbox}>
+                          <Text style={styles.inputtitle}>Phone number</Text>
+                          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 2 }}>
+                            <Text style={styles.inputtext}>{`(${profile.Eme.mobileNumber.CountryCode})-${profile.Eme.mobileNumber.SubscriberNumber}`}</Text>
+                            <Image source={require("../../../assets/Image/phone.png")}
+                              style={{ width: 35, height: 35 }} />
+                          </View>
+                        </View>
+
+                        <View style={styles.inputbox}>
+                          <Text style={styles.inputtitle}>ID code</Text>
+                          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 2 }}>
+                            <Text style={styles.inputtext}>{`${profile.Eme.idNo.Identification}-(${profile.Eme.idNo.CheckDigit})`}</Text>
+                            <Image source={require("../../../assets/Image/phone.png")}
+                              style={{ width: 35, height: 35 }} />
+                          </View>
+                        </View>
+
+                        <View style={{ ...styles.lastbox }}>
+                          <Text style={{ ...styles.inputtitle, fontWeight: 'bold', color: '#000'}}>Profile Data Provided by iAM SMART</Text>
+                        </View>
+
+                      </View>
+                    ) : (
+                      <>
+                        <View style={{ alignSelf: 'center' }}>
+                          <ProfileButton />
+                        </View>
+                        <View
                           style={{
-                            color: COLOR.WHITE[100],
-                            fontWeight: '700',
-                            fontSize: 15,
+                            flex: 1,
+                            alignItems: 'center',
+                            width: '100%',
                           }}>
-                          GET MY FIRST CREDENTIAL
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
+                          <Icon
+                            name="file-certificate-outline"
+                            type="material-community"
+                            size={90}
+                            color={COLOR.BLUE[300]}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 25,
+                              color: COLOR.BLACK[100],
+                              fontWeight: '600',
+                            }}>
+                            Let's get your first credential
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 17,
+                              color: COLOR.BLACK[100],
+                              fontWeight: '400',
+                              marginTop: 15,
+                              width: '75%',
+                              textAlign: 'center',
+                            }}>
+                            You can self issue your own credential or receive a
+                            testimonial from your business partners or colleagues
+                          </Text>
+
+                          <TouchableOpacity
+                            style={{
+                              backgroundColor: COLOR.BLUE[300],
+                              marginTop: 20,
+                              padding: 5,
+                              paddingHorizontal: 15,
+                              borderRadius: 5,
+                            }}
+                            onPress={() => getmycredential()}>
+                            <Text
+                              style={{
+                                color: COLOR.WHITE[100],
+                                fontWeight: '700',
+                                fontSize: 15,
+                              }}>
+                              GET MY FIRST CREDENTIAL
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </>
+                    )}
                   </View>
                 )}
 
