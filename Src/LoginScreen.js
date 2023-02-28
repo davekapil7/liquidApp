@@ -82,7 +82,7 @@ const LoginScreen = () => {
           // If server response message same as Data Matched
           if (responseJson?.data?.data === 'OTP SENT') {
             setOtpInput(true);
-            Toast.show('OTP SENT', Toast.LONG, {backgroundColor: 'blue'});
+            // Toast.show('OTP SENT', Toast.LONG, {backgroundColor: 'blue'});
           } else {
             setErrortext(responseJson?.data?.error);
             Toast.show('Please check your email', Toast.LONG, {

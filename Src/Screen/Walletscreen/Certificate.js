@@ -56,29 +56,10 @@ const Certificate = ({ toMail, setMail }) => {
         }
       })
       .catch(function (error) {
-        //  setErrortext(responseJson?.data?.error);
-        // Toast.show('Somthing Went Wrong Scan Again', Toast.LONG, {
-        //   backgroundColor: 'blue',
-        // });
-        // setLoading(false);
       });
   };
 
-  useEffect(() => {
-
-    let arr = []
-    cardData.map((item) => {
-      arr.push(item?.id)
-    })
-    console.log("@@@@@@@", cardData);
-    setEmailicon(arr)
-
-  }, [])
-
-  console.log("$$$$$4", emailIcon);
-
   const openmodal = (val) => {
-    console.log('HEllo', val);
     setApiloader(true)
     createProof(val);
   };
@@ -167,243 +148,61 @@ const Certificate = ({ toMail, setMail }) => {
           </View>
         }
 
-        <View style={{ flex: 1, width: 350, height: 250 }}>
-          <Image source={require("../../../assets/Image/card/card5.png")}
+        <View style={{ flex: 1, width: 360, height: 250 }}>
+          <Image source={require("../../../assets/Image/card/card7.png")}
             style={{ width: "100%", height: "100%", resizeMode: "stretch" }} />
           <View style={{ position: "absolute", width: "80%", height: "80%", margin: 25, alignSelf: "center" }}>
-            <Text style={{ color: COLOR.WHITE[100] }}>Kerry ID</Text>
-            <Text
-              style={{
-                fontSize: 20,
-                color: '#4C516D',
-                fontWeight: 'bold',
-              }}>
-              {item.data.credentialSubject?.filehash}
-            </Text>
 
-            <View style={{ position: "absolute", width: "100%", bottom: 25 }}>
-              <Text
-                style={{
-                  fontSize: 27,
-                  marginTop: 15,
-                  textTransform: 'uppercase',
-                  color: COLOR.WHITE[100],
-                  fontWeight: 'bold',
-                  width: '50%',
-                }}>
-                {item.data.credentialSubject?.Filename}
-              </Text>
+            <View style={{ position: "absolute", width: "100%", right: 0, alignItems: 'flex-end' }}>
+              <Image source={require("../../../assets/Image/card/Kerry-Logistics.png")} />
             </View>
 
-            <View style={{ position: "absolute", width: "100%", height: "100%", marginTop: -10, alignItems: "flex-end", justifyContent: "center" }}>
-              <View style={{ flexDirection: "row", }}>
-                <TouchableOpacity style={{
-                  width: 80,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderWidth: 1,
-                  borderTopLeftRadius: 25,
-                  borderBottomLeftRadius: 25,
-                  height: 40
-                }}
-                  onPress={() => openmodal(item?.id)}>
-                  <Text style={{ fontWeight: "600", color: "black" }}>SHARE</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{
-                  width: 50,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderWidth: 1,
-                  borderLeftWidth: 0,
-                  borderBottomRightRadius: 25,
-                  borderTopRightRadius: 25,
-                  height: 40
-                }}>
-                  <Icon name='chevron-small-down'
-                    type='entypo'
+            <View style={{ position: "absolute", width: "100%", bottom: 30, right: 0, alignItems: 'flex-end' }}>
+              <Image source={require("../../../assets/Image/card/logo-liquid-white.png")} />
+            </View>
 
-                    size={35} />
-                </TouchableOpacity>
+            <View style={{ position: "absolute", width: "100%", height: "100%", marginTop: -10, justifyContent: "center" }}>
+              <View style={{ flexDirection: "row", alignContent: 'space-between' }}>
+                <View style={{ width: '50%' }}>
+                  <Text style={{ fontWeight: "600", color: "#FFFFFF", fontSize: 20 }}>UID</Text>
+                  <Text style={{ fontWeight: "600", color: "#FFFFFF", fontSize: 12 }}>{item.id.split(":")[2].slice(0, 6)}...{item.id.split(":")[2].slice(24, 32)}</Text>
+                </View>
+                <View style={{ position: 'absolute', right: 0, flexDirection: 'row' }} >
+                  <TouchableOpacity style={{
+                    width: 80,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderWidth: 1,
+                    borderTopLeftRadius: 25,
+                    borderBottomLeftRadius: 25,
+                    height: 40,
+                  }}
+                    onPress={() => openmodal(item?.id)}>
+                    <Text style={{ fontWeight: "600", color: "black" }}>SHARE</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{
+                    width: 50,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderWidth: 1,
+                    borderLeftWidth: 0,
+                    borderBottomRightRadius: 25,
+                    borderTopRightRadius: 25,
+                    height: 40
+                  }}>
+                    <Icon name='chevron-small-down'
+                      type='entypo'
+                      size={35} />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
         </View>
-
-        {/* <View style={{ flex: 1 }}>
-          <ImageBackground source={require("../../../assets/Image/card/card5.png")}
-            style={{ width: "100%", height: "100%" }} resizeMode='cover'>
-            <View style={{ padding: 15, width: '100%' }}>
-              <View
-                style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <View>
-                  <Text style={{ color: COLOR.WHITE[100] }}>Kerry ID</Text>
-                  <View
-                    style={{
-                      // backgroundColor: COLOR.WHITE[100],
-                      // padding: 10,
-                      borderRadius: 5,
-                      marginTop: 5,
-                      alignSelf: 'flex-start',
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        color: '#4C516D',
-                        fontWeight: 'bold',
-                      }}>
-                      {item.data.credentialSubject?.filehash}
-                    </Text>
-                  </View>
-                </View>
-
-               
-              </View>
-
-              <View
-                style={{
-                  width: '100%',
-                  alignItems: 'flex-end',
-                  flexDirection: 'row',
-                }}>
-                <Text
-                  style={{
-                    fontSize: 27,
-                    marginTop: 15,
-                    textTransform: 'uppercase',
-                    color: COLOR.WHITE[100],
-                    fontWeight: 'bold',
-                    width: '50%',
-                  }}>
-                  {item.data.credentialSubject?.Filename}
-                </Text>
-              </View>
-              <View style={{ width: "100%", justifyContent: "center", alignItems: "center" }}>
-
-                <View
-                  style={{
-                    width: 140,
-                    alignItems: 'center',
-                    //  justifyContent: 'center',
-                    height: 45,
-                    borderRadius: 25,
-                    flexDirection: "row", borderWidth: 1,
-                    // position:"absolute",
-                    alignSelf: "flex-end",
-
-                    //  marginTop:"10%"
-
-                  }}
-                >
-                  <TouchableOpacity onPress={() => openmodal(item?.id)} style={{ width: 90, alignItems: "center", justifyContent: "center" }}>
-                    <Text style={{ color: COLOR.BLACK[100], fontWeight: "600", fontSize: 15 }}>SHARE</Text>
-
-                  </TouchableOpacity>
-                  <View style={{ borderLeftWidth: 1, height: "100%", paddingLeft: 5, alignItems: "center", justifyContent: "center" }}>
-                    <Icon name='chevron-small-down'
-                      type='entypo'
-
-                      size={35} />
-                  </View>
-                </View>
-              </View>
-            </View>
-          </ImageBackground>
-        </View> */}
-        {/* <LinearGradient
-          start={{ x: 0.0, y: 0.4 }}
-          end={{ x: 0.85, y: 0.5 }}
-          locations={[0, 0.9]}
-          colors={['rgba(69, 77, 188, 0.7)', 'rgba(189, 89, 250, 0.7)']}
-          style={{ borderRadius: 15, flex: 1 }}>
-          <View style={{ padding: 15, width: '100%' }}>
-            <View
-              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <View>
-                <Text style={{ color: COLOR.WHITE[100] }}>Kerry ID</Text>
-                <View
-                  style={{
-                    // backgroundColor: COLOR.WHITE[100],
-                    // padding: 10,
-                    borderRadius: 5,
-                    marginTop: 5,
-                    alignSelf: 'flex-start',
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      color: '#4C516D',
-                      fontWeight: 'bold',
-                    }}>
-                    {item.data.credentialSubject?.filehash}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={{}}>
-                <View>
-                  <Text style={{ color: COLOR.WHITE[100], fontSize: 15 }}>
-                    Member since
-                  </Text>
-                  <Text
-                    style={{
-                      color: COLOR.WHITE[100],
-                      fontSize: 18,
-                      fontWeight: '700',
-                    }}>
-                    {memberformated}
-                  </Text>
-                </View>
-                <View style={{ marginTop: 11 }}>
-                  <Text style={{ color: COLOR.WHITE[100], fontSize: 15 }}>
-                    Issurance Date
-                  </Text>
-                  <Text
-                    style={{
-                      color: COLOR.WHITE[100],
-                      fontSize: 18,
-                      fontWeight: '700',
-                    }}>
-                    {insformated}
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: '100%',
-                alignItems: 'flex-end',
-                flexDirection: 'row',
-              }}>
-              <Text
-                style={{
-                  fontSize: 27,
-                  marginTop: 15,
-                  textTransform: 'uppercase',
-                  color: COLOR.WHITE[100],
-                  fontWeight: 'bold',
-                  width: '70%',
-                }}>
-                {item.data.credentialSubject?.Filename}
-              </Text>
-              <TouchableOpacity
-                style={{
-                  width: '30%',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: 35,
-                  borderRadius: 10,
-                  backgroundColor: COLOR.WHITE[100],
-                }}
-                onPress={() => openmodal(item?.id)}>
-                <Text style={{ color: COLOR.BLUE[300], fontSize: 16 }}>Share</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </LinearGradient> */}
       </View>
     );
   };
+
   return (
     <View
       style={{
@@ -413,7 +212,7 @@ const Certificate = ({ toMail, setMail }) => {
         paddingTop: '30%',
         justifyContent: 'center',
       }}>
-      {cardData?.length < 1 ? (
+      {cardData && cardData?.length < 1 ? (
         <View style={{ height: '100%', alignItems: 'center', width: '100%' }}>
           <Text
             style={{ fontSize: 25, color: COLOR.BLACK[100], fontWeight: '700' }}>

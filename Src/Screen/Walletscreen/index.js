@@ -32,18 +32,15 @@ import { useSelector, useDispatch } from "react-redux";
 import axiosInstance from '../../Constant/axios';
 import { getCarddata } from '../../Function/Apicall';
 
-const profile = { "Eme": { "birthDate": "20090801", "businessID": "2ce8db815f15dec858f24bfeb863a4", "emailAddr": "davekapil071@gmail.com", "enName": { "UnstructuredName": "JOHANSON, Christine" }, "gender": "F", "homeTelNumber": { "CountryCode": "852", "SubscriberNumber": "918719847380" }, "idNo": { "CheckDigit": "7", "Identification": "G996960" }, "mobileNumber": { "CountryCode": "852", "SubscriberNumber": "918719847380" }, "officeTelNumber": { "CountryCode": "852", "SubscriberNumber": "918719847380" } } }
+const HEIGHT = Dimensions.get("screen").height;
 
-
-const HEIGHT = Dimensions.get("screen").height
 const Walletscreen = () => {
 
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
   const [toMail, setToMail] = useState('');
   const profileData = useSelector(state => state?.appstate?.profileData);
-
-  console.log("$$$$$", Object.keys(profile).length);
+  const cardData = useSelector((state) => state.appstate.cardList);
 
   useEffect(() => {
     console.log("I am in wallet screen");
@@ -66,6 +63,12 @@ const Walletscreen = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if(!cardData) {
+      getData();
+    }
+  }, [selectedtype])
+
   function getStringBetween(str, start, end) {
     const result = str.match(new RegExp(start + "(.*)" + end));
     return result[1];
@@ -78,7 +81,6 @@ const Walletscreen = () => {
       )
       .then(function (responseJson) {
         if (responseJson.status === 200) {
-          console.log("Card data", responseJson?.data?.data?.items);
           dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
         }
       })
@@ -194,7 +196,9 @@ const Walletscreen = () => {
             <View style={styles.headerContainer}>
               <View>
                 <Text style={styles.titletext}>{STR.WALLET.TITLE}</Text>
-                <Text style={styles.welcometext}>{STR.WALLET.WELCOME} User</Text>
+                <Text style={styles.welcometext}>{STR.WALLET.WELCOME}
+                  {Object.keys(profileData).length > 0 ? ` ${profileData.enName.UnstructuredName}` : 'User'}
+                </Text>
               </View>
 
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -304,8 +308,8 @@ const Walletscreen = () => {
                           borderBottomColor: COLOR.GRAY[100],
                         }}>
                         <View>
-                          <Text style={{ fontSize: 20, color: COLOR.BLACK[100] }}>
-                            User
+                          <Text style={{ fontSize: 18, color: COLOR.BLACK[100] }}>
+                            {Object.keys(profileData).length > 0 ? profileData.enName.UnstructuredName : 'User'}
                           </Text>
                           <Text
                             style={{
@@ -313,7 +317,7 @@ const Walletscreen = () => {
                               marginTop: 10,
                               color: COLOR.BLACK[100],
                             }}>
-                            ***@gmail.com
+                            {Object.keys(profileData).length > 0 ? profileData.emailAddr : '****@gmail.com'}
                           </Text>
                         </View>
                         <View
@@ -414,7 +418,7 @@ const Walletscreen = () => {
                         </View>
 
                         <View style={{ ...styles.lastbox }}>
-                          <Text style={{ ...styles.inputtitle, fontWeight: 'bold', color: '#000'}}>Profile Data Provided by iAM SMART</Text>
+                          <Text style={{ ...styles.inputtitle, fontWeight: 'bold', color: '#000' }}>Profile Data Provided by iAM SMART</Text>
                         </View>
 
                       </View>

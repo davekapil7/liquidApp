@@ -84,7 +84,6 @@ const LoginScreen = () => {
           //  storeData(responseJson?.data?.data);
           // setType(STR.LOGIN)
           navigation.navigate('Otpscreen');
-          Alert.alert('OTP SENT');
           console.log('Registration Successful. Please Login to proceed');
         } else {
           // setErrortext(responseJson?.data?.error);
@@ -147,7 +146,7 @@ const LoginScreen = () => {
           // If server response message same as Data Matched
           if (responseJson?.data?.data === 'OTP SENT') {
             // setOtpInput(true);
-            Alert.alert('OTP SENT');
+            // Alert.alert('OTP SENT');
             navigation.navigate('Otpscreen');
           } else {
             Alert.alert('Please check your email');
@@ -157,29 +156,7 @@ const LoginScreen = () => {
         .catch(function (error) {
           console.log(error);
         });
-
-      // axios
-      //   .post('http://142.93.213.49:8000/auth/login', dataToSend)
-      //   .then(function (responseJson) {
-      //     console.log(responseJson, 'ressss');
-
-      //     // If server response message same as Data Matched
-      //     if (responseJson?.data?.data === 'OTP SENT') {
-      //       // setOtpInput(true);
-      //       Alert.alert('OTP SENT');
-      //       navigation.navigate('Otpscreen');
-      //     } else {
-      //       Alert.alert('Please check your email');
-      //       console.log('Please check your email id or password');
-      //     }
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
     }
-
-    console.log('######', email);
-    //  navigation.navigate('Otpscreen')
   };
 
   return (

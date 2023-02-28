@@ -17,7 +17,6 @@ const WalletPinscreen = props => {
 
   console.log('%%%%%%', recovery);
   const pressdata = val => {
-    console.log('#######', value1);
     if (value1 === undefined) {
       console.log('WWWW');
       setValue1(val);

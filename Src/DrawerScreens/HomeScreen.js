@@ -4,13 +4,6 @@ import {View, Text, SafeAreaView} from 'react-native';
 import axios from 'axios';
 
 const HomeScreen = () => {
-  useEffect(() => {
-    const getData = async () => {
-      const dId = await axios.get(`http://142.93.213.49:8000/api/getDid`);
-      console.log(dId, 'did');
-    };
-    getData();
-  }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>

@@ -65,11 +65,11 @@ const ProofListingScreen = () => {
   );
 
   useEffect(() => {
-    const getData = async () => {
-      const getDid = await axios.get(`http://142.93.213.49:8000/api/getDid`);
-      setListData(getDid?.data?.data?.items);
-    };
-    getData();
+    // const getData = async () => {
+    //   const getDid = await axios.get(`http://142.93.213.49:8000/api/getDid`);
+    //   setListData(getDid?.data?.data?.items);
+    // };
+    // getData();
   }, []);
 
   return (
