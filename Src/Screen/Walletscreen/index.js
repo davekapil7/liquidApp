@@ -41,7 +41,7 @@ const Walletscreen = () => {
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
   const [toMail, setToMail] = useState('');
-
+  const profileData = useSelector(state => state?.appstate?.profileData);
 
   console.log("$$$$$", Object.keys(profile).length);
 
@@ -373,13 +373,13 @@ const Walletscreen = () => {
                         </Text>
                       </TouchableOpacity>
                     </View>
-                    {Object.keys(profile).length > 0 ? (
+                    {Object.keys(profileData).length > 0 ? (
                       <View style={{ flex: 1, width: "100%", marginBottom: 35 }}>
 
                         <View style={styles.inputbox}>
                           <Text style={styles.inputtitle}>FULL NAME</Text>
                           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 2 }}>
-                            <Text style={styles.inputtext}>{profile.Eme.enName.UnstructuredName}</Text>
+                            <Text style={styles.inputtext}>{profileData.enName.UnstructuredName}</Text>
                             <Image source={require("../../../assets/Image/phone.png")}
                               style={{ width: 35, height: 35 }} />
                           </View>
@@ -389,7 +389,7 @@ const Walletscreen = () => {
                         <View style={styles.inputbox}>
                           <Text style={styles.inputtitle}>Birth date</Text>
                           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 2 }}>
-                            <Text style={styles.inputtext}>{birthDayConverter(profile.Eme.birthDate)}</Text>
+                            <Text style={styles.inputtext}>{birthDayConverter(profileData.birthDate)}</Text>
                             <Image source={require("../../../assets/Image/phone.png")}
                               style={{ width: 35, height: 35 }} />
                           </View>
@@ -398,7 +398,7 @@ const Walletscreen = () => {
                         <View style={styles.inputbox}>
                           <Text style={styles.inputtitle}>Phone number</Text>
                           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 2 }}>
-                            <Text style={styles.inputtext}>{`(${profile.Eme.mobileNumber.CountryCode})-${profile.Eme.mobileNumber.SubscriberNumber}`}</Text>
+                            <Text style={styles.inputtext}>{`(${profileData.mobileNumber.CountryCode})-${profileData.mobileNumber.SubscriberNumber}`}</Text>
                             <Image source={require("../../../assets/Image/phone.png")}
                               style={{ width: 35, height: 35 }} />
                           </View>
@@ -407,7 +407,7 @@ const Walletscreen = () => {
                         <View style={styles.inputbox}>
                           <Text style={styles.inputtitle}>ID code</Text>
                           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 2 }}>
-                            <Text style={styles.inputtext}>{`${profile.Eme.idNo.Identification}-(${profile.Eme.idNo.CheckDigit})`}</Text>
+                            <Text style={styles.inputtext}>{`${profileData.idNo.Identification}-(${profileData.idNo.CheckDigit})`}</Text>
                             <Image source={require("../../../assets/Image/phone.png")}
                               style={{ width: 35, height: 35 }} />
                           </View>

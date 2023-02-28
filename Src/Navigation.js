@@ -199,7 +199,7 @@ const Rootnavigation = () => {
           let profileData = JSON.stringify(responseJson.data.profile);
           profileData = JSON.parse(profileData);
           console.log("Profile Data", profileData);
-          dispatch({ type: 'ADD_PROFILE', payload: responseJson.data.data });
+          dispatch({ type: 'ADD_PROFILE', payload: responseJson.data.profile.Eme });
         }
       })
       .catch(function (error) {
