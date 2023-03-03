@@ -7,7 +7,7 @@ export const getCarddata = (dispatch) => {
     )
     .then(function (responseJson) {
       if (responseJson.status === 200) {
-        console.log("Card data", responseJson?.data?.data?.items);
+        console.log("Card data", JSON.stringify(responseJson?.data?.data?.items));
         dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
       }
     })

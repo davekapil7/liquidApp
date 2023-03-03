@@ -109,10 +109,25 @@ const Certificate = ({ toMail, setMail }) => {
       });
 
   }
+  let imgbkg = require('../../../assets/Image/card/card5.png');
+  let company = require('../../../assets/Image/card/iamsmart.png');
+
+  const imageReplacer = (type) => {
+    if (type[1] && type[1].includes('IamSmart')) {
+      imgbkg = require('../../../assets/Image/card/card8.png'),
+      company = require('../../../assets/Image/card/iamsmart.png')
+    } else if (type[1] && type[1].includes('Document')) {
+      imgbkg = require('../../../assets/Image/card/card7.png'),
+      company = require('../../../assets/Image/card/Kerry-Logistics.png')
+    }
+    console.log("Image type", imgbkg);
+  }
 
   const renderItem = ({ item, index }) => {
     const insdate = item?.data?.issuanceDate;
     const memberdate = item?.data?.proof?.created;
+
+    imageReplacer(item.data.type);
 
     const insformated = moment(insdate).format('MM/DD/YYYYY');
     const memberformated = moment(memberdate).format('MM/DD/YYYYY');
@@ -143,12 +158,12 @@ const Certificate = ({ toMail, setMail }) => {
         }
 
         <View style={{ flex: 1, width: 360, height: 250 }}>
-          <Image source={require("../../../assets/Image/card/card7.png")}
+          <Image source={imgbkg}
             style={{ width: "100%", height: "100%", resizeMode: "stretch" }} />
           <View style={{ position: "absolute", width: "80%", height: "80%", margin: 25, alignSelf: "center" }}>
 
             <View style={{ position: "absolute", width: "100%", right: 0, alignItems: 'flex-end' }}>
-              <Image source={require("../../../assets/Image/card/Kerry-Logistics.png")} />
+              <Image source={company} />
             </View>
 
             <View style={{ position: "absolute", width: "100%", bottom: 30, right: 0, alignItems: 'flex-end' }}>
