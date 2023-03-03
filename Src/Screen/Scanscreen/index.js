@@ -1,5 +1,5 @@
 // import React in our code
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 // import all the components we are going to use
 import {
@@ -13,16 +13,19 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import {CameraScreen} from 'react-native-camera-kit';
+import { CameraScreen } from 'react-native-camera-kit';
 import axios from 'axios';
 import Toast from 'react-native-simple-toast';
 import Theambackground from '../../Components/Theambackground';
-import {COLOR} from '../../Constant/color';
+import { COLOR } from '../../Constant/color';
+import axiosInstance from '../../Constant/axios';
 
 const VerifyProofScreen = () => {
   const [qrvalue, setQrvalue] = useState('');
   const [opneScanner, setOpneScanner] = useState(false);
-  const [verify, setVerify] = useState(false);
+  const [verifyData, setVerifyData] = useState({});
+  const [verifyDetails, setVerifyDetails] = useState({});
+  const [errorText, setErrortext] = useState('');
 
   const onOpenlink = () => {
     // If scanned then function to open URL in Browser
@@ -30,79 +33,50 @@ const VerifyProofScreen = () => {
   };
 
   const onBarcodeScan = qrvalue => {
+    console.log("Qr value", qrvalue);
     // Called after te successful scanning of QRCode/Barcode
-    setQrvalue(qrvalue);
-    onOpneScanner();
+    let obj = JSON.parse(qrvalue);
+    obj = { ...obj, err: false }
+    onOpneScanner(obj);
     setOpneScanner(false);
   };
 
-  const onOpneScanner = async () => {
+  const onOpneScanner = async (obj) => {
     // To Start Scanning
-    // if (Platform.OS === 'android') {
-    //   async function requestCameraPermission() {
-    //     try {
-    //       const granted = await PermissionsAndroid.request(
-    //         PermissionsAndroid.PERMISSIONS.CAMERA,
-    //         {
-    //           title: 'Camera Permission',
-    //           message: 'App needs permission for camera access',
-    //         },
-    //       );
-    //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    //         // If CAMERA Permission is granted
-    //         setQrvalue('');
-    //         setOpneScanner(true);
-    //       } else {
-    //         alert('CAMERA permission denied');
-    //       }
-    //     } catch (err) {
-    //       alert('Camera permission err', err);
-    //       console.warn(err);
-    //     }
-    //   }
-    //   // Calling the camera permission function
-    //   requestCameraPermission();
-    //   // } else {
-    //   setQrvalue('');
-    //   setOpneScanner(true);
-    // }
-    axios
-      .post(
-        'http://142.93.213.49:8000/api/verifyProof',
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-        {
-          itemId: qrvalue,
-        },
-      )
-      .then(function (responseJson) {
-        // setLoading(false);
-        if (responseJson) {
-          console.log(responseJson.status);
-          if (responseJson.status === 200) {
-            Toast.show('Successfully Proof Created', Toast.LONG, {
-              backgroundColor: 'blue',
-            });
-            setVerify(true);
-          }
-        } else {
-          setErrortext(responseJson?.data?.error);
-          Toast.show('Somthing Went Wrong Scan Again', Toast.LONG, {
+    let dataToSend = { ...obj, err: false };
+
+    var raw = JSON.stringify({ ...dataToSend });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch("https://api.liquid.com.hk/api/api/verifyQR", requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        let scannedObj = JSON.parse(result);
+        setVerifyData(scannedObj.proof);
+        let scData = JSON.parse(scannedObj.data.data);
+        setVerifyDetails(scData);
+        console.log("Scanned data", scData);
+        console.log("Scanned proof", JSON.stringify(scannedObj.proof));
+        if (scannedObj?.proof) {
+          Toast.show('Successfully Proof Created', Toast.LONG, {
             backgroundColor: 'blue',
           });
         }
       })
-      .catch(function (error) {
-        setErrortext(responseJson?.data?.error);
-        Toast.show('Somthing Went Wrong Scan Again', Toast.LONG, {
-          backgroundColor: 'blue',
-        });
-        // setLoading(false);
-      });
-    // console.log(qrvalue, 'value');
+      .catch(error => console.log('error', error));
   };
 
-const requestCameraPermission = async () => {
-  
+  const requestCameraPermission = async () => {
+
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -114,7 +88,7 @@ const requestCameraPermission = async () => {
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         // If CAMERA Permission is granted
 
-        console.log("$$$$$$",granted);
+        console.log("$$$$$$", granted);
         setQrvalue('');
         setOpneScanner(true);
       } else {
@@ -124,19 +98,19 @@ const requestCameraPermission = async () => {
       alert('Camera permission err', err);
       console.warn(err);
     }
-  
-}
+
+  }
 
   useEffect(() => {
     if (Platform.OS === 'android') {
 
       requestCameraPermission();
-      
-    }else{
+
+    } else {
       setQrvalue('');
       setOpneScanner(true);
     }
-  
+
   }, []);
 
   return (
@@ -148,9 +122,9 @@ const requestCameraPermission = async () => {
       scanscreen={true}
       back={true}
       setting={false}>
-      <View style={{flex: 1, backgroundColor: 'pink', width: '100%'}}>
+      <View style={{ flex: 1, backgroundColor: 'pink', width: '100%' }}>
         {opneScanner ? (
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <CameraScreen
               showFrame={false}
               // Show/hide scan frame
@@ -169,17 +143,11 @@ const requestCameraPermission = async () => {
           </View>
         ) : (
           <View style={styles.container}>
-            {/* <Text style={styles.titleText}>
-            Scan the barcode and verify your proof
-          </Text>
-          <Text style={styles.textStyle}>
-            {verify ? 'Proof Verified ' : ''}
-          </Text> */}
             {qrvalue.includes('https://') ||
-            qrvalue.includes('http://') ||
-            qrvalue.includes('geo:') ? (
+              qrvalue.includes('http://') ||
+              qrvalue.includes('geo:') ? (
               <>
-                <Text style={{fontSize: 15, color: COLOR.BLACK[100]}}>
+                <Text style={{ fontSize: 15, color: COLOR.BLACK[100] }}>
                   {qrvalue}
                 </Text>
                 <TouchableHighlight onPress={onOpenlink}>
@@ -210,6 +178,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     alignItems: 'center',
+    justifyContent: 'center'
   },
   titleText: {
     marginTop: 50,

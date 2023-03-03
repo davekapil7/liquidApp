@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, Alert, Dimensions, ActivityIndicator, ImageBackground, Image } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert, Dimensions,
+  ActivityIndicator,
+  ImageBackground, Image
+} from 'react-native';
 
 import Carousel from 'react-native-snap-carousel';
 import { COLOR } from '../../Constant/color';
@@ -23,13 +29,14 @@ const WIDTH = Dimensions.get('screen').width;
 const HIGHT = Dimensions.get('screen').height;
 
 const Certificate = ({ toMail, setMail }) => {
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [shareopen, setShareopen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [id, setId] = useState();
-  const [emailApproval, setEmailapproval] = useState(false)
-  const [emailIcon, setEmailicon] = useState([])
-  const [apiloader, setApiloader] = useState(false)
+  const [emailApproval, setEmailapproval] = useState(false);
+  const [emailIcon, setEmailicon] = useState([]);
+  const [apiloader, setApiloader] = useState(false);
 
   const ref = useRef(null);
 
@@ -83,8 +90,8 @@ const Certificate = ({ toMail, setMail }) => {
           delete objData.err;
           console.log("Response json1", objData);
 
-          const id = objData?.id
-          const iv = objData?.iv
+          const id = objData?.id;
+          const iv = objData?.iv;
           let stringData = JSON.stringify(objData);
           const res = await sendToverification(toMail, id, iv)
           console.log("Response from mail", res);
@@ -99,20 +106,7 @@ const Certificate = ({ toMail, setMail }) => {
         }
       })
       .catch(function (error) {
-        //  setErrortext(responseJson?.data?.error);
-        // Toast.show('Somthing Went Wrong Scan Again', Toast.LONG, {
-        //   backgroundColor: 'blue',
-        // });
-        // setLoading(false);
       });
-
-
-    // let oldarr = emailIcon
-
-    // let fillterarr = oldarr.filter(val => val !== id)
-
-    // console.log("@@@@@@@", fillterarr);
-    // setEmailicon(fillterarr)
 
   }
 
