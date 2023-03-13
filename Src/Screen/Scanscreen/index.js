@@ -11,6 +11,7 @@ import {
   PermissionsAndroid,
   Platform,
   StyleSheet,
+  Alert,
 } from 'react-native';
 
 import { CameraScreen } from 'react-native-camera-kit';
@@ -19,6 +20,8 @@ import Toast from 'react-native-simple-toast';
 import Theambackground from '../../Components/Theambackground';
 import { COLOR } from '../../Constant/color';
 import axiosInstance from '../../Constant/axios';
+import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 const VerifyProofScreen = () => {
   const [qrvalue, setQrvalue] = useState('');
@@ -26,6 +29,11 @@ const VerifyProofScreen = () => {
   const [verifyData, setVerifyData] = useState({});
   const [verifyDetails, setVerifyDetails] = useState({});
   const [errorText, setErrortext] = useState('');
+
+  const [isEnabled, setIsEnabled] = useState(false);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const onOpenlink = () => {
     // If scanned then function to open URL in Browser
@@ -36,9 +44,21 @@ const VerifyProofScreen = () => {
     console.log("Qr value", qrvalue);
     // Called after te successful scanning of QRCode/Barcode
     let obj = JSON.parse(qrvalue);
-    obj = { ...obj, err: false }
-    onOpneScanner(obj);
-    setOpneScanner(false);
+    obj = { ...obj }
+    if (obj.type == 'verification_request') {
+      // onOpneScanner(obj);
+      dispatch({ type: 'ADD_EMAIL', payload: obj.email });
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Tabnavigationroute' }],
+      });
+    } else if (obj.type == 'login-qr') {
+      console.log("Login check qr");
+      loginScanner(obj.id);
+    }
+    else {
+      onOpneScanner(obj);
+    }
   };
 
   const onOpneScanner = async (obj) => {
@@ -74,6 +94,51 @@ const VerifyProofScreen = () => {
       })
       .catch(error => console.log('error', error));
   };
+
+  const loginScanner = (qrVal) => {
+    axiosInstance
+      .get('api/create-proof-login')
+      .then(function (responseJson) {
+        if (responseJson.status === 200) {
+          console.log("Login QR ", responseJson.data);
+          console.log("Login QR type", typeof responseJson.data);
+          let obj = responseJson.data;
+          delete obj.err;
+          obj = { ...obj, qr_id: qrVal }
+          // console.log("Login QR", obj);
+          shareMobileToken(obj);
+        }
+      })
+      .catch(error => {
+        //Hide Loader
+        console.error(error);
+        // Alert.alert("Login didn't worked");
+        Toast.show("Login didn't worked",Toast.LONG, {
+          backgroundColor: 'red',
+        });
+      });
+  };
+
+  const shareMobileToken = (data) => {
+    console.log("Object data", data);
+    axiosInstance
+      .post('api/share-mobile-token', data)
+      .then(function (responseJson) {
+        if (responseJson.status === 200) {
+          Toast.show('Logged in Mobile Token Created', Toast.LONG, {
+            backgroundColor: 'blue',
+          });
+          console.log("Share QR token", responseJson.data);
+        }
+      })
+      .catch(error => {
+        //Hide Loader
+        console.error(error);
+        Toast.show("Login didn't worked",Toast.LONG, {
+          backgroundColor: 'red',
+        });
+      });
+  }
 
   const requestCameraPermission = async () => {
 
@@ -116,11 +181,13 @@ const VerifyProofScreen = () => {
   return (
     // <SafeAreaView style={{flex: 1}}>
     <Theambackground
-      title="Scan OR Code"
-      subtitle="Scan the recipient's QR to send a credential"
+      title="Scan QR Code"
+      subtitle="Please turn on the switch for login & off for credentials"
       scan={false}
       scanscreen={true}
       back={true}
+      // isEnabled={isEnabled}
+      // toggleSwitch={toggleSwitch}
       setting={false}>
       <View style={{ flex: 1, backgroundColor: 'pink', width: '100%' }}>
         {opneScanner ? (

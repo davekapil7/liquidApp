@@ -35,11 +35,13 @@ const Otpscreen = () => {
     axiosInstance
       .post('auth/verify-otp', dataToSend)
       .then(function (responseJson) {
-        console.log(responseJson, 'ressss');
-        console.log(responseJson.data, 'responce');
+        console.log("Verified user", responseJson.data, 'responce');
         if (responseJson?.data?.data === 'Authorized') {
-         
+
+          // dispatch({ type: 'ADD_EXPIRY', payload: responseJson.data.expires });
           AsyncStorage.setItem('login', 'true');
+         
+          AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
 
           initialapicall()
           // navigation.navigate('Tabnavigationroute');

@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,16 +9,18 @@ import {
   TouchableOpacity,
   ScrollView,
   Share,
+  Switch,
+  StyleSheet,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-import {STR} from '../Constant/string';
-import {Header as HeaderRNE, HeaderProps, Icon} from '@rneui/themed';
-import {COLOR} from '../Constant/color';
-import {Dimensions} from 'react-native';
+import { STR } from '../Constant/string';
+import { Header as HeaderRNE, HeaderProps, Icon } from '@rneui/themed';
+import { COLOR } from '../Constant/color';
+import { Dimensions } from 'react-native';
 
-const Theambackground = ({children, scan,scanscreen, setting, back, title, subtitle}) => {
+const Theambackground = ({ children, scan, scanscreen, setting, back, title, subtitle, }) => {
   const navigation = useNavigation();
   const handlescan = () => {
     navigation.navigate("Scanscreen")
@@ -30,19 +32,19 @@ const Theambackground = ({children, scan,scanscreen, setting, back, title, subti
   const HEIGHT = Dimensions.get('window').height;
 
   return (
-    <View style={{flex: 1, height: '100%'}}>
-      <ScrollView style={{flex: 1, height: '100%'}}>
-        <View style={{flex: 1, minHeight: HEIGHT}}>
+    <View style={{ flex: 1, height: '100%' }}>
+      <ScrollView style={{ flex: 1, height: '100%' }}>
+        <View style={{ flex: 1, minHeight: HEIGHT }}>
           <LinearGradient
-            start={{x: 0.0, y: 0.4}}
-            end={{x: 0.85, y: 0.5}}
+            start={{ x: 0.0, y: 0.4 }}
+            end={{ x: 0.85, y: 0.5 }}
             locations={[0, 0.9]}
             // start={{x: 0.0, y: 0.4}}
             // end={{x: 0.8, y: 0.5}}
             // locations={[0, 0.9]}
             // colors={['#5d0981', '#e30cd1']}
             colors={['#454dbc', '#bd59fa']}
-            style={{flex: 1}}>
+            style={{ flex: 1 }}>
             <View
               style={{
                 marginTop: 25,
@@ -52,17 +54,17 @@ const Theambackground = ({children, scan,scanscreen, setting, back, title, subti
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-                {back && 
-              <TouchableOpacity onPress={()=>navigation.goBack()}>
-                <Icon
-                  name="chevron-back"
-                  type="ionicon"
-                  color={COLOR.WHITE[100]}
-                  size={35}
-                />
-              </TouchableOpacity>
+              {back &&
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Icon
+                    name="chevron-back"
+                    type="ionicon"
+                    color={COLOR.WHITE[100]}
+                    size={35}
+                  />
+                </TouchableOpacity>
               }
-              <View style={{width: '80%'}}>
+              <View style={{ width: '70%' }}>
                 <Text
                   style={{
                     fontSize: 25,
@@ -82,7 +84,7 @@ const Theambackground = ({children, scan,scanscreen, setting, back, title, subti
                 </Text>
               </View>
 
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 {scan && (
                   <TouchableOpacity onPress={() => handlescan()}>
                     <Icon
@@ -95,7 +97,7 @@ const Theambackground = ({children, scan,scanscreen, setting, back, title, subti
                 )}
                 {setting && (
                   <TouchableOpacity
-                    style={{marginLeft: 10}}
+                    style={{ marginLeft: 10 }}
                     onPress={() => handlesetting()}>
                     <Icon
                       name="settings-outline"
@@ -107,7 +109,7 @@ const Theambackground = ({children, scan,scanscreen, setting, back, title, subti
                 )}
               </View>
             </View>
-              
+
             <View
               style={{
                 backgroundColor: COLOR.BLUE[100],
@@ -128,4 +130,11 @@ const Theambackground = ({children, scan,scanscreen, setting, back, title, subti
   );
 };
 
+const styles = StyleSheet.create({
+  // container: {
+  //   flex: 1,
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
+});
 export default Theambackground;

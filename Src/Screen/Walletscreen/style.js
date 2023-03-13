@@ -1,27 +1,32 @@
-import {StyleSheet} from 'react-native';
-import {COLOR} from '../../Constant/color';
+import { StyleSheet } from 'react-native';
+import { COLOR } from '../../Constant/color';
 
 export const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    height:"100%",
-   //backgroundColor: COLOR.PRIMARY,
+    height: "100%",
+    //backgroundColor: COLOR.PRIMARY,
   },
-  headerContainer:{
-    marginTop:25,
-    paddingHorizontal:25,
-    flexDirection:"row",
-    width:"100%",
-    justifyContent:"space-between"
+  headerContainer: {
+    marginTop: 25,
+    paddingHorizontal: 25,
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between"
   },
-  titletext:{
-    fontSize:25,
-    color:COLOR.WHITE[100],
-    fontWeight:"bold"
+  subtitle: {
+    color: '#fff',
+    fontWeight: '500',
+    fontSize: 14
+  },
+  titletext: {
+    fontSize: 25,
+    color: COLOR.WHITE[100],
+    fontWeight: "bold"
   },
   inputbox: {
     width: '95%',
-    alignSelf:"center",
+    alignSelf: "center",
     borderRadius: 10,
     minHeight: 75,
     marginTop: 20,
@@ -30,16 +35,16 @@ export const styles = StyleSheet.create({
     padding: 15,
   },
   lastbox: {
-    alignSelf:"center",
+    alignSelf: "center",
     borderRadius: 10,
     marginTop: 20,
     borderWidth: 1,
     borderColor: COLOR.BLUE[400],
-    marginBottom: 50, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    width: '80%', 
-    minHeight: 30, 
+    marginBottom: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '80%',
+    minHeight: 30,
     padding: 10
   },
   inputtitle: {
@@ -47,37 +52,37 @@ export const styles = StyleSheet.create({
     color: COLOR.GRAY[100],
     fontWeight: '700',
   },
-  inputtext: {color: 'black', fontSize: 18},
- 
-  welcometext:{
-    fontSize:17,
-    marginTop:3,
-    color:COLOR.WHITE[100],
-    fontWeight:"400"
+  inputtext: { color: 'black', fontSize: 18 },
+
+  welcometext: {
+    fontSize: 17,
+    marginTop: 3,
+    color: COLOR.WHITE[100],
+    fontWeight: "400"
   },
 
-  container:{
-   backgroundColor:COLOR.BLUE[100],
-  // backgroundColor:"pink",
-    marginTop:15,
-    flex:1,  
-    height:"100%",
+  container: {
+    backgroundColor: COLOR.BLUE[100],
+    // backgroundColor:"pink",
+    marginTop: 15,
+    flex: 1,
+    height: "100%",
 
-    borderTopLeftRadius:15,
-    borderTopRightRadius:15,
-    padding:8,
-    paddingTop:15
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    padding: 8,
+    paddingTop: 15
   },
-  tabcontain:{
-    flexDirection:"row",
-    backgroundColor:COLOR.BLUE[200],
-    borderRadius:10,
-    height:40
-   // paddingVertical:10
+  tabcontain: {
+    flexDirection: "row",
+    backgroundColor: COLOR.BLUE[200],
+    borderRadius: 10,
+    height: 40
+    // paddingVertical:10
   },
-  tabView:{
-    paddingHorizontal:15,
-    paddingVertical:10
+  tabView: {
+    paddingHorizontal: 15,
+    paddingVertical: 10
 
   },
   button: {
@@ -107,5 +112,5 @@ export const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'contain',
   },
- 
+
 });

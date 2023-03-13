@@ -31,6 +31,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import axiosInstance from '../../Constant/axios';
 import { getCarddata } from '../../Function/Apicall';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HEIGHT = Dimensions.get("screen").height;
 
@@ -39,14 +40,55 @@ const Walletscreen = () => {
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
   const [toMail, setToMail] = useState('');
-  const profileData = useSelector(state => state?.appstate?.profileData);
   const cardData = useSelector((state) => state.appstate.cardList);
+  const email = useSelector((state) => state.appstate.email);
+  const profileData = useSelector(state => state?.appstate?.profileData);
+
+  const logout = () => {
+    AsyncStorage.removeItem('login')
+    navigation.navigate("Auth")
+    axiosInstance
+      .get(
+        'auth/logout',
+      )
+      .then(function (responseJson) {
+        console.log("Logged out", responseJson);
+      })
+      .catch(function (error) {
+        //  setErrortext(responseJson?.data?.error);
+        // Toast.show('Somthing Went Wrong Scan Again', Toast.LONG, {
+        //   backgroundColor: 'blue',
+        // });
+        // setLoading(false);
+      });
+  }
+
+  useEffect(() => {
+    if(email && email.length > 0) {
+      setSelectedType(1);
+      setToMail(email);
+    }
+  }, [email])
+
+  const sessionCheck = async () => {
+    let date = new Date(); // some mock date
+    let currentMs = date.getTime();
+    const loginExpiry = await AsyncStorage.getItem('loginExpiry');
+    let expiryMs = Date.parse(loginExpiry);
+
+    if (Number(currentMs) > Number(expiryMs)) {
+      logout();
+    }
+
+  }
 
   useEffect(() => {
     console.log("I am in wallet screen");
 
     getData();
     setSelectedType(0);
+
+    sessionCheck();
     setTimeout(() => {
       setLoader(false)
     }, 1000);
@@ -64,7 +106,7 @@ const Walletscreen = () => {
   }, []);
 
   useEffect(() => {
-    if(!cardData) {
+    if (!cardData) {
       getData();
     }
   }, [selectedtype])
@@ -460,7 +502,7 @@ const Walletscreen = () => {
                             testimonial from your business partners or colleagues
                           </Text>
 
-                          <TouchableOpacity
+                          {/* <TouchableOpacity
                             style={{
                               backgroundColor: COLOR.BLUE[300],
                               marginTop: 20,
@@ -477,7 +519,7 @@ const Walletscreen = () => {
                               }}>
                               GET MY FIRST CREDENTIAL
                             </Text>
-                          </TouchableOpacity>
+                          </TouchableOpacity> */}
                         </View>
                       </>
                     )}

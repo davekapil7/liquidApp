@@ -2,6 +2,7 @@
 const initialState = {
  appState : "",
  cardList: [],
+ email: '',
  profileData: {},
 };
 
@@ -21,6 +22,11 @@ const appReducer = (state = initialState, action) => {
       return {
         ...state,
         profileData: action.payload,
+      };
+    case "ADD_EMAIL":
+      return {
+        ...state,
+        email: action.payload,
       };
 
     default:
