@@ -1,0 +1,133 @@
+import React, { useEffect, useState } from 'react';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TouchableOpacity
+} from 'react-native';
+import { useSelector } from 'react-redux';
+import axiosInstance from '../../Constant/axios';
+import Toast from 'react-native-simple-toast';
+
+const Credentials = () => {
+
+  const profileData = useSelector(state => state?.appstate?.profileData);
+
+    // if (loader) {
+    //     return (
+    //         <View style={{ width: '100 %', height: '100%' }}>
+    //             <ActivityIndicator size="large" color="#00ff00" />
+    //         </View>
+    //     )
+    // }
+
+    const offerTemplate = () => {
+        axiosInstance
+            .get('template/fetchAllofferedTemplate')
+            .then(function (responseJson) {
+                if (responseJson.status === 200) {
+                    console.log("Template for all the DIDs", responseJson.data.data);
+                    let getDidList = responseJson.data.data;
+                    let selected;
+                    for(let i = 0; i < getDidList.length; i++) {
+                        let did = getDidList[i].templateId;
+                        if(did.toUpperCase().includes('IAMSMART')) {
+                            selected = did;
+                        }
+                    }
+                    console.log("Selected template ", selected);
+                    smartCredential(selected);
+                }
+            })
+            .catch(error => {
+                //Hide Loader
+                console.error(error);
+                Toast.show("Template couldn't be fetched", Toast.LONG, {
+                    backgroundColor: 'red',
+                });
+            });
+    }
+
+    const smartCredential = (template) => {
+
+        let dataToSend = {
+            data: {
+                birthDate: profileData.birthDate,
+                businessID: profileData.businessID,
+                enName_UnstructuredName: profileData?.enName?.UnstructuredName,
+                gender: profileData.gender,
+                idNo_CheckDigit: profileData.idNo.CheckDigit,
+                idNo_Identification: profileData.idNo.Identification,
+            },
+            email: profileData.emailAddr,
+            templateId: template,
+        }
+
+        console.log("Data to send ", dataToSend);
+
+        axiosInstance
+            .post('api/issue-credentials-using-template', dataToSend)
+            .then(function (responseJson) {
+                if (responseJson.status === 200) {
+                    console.log("I am smart credential created ", responseJson.data);
+                }
+            })
+            .catch(error => {
+                //Hide Loader
+                console.error(error);
+                Toast.show("Credential couldn't be created", Toast.LONG, {
+                    backgroundColor: 'red',
+                });
+            });
+    }
+
+    return (
+        <View
+            style={{
+                height: '100%',
+                width: '100%',
+                alignItems: 'center',
+            }}>
+            <View style={{ marginLeft: 5 }}>
+                <View style={{ marginTop: '10%' }}>
+                    <Text style={styles.title} >iAM SMART Profile Credential</Text>
+                </View>
+                <View style={{ marginTop: 20 }}>
+                    <Text style={styles.subtitle} >Make sure your IamSmart profile data is accurate and create your credentials</Text>
+                </View>
+                <TouchableOpacity disabled={Object.keys(profileData).length === 0} onPress={() => offerTemplate()} style={styles.btnContainer} >
+                    <Text style={styles.btnText} >CREATE CREDENTIAL</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    title: {
+        color: '#000',
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    subtitle: {
+        color: '#000',
+        fontSize: 16,
+    },
+    btnText: {
+        color: '#fff',
+        fontSize: 16,
+    },
+    btnContainer: {
+        marginTop: '20%',
+        width: 220,
+        height: 50,
+        backgroundColor: '#324FC4',
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 25
+    }
+});
+
+
+export default Credentials;

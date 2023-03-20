@@ -32,6 +32,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axiosInstance from '../../Constant/axios';
 import { getCarddata } from '../../Function/Apicall';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Credentials from './Credentials';
 
 const HEIGHT = Dimensions.get("screen").height;
 
@@ -64,7 +65,7 @@ const Walletscreen = () => {
   }
 
   useEffect(() => {
-    if(email && email.length > 0) {
+    if (email && email.length > 0) {
       setSelectedType(1);
       setToMail(email);
     }
@@ -536,7 +537,19 @@ const Walletscreen = () => {
                       flex: 1,
                     }}>
                     <Certificate toMail={toMail} setMail={setToMail} />
+                  </View>
+                )}
 
+                {selectedtype === 2 && (
+                  <View
+                    style={{
+                      alignItems: 'flex-start',
+                      width: '100%',
+                      height: "100%",
+                      alignSelf: 'flex-start',
+                      flex: 1,
+                    }}>
+                    <Credentials />
                   </View>
                 )}
               </View>

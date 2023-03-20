@@ -62,8 +62,8 @@ export const wallettype = [
   },
   {
     id: 2,
-    title: 'Testimonials',
-    iname: 'appstore-o',
+    title: 'Credentials',
+    iname: 'idcard',
     itype: 'antdesign',
   },
   {
