@@ -11,7 +11,9 @@ import {
   PermissionsAndroid,
   Platform,
   StyleSheet,
+  Modal,
   Alert,
+  Image,
 } from 'react-native';
 
 import { CameraScreen } from 'react-native-camera-kit';
@@ -29,12 +31,16 @@ const VerifyProofScreen = () => {
   const [verifyData, setVerifyData] = useState({});
   const [verifyDetails, setVerifyDetails] = useState({});
   const [errorText, setErrortext] = useState('');
+  const [loginmodal, setLoginmodal] = useState(false)
+  const [validmodal, setValidmodal] = useState(false)
 
   const [isEnabled, setIsEnabled] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
+  const validJson = { "isValid": true, "validationMessages": [], "validationResults": { "CredentialStatus": { "isValid": true, "messages": [] }, "IssuerIsSigner": { "isValid": true, "messages": [] }, "SchemaConformance": { "isValid": true, "messages": [] }, "SignatureVerification": { "isValid": true, "messages": [] } } }
+  const validresult = validJson?.validationResults
   const onOpenlink = () => {
     // If scanned then function to open URL in Browser
     Linking.openURL(qrvalue);
@@ -113,7 +119,7 @@ const VerifyProofScreen = () => {
         //Hide Loader
         console.error(error);
         // Alert.alert("Login didn't worked");
-        Toast.show("Login didn't worked",Toast.LONG, {
+        Toast.show("Login didn't worked", Toast.LONG, {
           backgroundColor: 'red',
         });
       });
@@ -134,7 +140,7 @@ const VerifyProofScreen = () => {
       .catch(error => {
         //Hide Loader
         console.error(error);
-        Toast.show("Login didn't worked",Toast.LONG, {
+        Toast.show("Login didn't worked", Toast.LONG, {
           backgroundColor: 'red',
         });
       });
@@ -232,6 +238,41 @@ const VerifyProofScreen = () => {
           </View>
         )}
       </View>
+
+      {/* <Modal visible={loginmodal}  transparent={true} style={{alignItems:"center",justifyContent:"center",backgroundColor:"pink",height:"100%"}}>
+  <View style={{width:"80%",height:"100%",alignSelf:"center",backgroundColor:"transparent",alignItems:"center",justifyContent:"center"}}>
+   <View style={{width:"100%",height:150 , alignItems:"center",backgroundColor:"white",paddingTop:15}}>
+   <Text style={{fontSize:18 , color:"black" , fontWeight:"700"}}>Login succcessfully done in web portal</Text>
+   </View>
+   
+  </View>
+  </Modal>  */}
+      <Modal visible={validmodal} transparent={true} >
+        <View style={{ width: "90%", height: "100%", alignSelf: "center", backgroundColor: "transparent", alignItems: "center", justifyContent: "center" }}>
+          <View style={{ width: "100%", paddingVertical: 10, minHeight: 150, backgroundColor: "white", paddingTop: 15, borderRadius: 15 }}>
+            <View style={{ flexDirection: "row", alignItems: "center", width: "100%", justifyContent: "center" }}>
+              <Image source={require("../../../Image/check.png")} />
+              <Text style={{ fontSize: 22, fontWeight: "bold", color: "black", marginLeft: 5 }}>isValid</Text>
+            </View>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", width: "100%" }}>
+              {Object.entries(validresult).map((item, i) => {
+                console.log("@@@@", item[0]);
+                return (
+                  <View style={{ width: "50%", flexWrap: "wrap" }}>
+                    {item[1]?.isValid == true ?
+                      <Image source={require("../../../Image/check.png")} />
+                      :
+                      <Image source={require("../../../Image/cross.png")} />
+                    }
+                    <Text numberOfLines={1}>{item[0]}</Text>
+                  </View>);
+              })}
+            </View>
+
+          </View>
+
+        </View>
+      </Modal>
     </Theambackground>
     // </SafeAreaView>
   );

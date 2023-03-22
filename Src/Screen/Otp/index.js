@@ -12,11 +12,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../Constant/axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCarddata } from '../../Function/Apicall';
-const Otpscreen = () => {
+const Otpscreen = (params) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const cardData = useSelector((state) => state.appstate.cardList);
 
+  const screen = params?.route?.params?.screen
+  const email = params?.route?.params?.email
+  const datatoken = params?.route?.params?.data
+  
   const [otp, setOtp] = useState();
 
   const rnBiometrics = new ReactNativeBiometrics({
@@ -37,6 +41,38 @@ const Otpscreen = () => {
       .then(function (responseJson) {
         console.log("Verified user", responseJson.data, 'responce');
         if (responseJson?.data?.data === 'Authorized') {
+
+          // dispatch({ type: 'ADD_EXPIRY', payload: responseJson.data.expires });
+          AsyncStorage.setItem('login', 'true');
+         
+          AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
+
+          initialapicall()
+          // navigation.navigate('Tabnavigationroute');
+         handlebiomatric();
+        } else {
+          Alert.alert('Please Enter Right OTP');
+          console.log('Please check your email id or password');
+        }
+      })
+      .catch(error => {
+        //Hide Loader
+
+        console.error(error);
+        Alert.alert('Please Enter Right OTP');
+      });
+  };
+
+
+  const handleregisterotp= () => {
+    console.log('HELLO');
+    let dataToSend = {data : datatoken , otp: otp};
+    console.log(dataToSend , datatoken, 'fshsh');
+    axiosInstance
+      .post('auth/verifySignupOtp', dataToSend)
+      .then(function (responseJson) {
+        console.log("Verified user", responseJson.data, 'responce');
+        if (responseJson?.data?.error === false) {
 
           // dispatch({ type: 'ADD_EXPIRY', payload: responseJson.data.expires });
           AsyncStorage.setItem('login', 'true');
@@ -133,8 +169,7 @@ const Otpscreen = () => {
             color: COLOR.BLACK[100],
             fontWeight: '300',
           }}>
-          Please enter the verification code that we have sent to the mobile
-          number +954875285
+          Please enter the verification code that we have sent to the email id {email}
         </Text>
 
         <OtpInputs
@@ -173,7 +208,13 @@ const Otpscreen = () => {
             alignItems: 'center',
             justifyContent: 'center',
           }}
-          onPress={() => handleotp()}>
+          onPress={() => {
+            if(screen === "Register Account"){
+              handleregisterotp()
+            }else{
+              handleotp()
+            }
+          }}>
           <Text
             style={{
               fontSize: 15,

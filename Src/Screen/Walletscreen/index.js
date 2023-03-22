@@ -78,7 +78,7 @@ const Walletscreen = () => {
     let expiryMs = Date.parse(loginExpiry);
 
     if (Number(currentMs) > Number(expiryMs)) {
-      logout();
+     logout();
     }
 
   }
@@ -150,6 +150,7 @@ const Walletscreen = () => {
         if (responseJson.status === 200) {
           // dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
           console.log("Response for jump", responseJson.data.data);
+          // setLoader(true);
 
           let iAmSmartRes = responseJson?.data?.data;
           if (iAmSmartRes.url && iAmSmartRes.url.length > 0) {

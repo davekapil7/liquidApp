@@ -32,6 +32,7 @@
     "react-native-biometrics": "^3.0.1",
     "react-native-camera-kit": "^13.0.0",
     "react-native-cli": "^2.0.1",
+    "react-native-country-codes-picker": "^2.3.0",
     "react-native-gesture-handler": "^2.8.0",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-otp-inputs": "^7.4.0",
