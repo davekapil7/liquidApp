@@ -36,6 +36,7 @@ import Editdetail from './Screen/Walletscreen/Editdetails';
 import Selfissue from './Screen/Addscreen/Selfissue';
 import Testimonial from './Screen/Addscreen/Testimonial';
 import axiosInstance from './Constant/axios';
+import Cardinfo from './Screen/Walletscreen/CardInfo';
 
 const Stack = createStackNavigator();
 
@@ -260,6 +261,12 @@ const Rootnavigation = () => {
         <Stack.Screen
           name="Walletconnection"
           component={WalletconnectionScreen}
+          // Hiding header for Navigation Drawer
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Cardinfo"
+          component={Cardinfo}
           // Hiding header for Navigation Drawer
           options={{ headerShown: false }}
         />

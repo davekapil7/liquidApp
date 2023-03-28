@@ -49,7 +49,7 @@ const Settingscreen = () => {
         'auth/logout',
       )
       .then(function (responseJson) {
-        console.log("Logged out", responseJson);
+        console.log("Logged out");
       })
       .catch(function (error) {
         //  setErrortext(responseJson?.data?.error);

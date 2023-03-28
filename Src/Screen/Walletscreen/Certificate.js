@@ -23,6 +23,7 @@ import { useSelector, useDispatch } from "react-redux";
 import QRCode from 'react-native-qrcode-svg';
 import axiosInstance from '../../Constant/axios';
 import { sendToverification } from '../../Function/Apicall';
+import { useNavigation } from '@react-navigation/native';
 
 const WIDTH = Dimensions.get('screen').width;
 
@@ -39,6 +40,8 @@ const Certificate = ({ toMail, setMail }) => {
   const [apiloader, setApiloader] = useState(false);
 
   const ref = useRef(null);
+
+  const navigation = useNavigation()
 
   const cardData = useSelector((state) => state.appstate.cardList);
 
@@ -123,7 +126,18 @@ const Certificate = ({ toMail, setMail }) => {
     console.log("Image type", imgbkg);
   }
 
+
+  const renderDtata = ({itme}) => {
+    return(
+      <View>
+        <Text>HEllor</Text>
+      </View>
+    )
+  }
+
   const renderItem = ({ item, index }) => {
+
+    console.log("item is " , item);
     const insdate = item?.data?.issuanceDate;
     const memberdate = item?.data?.proof?.created;
 
@@ -138,7 +152,7 @@ const Certificate = ({ toMail, setMail }) => {
 
     if (loader) {
       return (
-        <View style={{ width: '100 %', height: '100%' }}>
+        <View style={{ width: '80 %' , height:150 }}>
           <ActivityIndicator size="large" color="#00ff00" />
         </View>
       )
@@ -162,7 +176,13 @@ const Certificate = ({ toMail, setMail }) => {
             style={{ width: "100%", height: "100%", resizeMode: "stretch" }} />
           <View style={{ position: "absolute", width: "80%", height: "80%", margin: 25, alignSelf: "center" }}>
 
-            <View style={{ position: "absolute", width: "100%", right: 0, alignItems: 'flex-end' }}>
+            <View style={{ position: "absolute", width: "100%", right: 0 , flexDirection:"row" , justifyContent:"space-between"}}>
+           <TouchableOpacity onPress={() => navigation.navigate("Cardinfo" , {data : item})}>
+            <Icon name='information-circle-outline'
+                type='ionicon'
+                color={COLOR.BLACK[100]}
+                size={40} />
+                </TouchableOpacity>
               <Image source={company} />
             </View>
 
@@ -212,13 +232,14 @@ const Certificate = ({ toMail, setMail }) => {
     );
   };
 
+
   return (
     <View
       style={{
         height: '100%',
         width: '100%',
         alignItems: 'center',
-        paddingTop: '30%',
+        paddingTop: '10%',
         justifyContent: 'center',
       }}>
       {cardData && cardData?.length < 1 ? (
@@ -249,17 +270,25 @@ const Certificate = ({ toMail, setMail }) => {
           </TouchableOpacity>
         </View>
       ) : (
-        <Carousel
-          layout="default"
-          // layoutCardOffset={'18'}
-          ref={ref}
-          data={cardData}
-          sliderWidth={350}
-          itemWidth={350}
-          //  style={{backgroundColor:"pink",width:"100%"}}
-          renderItem={renderItem}
-          onSnapToItem={index => setActiveIndex(index)}
-        />
+
+<View style={{width:"100%",  height:"100%",alignItems:"center",justifyContent:"center",paddingLeft:10}}>
+  {cardData.map((item , i)=>{
+return(
+  renderItem({item})
+);
+  })}
+</View>
+        // <Carousel
+        //   layout="default"
+        //   // layoutCardOffset={'18'}
+        //   ref={ref}
+        //   data={cardData}
+        //   sliderWidth={350}
+        //   itemWidth={350}
+        //   //  style={{backgroundColor:"pink",width:"100%"}}
+        //   renderItem={renderItem}
+        //   onSnapToItem={index => setActiveIndex(index)}
+        // />
       )}
       {apiloader &&
 

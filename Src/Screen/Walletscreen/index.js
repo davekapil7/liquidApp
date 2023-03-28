@@ -53,7 +53,7 @@ const Walletscreen = () => {
         'auth/logout',
       )
       .then(function (responseJson) {
-        console.log("Logged out", responseJson);
+        console.log("Logged out");
       })
       .catch(function (error) {
         //  setErrortext(responseJson?.data?.error);
@@ -63,6 +63,12 @@ const Walletscreen = () => {
         // setLoading(false);
       });
   }
+
+  useEffect(() => {
+    if(profileData && profileData.birthDate) {
+      setLoader(false)
+    }
+  }, [profileData])
 
   useEffect(() => {
     if (email && email.length > 0) {
@@ -150,7 +156,7 @@ const Walletscreen = () => {
         if (responseJson.status === 200) {
           // dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
           console.log("Response for jump", responseJson.data.data);
-          // setLoader(true);
+          setLoader(true);
 
           let iAmSmartRes = responseJson?.data?.data;
           if (iAmSmartRes.url && iAmSmartRes.url.length > 0) {

@@ -8,10 +8,12 @@ import {
 import { useSelector } from 'react-redux';
 import axiosInstance from '../../Constant/axios';
 import Toast from 'react-native-simple-toast';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Credentials = () => {
 
-  const profileData = useSelector(state => state?.appstate?.profileData);
+    const profileData = useSelector(state => state?.appstate?.profileData);
+    const [created, setCreated] = useState(false);
 
     // if (loader) {
     //     return (
@@ -21,6 +23,19 @@ const Credentials = () => {
     //     )
     // }
 
+    const credentialFunc = async () => {
+        const isIamSmartCreated = await AsyncStorage.getItem('isIamSmartCreated');
+        let creation = false;
+        if(isIamSmartCreated == 'true') {
+            creation = true;
+        }
+        setCreated(creation);
+    }
+
+    useEffect(() => {
+        credentialFunc();
+    }, [])
+
     const offerTemplate = () => {
         axiosInstance
             .get('template/fetchAllofferedTemplate')
@@ -29,9 +44,9 @@ const Credentials = () => {
                     console.log("Template for all the DIDs", responseJson.data.data);
                     let getDidList = responseJson.data.data;
                     let selected;
-                    for(let i = 0; i < getDidList.length; i++) {
+                    for (let i = 0; i < getDidList.length; i++) {
                         let did = getDidList[i].templateId;
-                        if(did.toUpperCase().includes('IAMSMART')) {
+                        if (did.toUpperCase().includes('IAMSMART')) {
                             selected = did;
                         }
                     }
@@ -95,10 +110,13 @@ const Credentials = () => {
                 <View style={{ marginTop: 20 }}>
                     <Text style={styles.subtitle} >Make sure your IamSmart profile data is accurate and create your credentials</Text>
                 </View>
-                <TouchableOpacity disabled={Object.keys(profileData).length === 0} onPress={() => offerTemplate()} style={styles.btnContainer} >
+                <TouchableOpacity activeOpacity={created ? 0 : 1} disabled={created} onPress={() => offerTemplate()} style={[created ? styles.disabledBtnContainer : styles.btnContainer]} >
                     <Text style={styles.btnText} >CREATE CREDENTIAL</Text>
                 </TouchableOpacity>
             </View>
+            {created && <View style={{ marginTop: '10%', alignItems: 'center' }}>
+                <Text style={{ ...styles.title, color: '#454545' }} >Your iAM Smart credential is already created !</Text>
+            </View>}
         </View>
     );
 };
@@ -106,8 +124,9 @@ const Credentials = () => {
 const styles = StyleSheet.create({
     title: {
         color: '#000',
-        fontSize: 20,
-        fontWeight: 'bold'
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center'
     },
     subtitle: {
         color: '#000',
@@ -122,6 +141,16 @@ const styles = StyleSheet.create({
         width: 220,
         height: 50,
         backgroundColor: '#324FC4',
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 25
+    },
+    disabledBtnContainer: {
+        marginTop: '20%',
+        width: 220,
+        height: 50,
+        backgroundColor: '#808080',
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',

@@ -47,9 +47,11 @@ const Otpscreen = (params) => {
          
           AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
 
+          AsyncStorage.setItem('isIamSmartCreated', JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated));
+
           initialapicall()
-          // navigation.navigate('Tabnavigationroute');
-         handlebiomatric();
+           navigation.navigate('Tabnavigationroute');
+      //   handlebiomatric();
         } else {
           Alert.alert('Please Enter Right OTP');
           console.log('Please check your email id or password');
@@ -81,7 +83,7 @@ const Otpscreen = (params) => {
 
           initialapicall()
           // navigation.navigate('Tabnavigationroute');
-         handlebiomatric();
+       //  handlebiomatric();
         } else {
           Alert.alert('Please Enter Right OTP');
           console.log('Please check your email id or password');
