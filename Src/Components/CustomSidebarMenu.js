@@ -15,7 +15,7 @@ const CustomSidebarMenu = props => {
   const [profileData, setProfileData] = useState();
   useEffect(() => {
     const getData = async () => {
-      const cData = await axios.get(`http://142.93.213.49:8000/auth/info`);
+      const cData = await axios.get(`https://api.liquid.com.hk/api/auth/info`);
       setProfileData(cData.data.data);
       console.log(cData.data, 'profile');
     };

@@ -74,7 +74,7 @@ const LoginScreen = () => {
     if (userEmail && !otp) { 
       let dataToSend = {email: userEmail};
       axios
-        .post('http://142.93.213.49:8000/auth/login', dataToSend)
+        .post('https://api.liquid.com.hk/api/auth/login', dataToSend)
         .then(function (responseJson) {
           setLoading(false);
           console.log(responseJson, 'ressss');
@@ -102,7 +102,7 @@ const LoginScreen = () => {
       let dataToSend = {otp: otp};
       // console.log(dataToSend, 'fshsh');
       axios
-        .post('http://142.93.213.49:8000/auth/verify-otp', dataToSend)
+        .post('https://api.liquid.com.hk/api/auth/verify-otp', dataToSend)
         .then(function (responseJson) {
           setLoading(false);
           console.log(responseJson, 'ressss');

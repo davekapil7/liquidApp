@@ -66,7 +66,7 @@ const ProofListingScreen = () => {
 
   useEffect(() => {
     // const getData = async () => {
-    //   const getDid = await axios.get(`http://142.93.213.49:8000/api/getDid`);
+    //   const getDid = await axios.get(`https://api.liquid.com.hk/api/api/getDid`);
     //   setListData(getDid?.data?.data?.items);
     // };
     // getData();

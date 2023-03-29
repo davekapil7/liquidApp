@@ -65,7 +65,7 @@ const VerifyProofScreen = () => {
     }
     axios
       .post(
-        'http://142.93.213.49:8000/api/verifyProof',
+        'https://api.liquid.com.hk/api/api/verifyProof',
 
         {
           itemId: qrvalue,

@@ -73,7 +73,7 @@ const RegisterScreen = props => {
     console.log(dataToSend, 'test');
 
     axios
-      .post('http://142.93.213.49:8000/auth/signup', dataToSend)
+      .post('https://api.liquid.com.hk/api/auth/signup', dataToSend)
       .then(function (responseJson) {
         setLoading(false);
         console.log(responseJson?.data?.data);

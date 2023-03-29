@@ -14,7 +14,7 @@ const CreateProofScreen = props => {
       console.log(paramKey, 'paramKey');
       if (paramKey) {
         await axios
-          .post('http://142.93.213.49:8000/api/createProof', {
+          .post('https://api.liquid.com.hk/api/api/createProof', {
             itemId: paramKey,
           })
           .then(function (responseJson) {

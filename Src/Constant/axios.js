@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
     withCredentials:true,
    // httpAgent:httpAgent,
     headers:{
-     "Access-Control-Allow-Origin":"http://142.93.213.49:8000/",
+     "Access-Control-Allow-Origin":"https://api.liquid.com.hk/api/",
     },
   });
 

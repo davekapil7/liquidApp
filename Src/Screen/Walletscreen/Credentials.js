@@ -76,6 +76,10 @@ const Credentials = () => {
             },
             email: profileData.emailAddr,
             templateId: template,
+            extra: {
+
+            },
+            isVerificationRequired: false
         }
 
         console.log("Data to send ", dataToSend);

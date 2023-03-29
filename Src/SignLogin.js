@@ -46,7 +46,7 @@ const SignLoginScreen = ({navigation}) => {
     };
 
     axios
-      .post('http://142.93.213.49:8000/auth/verifySignupOtp', dataToSend)
+      .post('https://api.liquid.com.hk/api/auth/verifySignupOtp', dataToSend)
       .then(async function (responseJson) {
         setLoading(false);
         console.log(responseJson, 'ressss');
@@ -54,7 +54,7 @@ const SignLoginScreen = ({navigation}) => {
         console.log(responseJson?.data?.data);
 
         if (responseJson?.data?.data) {
-          const cData = await axios.get(`http://142.93.213.49:8000/auth/info`);
+          const cData = await axios.get(`https://api.liquid.com.hk/api/auth/info`);
           console.log(cData, 'profile');
           if (cData?.data?.data?.details) {
             AsyncStorage.setItem('login', 'true');
