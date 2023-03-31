@@ -3,7 +3,8 @@ import {
     View,
     Text,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import axiosInstance from '../../Constant/axios';
@@ -26,7 +27,7 @@ const Credentials = () => {
     const credentialFunc = async () => {
         const isIamSmartCreated = await AsyncStorage.getItem('isIamSmartCreated');
         let creation = false;
-        if(isIamSmartCreated == 'true') {
+        if (isIamSmartCreated == 'true') {
             creation = true;
         }
         setCreated(creation);
@@ -37,30 +38,35 @@ const Credentials = () => {
     }, [])
 
     const offerTemplate = () => {
-        axiosInstance
-            .get('template/fetchAllofferedTemplate')
-            .then(function (responseJson) {
-                if (responseJson.status === 200) {
-                    console.log("Template for all the DIDs", responseJson.data.data);
-                    let getDidList = responseJson.data.data;
-                    let selected;
-                    for (let i = 0; i < getDidList.length; i++) {
-                        let did = getDidList[i].templateId;
-                        if (did.toUpperCase().includes('IAMSMART')) {
-                            selected = did;
+        if (Object.keys(profileData).length == 0) {
+            Alert.alert('Please fetch your profile data to create iAM Smart Credential');
+        } else {
+
+            axiosInstance
+                .get('template/fetchAllofferedTemplate')
+                .then(function (responseJson) {
+                    if (responseJson.status === 200) {
+                        console.log("Template for all the DIDs", responseJson.data.data);
+                        let getDidList = responseJson.data.data;
+                        let selected;
+                        for (let i = 0; i < getDidList.length; i++) {
+                            let did = getDidList[i].templateId;
+                            if (did.toUpperCase().includes('IAMSMART')) {
+                                selected = did;
+                            }
                         }
+                        console.log("Selected template ", selected);
+                        smartCredential(selected);
                     }
-                    console.log("Selected template ", selected);
-                    smartCredential(selected);
-                }
-            })
-            .catch(error => {
-                //Hide Loader
-                console.error(error);
-                Toast.show("Template couldn't be fetched", Toast.LONG, {
-                    backgroundColor: 'red',
+                })
+                .catch(error => {
+                    //Hide Loader
+                    console.error(error);
+                    Toast.show("Template couldn't be fetched", Toast.LONG, {
+                        backgroundColor: 'red',
+                    });
                 });
-            });
+        }
     }
 
     const smartCredential = (template) => {
@@ -89,6 +95,7 @@ const Credentials = () => {
             .then(function (responseJson) {
                 if (responseJson.status === 200) {
                     console.log("I am smart credential created ", responseJson.data);
+                    setCreated(true);
                 }
             })
             .catch(error => {
@@ -114,12 +121,15 @@ const Credentials = () => {
                 <View style={{ marginTop: 20 }}>
                     <Text style={styles.subtitle} >Make sure your IamSmart profile data is accurate and create your credentials</Text>
                 </View>
-                <TouchableOpacity activeOpacity={created ? 0 : 1} disabled={created} onPress={() => offerTemplate()} style={[created ? styles.disabledBtnContainer : styles.btnContainer]} >
+                <TouchableOpacity activeOpacity={created ? 0 : 1} disabled={created && (Object.keys(profileData).length == 0)} onPress={() => offerTemplate()} style={[created ? styles.disabledBtnContainer : styles.btnContainer]} >
                     <Text style={styles.btnText} >CREATE CREDENTIAL</Text>
                 </TouchableOpacity>
             </View>
             {created && <View style={{ marginTop: '10%', alignItems: 'center' }}>
                 <Text style={{ ...styles.title, color: '#454545' }} >Your iAM Smart credential is already created !</Text>
+            </View>}
+            {Object.keys(profileData).length == 0 && <View style={{ marginTop: '10%', alignItems: 'center' }}>
+                <Text style={{ ...styles.title, color: '#454545' }} >You need to get Profile data from iAM Smart !</Text>
             </View>}
         </View>
     );
