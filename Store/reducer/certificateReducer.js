@@ -1,7 +1,8 @@
 
 const initialState = {
     proofdata : [],
-    verification:{}
+    verification:{},
+    verificationId: '',
    };
    
    const certificateReducer = (state = initialState, action) => {
@@ -15,6 +16,11 @@ const initialState = {
          return{
           ...state,
           verification : action.payload
+         }
+         case "VERIFICATION_ID" : 
+         return{
+          ...state,
+          verificationId : action.payload
          }
        
    

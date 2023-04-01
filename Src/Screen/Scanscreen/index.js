@@ -47,13 +47,14 @@ const VerifyProofScreen = () => {
   };
 
   const onBarcodeScan = qrvalue => {
-    console.log("Qr value", qrvalue);
     // Called after te successful scanning of QRCode/Barcode
     let obj = JSON.parse(qrvalue);
     obj = { ...obj }
+    console.log("Qr value", obj);
     if (obj.type == 'verification_request') {
       // onOpneScanner(obj);
       dispatch({ type: 'ADD_EMAIL', payload: obj.email });
+      dispatch({ type: 'VERIFICATION_ID', payload: obj.data.verification_id });
       navigation.reset({
         index: 0,
         routes: [{ name: 'Tabnavigationroute' }],

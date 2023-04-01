@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,24 +13,24 @@ import {
   Linking,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {useNavigation} from '@react-navigation/native';
-import {IMG} from '../../Constant/image';
-import {STR} from '../../Constant/string';
-import {styles} from './style';
+import { useNavigation } from '@react-navigation/native';
+import { IMG } from '../../Constant/image';
+import { STR } from '../../Constant/string';
+import { styles } from './style';
 import {
   Header as HeaderRNE,
   HeaderProps,
   Icon,
   BottomSheet,
 } from '@rneui/themed';
-import {COLOR} from '../../Constant/color';
-import {wallettype} from '../../Constant/json';
+import { COLOR } from '../../Constant/color';
+import { wallettype } from '../../Constant/json';
 import Carousel from 'react-native-snap-carousel';
 import Certificate from './Certificate';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import axiosInstance from '../../Constant/axios';
-import {getCarddata} from '../../Function/Apicall';
+import { getCarddata } from '../../Function/Apicall';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Credentials from './Credentials';
 import Professional from './Professional';
@@ -47,9 +47,9 @@ const Walletscreen = () => {
   const profileData = useSelector(state => state?.appstate?.profileData);
   const [currentcard, setCurrentcard] = useState();
   const [currentproof, setCurrentproof] = useState('');
- const proof = useSelector(state => state?.certificate.proofdata)
+  const proof = useSelector(state => state?.certificate.proofdata)
 
-console.log("Index proof ===>", proof);
+  console.log("Index proof ===>", proof);
   const addcertificate = id => {
     console.log('@@@@', currentproof, currentproof.length);
     if (currentproof.length > 0) {
@@ -61,13 +61,13 @@ console.log("Index proof ===>", proof);
       let oldarr = proof;
 
       let newarr = oldarr.push(newdata);
-    
-      console.log("New arr is=====>",newarr , oldarr);
+
+      console.log("New arr is=====>", newarr, oldarr);
       dispatch({
         type: "ADD_PROOF",
-        payload : oldarr
+        payload: oldarr
       })
-     
+
 
       setSelectedType(3)
     }
@@ -103,27 +103,27 @@ console.log("Index proof ===>", proof);
   }, [email]);
 
   useEffect(() => {
-getProofdata()
-  },[])
+    getProofdata()
+  }, [])
 
- const getProofdata = () =>{
-  var requestOptions = {
-    method: 'GET',
-    redirect: 'follow'
-  };
-  
-  fetch("https://dev.liquid.com.hk/api/verifier/getRequest?verification_id=64239bba773ec0693f7368d4", requestOptions)
-    .then(response => response.text())
-    .then(result => {
-      const res= JSON.parse(result)
-      console.log("Verification result ===> ",res?.data);
-      dispatch({
-        type : "VERIFICATION_DATA",
-        payload : res?.data
+  const getProofdata = () => {
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+
+    fetch("https://dev.liquid.com.hk/api/verifier/getRequest?verification_id=64239bba773ec0693f7368d4", requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        const res = JSON.parse(result)
+        console.log("Verification result ===> ", res?.data);
+        dispatch({
+          type: "VERIFICATION_DATA",
+          payload: res?.data
+        })
       })
-    })
-    .catch(error => console.log('error', error));
- }
+      .catch(error => console.log('error', error));
+  }
 
   const sessionCheck = async () => {
     let date = new Date(); // some mock date
@@ -151,13 +151,20 @@ getProofdata()
       let linkUrl = url.url;
       linkUrl = linkUrl + ' ';
       if (linkUrl.includes('email=')) {
-        let email = getStringBetween(linkUrl, 'email=', ' ');
+        let email = getStringBetween(linkUrl, 'email=', '&verificationId');
+        let verificationId = getStringBetween(linkUrl, 'verificationId=', ' ');
         console.log('Email =', email);
-        setToMail(email);
-        setSelectedType(1);
+        console.log('VerificationId =', verificationId);
+        dispatch({ type: 'ADD_EMAIL', payload: email });
+        dispatch({ type: 'VERIFICATION_ID', payload: verificationId });
+        // setToMail(email);
+        setSelectedType(3);
       }
     });
   }, []);
+  //  const proofdata = proof?.data;
+  //  const prrofarr = proofdata?.askedFor;
+  const verificationId = useSelector(state => state?.certificate?.verificationId)
 
   useEffect(() => {
     if (!cardData) {
@@ -285,14 +292,14 @@ getProofdata()
 
   return (
     <View style={styles.safeContainer}>
-      <ScrollView style={{flex: 1, height: '100%'}}>
+      <ScrollView style={{ flex: 1, height: '100%' }}>
         <LinearGradient
-          start={{x: 0.0, y: 0.4}}
-          end={{x: 0.85, y: 0.5}}
+          start={{ x: 0.0, y: 0.4 }}
+          end={{ x: 0.85, y: 0.5 }}
           locations={[0, 0.9]}
           colors={['#454dbc', '#bd59fa']}
-          style={{flex: 1, height: '100%'}}>
-          <View style={{flex: 1, minHeight: HEIGHT}}>
+          style={{ flex: 1, height: '100%' }}>
+          <View style={{ flex: 1, minHeight: HEIGHT }}>
             <View style={styles.headerContainer}>
               <View>
                 <Text style={styles.titletext}>{STR.WALLET.TITLE}</Text>
@@ -304,7 +311,7 @@ getProofdata()
                 </Text>
               </View>
 
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <TouchableOpacity onPress={() => scan()}>
                   <Icon
                     name="line-scan"
@@ -314,7 +321,7 @@ getProofdata()
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{marginLeft: 10}}
+                  style={{ marginLeft: 10 }}
                   onPress={() => setting()}>
                   <Icon
                     name="settings-outline"
@@ -327,11 +334,11 @@ getProofdata()
             </View>
 
             <View style={styles.container}>
-              <View style={{height: 45}}>
+              <View style={{ height: 45 }}>
                 <ScrollView
                   horizontal={true}
-                  style={{height: 23}}
-                  contentContainerStyle={{height: 40}}>
+                  style={{ height: 23 }}
+                  contentContainerStyle={{ height: 40 }}>
                   <View style={styles.tabcontain}>
                     {wallettype.map((type, i) => {
                       return (
@@ -411,7 +418,7 @@ getProofdata()
                           borderBottomColor: COLOR.GRAY[100],
                         }}>
                         <View>
-                          <Text style={{fontSize: 18, color: COLOR.BLACK[100]}}>
+                          <Text style={{ fontSize: 18, color: COLOR.BLACK[100] }}>
                             {Object.keys(profileData).length > 0
                               ? profileData.enName.UnstructuredName
                               : 'User'}
@@ -472,7 +479,7 @@ getProofdata()
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        style={{alignSelf: 'center', marginTop: 5}}
+                        style={{ alignSelf: 'center', marginTop: 5 }}
                         onPress={() => editdetail()}>
                         <Text
                           style={{
@@ -485,7 +492,7 @@ getProofdata()
                       </TouchableOpacity>
                     </View>
                     {Object.keys(profileData).length > 0 ? (
-                      <View style={{flex: 1, width: '100%', marginBottom: 35}}>
+                      <View style={{ flex: 1, width: '100%', marginBottom: 35 }}>
                         <View style={styles.inputbox}>
                           <Text style={styles.inputtitle}>FULL NAME</Text>
                           <View
@@ -499,7 +506,7 @@ getProofdata()
                             </Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
-                              style={{width: 35, height: 35}}
+                              style={{ width: 35, height: 35 }}
                             />
                           </View>
                         </View>
@@ -517,7 +524,7 @@ getProofdata()
                             </Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
-                              style={{width: 35, height: 35}}
+                              style={{ width: 35, height: 35 }}
                             />
                           </View>
                         </View>
@@ -536,7 +543,7 @@ getProofdata()
                               }>{`(${profileData.mobileNumber.CountryCode})-${profileData.mobileNumber.SubscriberNumber}`}</Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
-                              style={{width: 35, height: 35}}
+                              style={{ width: 35, height: 35 }}
                             />
                           </View>
                         </View>
@@ -555,12 +562,12 @@ getProofdata()
                               }>{`${profileData.idNo.Identification}-(${profileData.idNo.CheckDigit})`}</Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
-                              style={{width: 35, height: 35}}
+                              style={{ width: 35, height: 35 }}
                             />
                           </View>
                         </View>
 
-                        <View style={{...styles.lastbox}}>
+                        <View style={{ ...styles.lastbox }}>
                           <Text
                             style={{
                               ...styles.inputtitle,
@@ -573,7 +580,7 @@ getProofdata()
                       </View>
                     ) : (
                       <>
-                        <View style={{alignSelf: 'center'}}>
+                        <View style={{ alignSelf: 'center' }}>
                           <ProfileButton />
                         </View>
                         <View
@@ -667,7 +674,7 @@ getProofdata()
                 )}
 
                 {selectedtype == 3 && (
-                  <View style={{flex: 1}}>
+                  <View style={{ flex: 1 }}>
                     <Professional
                       changetype={setSelectedType}
                       setProof={setCurrentproof}
@@ -699,7 +706,7 @@ getProofdata()
             elevation: 5,
             shadowColor: 'black',
           }}>
-          <Text style={{fontSize: 20, color: COLOR.BLUE[300]}}>Share</Text>
+          <Text style={{ fontSize: 20, color: COLOR.BLUE[300] }}>Share</Text>
           <Text
             style={{
               fontSize: 17,
@@ -715,7 +722,7 @@ getProofdata()
 
           <Image
             source={IMG.QRCODE}
-            style={{width: 250, height: 250, resizeMode: 'stretch'}}
+            style={{ width: 250, height: 250, resizeMode: 'stretch' }}
           />
 
           <TouchableOpacity
