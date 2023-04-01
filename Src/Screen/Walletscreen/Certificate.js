@@ -29,7 +29,7 @@ const WIDTH = Dimensions.get('screen').width;
 
 const HIGHT = Dimensions.get('screen').height;
 
-const Certificate = ({ toMail, setMail }) => {
+const Certificate = ({ toMail, setMail  , setCard , setType,handleproof}) => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [shareopen, setShareopen] = useState(false);
@@ -127,17 +127,10 @@ const Certificate = ({ toMail, setMail }) => {
   }
 
 
-  const renderDtata = ({itme}) => {
-    return(
-      <View>
-        <Text>HEllor</Text>
-      </View>
-    )
-  }
 
   const renderItem = ({ item, index }) => {
 
-    console.log("item is " , item);
+   // console.log("item is " , item);
     const insdate = item?.data?.issuanceDate;
     const memberdate = item?.data?.proof?.created;
 
@@ -159,8 +152,13 @@ const Certificate = ({ toMail, setMail }) => {
     }
 
     return (
-      <View style={{ width: '100%', height: 300 }}>
-        {toMail && toMail.length > 0 &&
+      <View style={{ width: '100%', height: 300 ,flexDirection:"row"}}>
+      <TouchableOpacity onPress={() =>{
+        // setCard(id),
+        // setType(3)
+        handleproof(id)
+      }} style={{width:25,height:25,marginTop:60,borderRadius:25/2,backgroundColor:"gray"}}></TouchableOpacity>
+        {/* {toMail && toMail.length > 0 &&
           <View style={{ alignItems: "flex-start", marginBottom: -5, marginLeft: 25, }}>
             <TouchableOpacity onPress={() => handlemailicon(id)}>
               <Icon name='mail-unread-outline'
@@ -169,9 +167,9 @@ const Certificate = ({ toMail, setMail }) => {
                 size={35} />
             </TouchableOpacity>
           </View>
-        }
+        } */}
 
-        <View style={{ flex: 1, width: 360, height: 250 }}>
+        <View style={{ flex: 1, width: 320, height: 250 }}>
           <Image source={imgbkg}
             style={{ width: "100%", height: "100%", resizeMode: "stretch" }} />
           <View style={{ position: "absolute", width: "80%", height: "80%", margin: 25, alignSelf: "center" }}>

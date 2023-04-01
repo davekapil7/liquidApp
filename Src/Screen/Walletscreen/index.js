@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -13,47 +13,72 @@ import {
   Linking,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import { IMG } from '../../Constant/image';
-import { STR } from '../../Constant/string';
-import { styles } from './style';
+import {useNavigation} from '@react-navigation/native';
+import {IMG} from '../../Constant/image';
+import {STR} from '../../Constant/string';
+import {styles} from './style';
 import {
   Header as HeaderRNE,
   HeaderProps,
   Icon,
   BottomSheet,
 } from '@rneui/themed';
-import { COLOR } from '../../Constant/color';
-import { wallettype } from '../../Constant/json';
+import {COLOR} from '../../Constant/color';
+import {wallettype} from '../../Constant/json';
 import Carousel from 'react-native-snap-carousel';
 import Certificate from './Certificate';
-import { useSelector, useDispatch } from "react-redux";
+import {useSelector, useDispatch} from 'react-redux';
 
 import axiosInstance from '../../Constant/axios';
-import { getCarddata } from '../../Function/Apicall';
+import {getCarddata} from '../../Function/Apicall';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Credentials from './Credentials';
+import Professional from './Professional';
+import { onLoad } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 
-const HEIGHT = Dimensions.get("screen").height;
+const HEIGHT = Dimensions.get('screen').height;
 
 const Walletscreen = () => {
-
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
   const [toMail, setToMail] = useState('');
-  const cardData = useSelector((state) => state.appstate.cardList);
-  const email = useSelector((state) => state.appstate.email);
+  const cardData = useSelector(state => state.appstate.cardList);
+  const email = useSelector(state => state.appstate.email);
   const profileData = useSelector(state => state?.appstate?.profileData);
+  const [currentcard, setCurrentcard] = useState();
+  const [currentproof, setCurrentproof] = useState('');
+ const proof = useSelector(state => state?.certificate.proofdata)
 
+console.log("Index proof ===>", proof);
+  const addcertificate = id => {
+    console.log('@@@@', currentproof, currentproof.length);
+    if (currentproof.length > 0) {
+      const newdata = {
+        proof: currentproof,
+        card: id,
+      };
+
+      let oldarr = proof;
+
+      let newarr = oldarr.push(newdata);
+    
+      console.log("New arr is=====>",newarr , oldarr);
+      dispatch({
+        type: "ADD_PROOF",
+        payload : oldarr
+      })
+     
+
+      setSelectedType(3)
+    }
+  };
   const logout = () => {
-    AsyncStorage.removeItem('login')
-    navigation.navigate("Auth")
+    AsyncStorage.removeItem('login');
+    navigation.navigate('Auth');
     axiosInstance
-      .get(
-        'auth/logout',
-      )
+      .get('auth/logout')
       .then(function (responseJson) {
-        console.log("Logged out");
+        console.log('Logged out');
       })
       .catch(function (error) {
         //  setErrortext(responseJson?.data?.error);
@@ -62,20 +87,43 @@ const Walletscreen = () => {
         // });
         // setLoading(false);
       });
-  }
+  };
 
   useEffect(() => {
-    if(profileData && profileData.birthDate) {
-      setLoader(false)
+    if (profileData && profileData.birthDate) {
+      setLoader(false);
     }
-  }, [profileData])
+  }, [profileData]);
 
   useEffect(() => {
     if (email && email.length > 0) {
       setSelectedType(1);
       setToMail(email);
     }
-  }, [email])
+  }, [email]);
+
+  useEffect(() => {
+getProofdata()
+  },[])
+
+ const getProofdata = () =>{
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  
+  fetch("https://dev.liquid.com.hk/api/verifier/getRequest?verification_id=64239bba773ec0693f7368d4", requestOptions)
+    .then(response => response.text())
+    .then(result => {
+      const res= JSON.parse(result)
+      console.log("Verification result ===> ",res?.data);
+      dispatch({
+        type : "VERIFICATION_DATA",
+        payload : res?.data
+      })
+    })
+    .catch(error => console.log('error', error));
+ }
 
   const sessionCheck = async () => {
     let date = new Date(); // some mock date
@@ -84,30 +132,29 @@ const Walletscreen = () => {
     let expiryMs = Date.parse(loginExpiry);
 
     if (Number(currentMs) > Number(expiryMs)) {
-     logout();
+      logout();
     }
-
-  }
+  };
 
   useEffect(() => {
-    console.log("I am in wallet screen");
+    console.log('I am in wallet screen');
 
     getData();
     setSelectedType(0);
 
     sessionCheck();
     setTimeout(() => {
-      setLoader(false)
+      setLoader(false);
     }, 1000);
 
-    Linking.addEventListener('url', (url) => {
+    Linking.addEventListener('url', url => {
       let linkUrl = url.url;
-      linkUrl = linkUrl + " ";
+      linkUrl = linkUrl + ' ';
       if (linkUrl.includes('email=')) {
         let email = getStringBetween(linkUrl, 'email=', ' ');
-        console.log("Email =", email);
+        console.log('Email =', email);
         setToMail(email);
-        setSelectedType(1)
+        setSelectedType(1);
       }
     });
   }, []);
@@ -116,21 +163,22 @@ const Walletscreen = () => {
     if (!cardData) {
       getData();
     }
-  }, [selectedtype])
+  }, [selectedtype]);
 
   function getStringBetween(str, start, end) {
-    const result = str.match(new RegExp(start + "(.*)" + end));
+    const result = str.match(new RegExp(start + '(.*)' + end));
     return result[1];
   }
 
   const getData = async () => {
     axiosInstance
-      .get(
-        'api/getDid',
-      )
+      .get('api/getDid')
       .then(function (responseJson) {
         if (responseJson.status === 200) {
-          dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
+          dispatch({
+            type: 'ADD_CARDS',
+            payload: responseJson?.data?.data?.items,
+          });
         }
       })
       .catch(function (error) {
@@ -144,18 +192,16 @@ const Walletscreen = () => {
 
   const iAMSmartCall = async () => {
     axiosInstance
-      .get(
-        'iamsmart/IAMSMART_login', {
+      .get('iamsmart/IAMSMART_login', {
         params: {
           source: 'android',
-          redirect_uri: 'https://api.liquid.com.hk/mobile/redirect'
-        }
-      }
-      )
+          redirect_uri: 'https://api.liquid.com.hk/mobile/redirect',
+        },
+      })
       .then(function (responseJson) {
         if (responseJson.status === 200) {
           // dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
-          console.log("Response for jump", responseJson.data.data);
+          console.log('Response for jump', responseJson.data.data);
           setLoader(true);
 
           let iAmSmartRes = responseJson?.data?.data;
@@ -171,7 +217,7 @@ const Walletscreen = () => {
         // });
         // setLoading(false);
       });
-  }
+  };
 
   const ProfileButton = () => {
     return (
@@ -183,23 +229,21 @@ const Walletscreen = () => {
           />
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.subtitle}>
-            Personal Data from iAM Smart
-          </Text>
+          <Text style={styles.subtitle}>Personal Data from iAM Smart</Text>
         </View>
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
-  const birthDayConverter = (dateString) => {
+  const birthDayConverter = dateString => {
     let year = dateString.substring(0, 4);
     let month = dateString.substring(4, 6);
     let day = dateString.substring(6, 8);
 
     let date = new Date(year, month - 1, day);
-    console.log("Date length", date.toDateString());
+    console.log('Date length', date.toDateString());
     return date.toDateString();
-  }
+  };
 
   const navigation = useNavigation();
   const [selectedtype, setSelectedType] = useState(0);
@@ -227,31 +271,40 @@ const Walletscreen = () => {
 
   if (loader) {
     return (
-      <View style={{ width: '100 %', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+      <View
+        style={{
+          width: '100 %',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <ActivityIndicator size="large" color="#00ff00" />
       </View>
-    )
+    );
   }
 
   return (
     <View style={styles.safeContainer}>
-      <ScrollView style={{ flex: 1, height: "100%" }}>
+      <ScrollView style={{flex: 1, height: '100%'}}>
         <LinearGradient
-          start={{ x: 0.0, y: 0.4 }}
-          end={{ x: 0.85, y: 0.5 }}
+          start={{x: 0.0, y: 0.4}}
+          end={{x: 0.85, y: 0.5}}
           locations={[0, 0.9]}
           colors={['#454dbc', '#bd59fa']}
-          style={{ flex: 1, height: "100%" }}>
-          <View style={{ flex: 1, minHeight: HEIGHT }}>
+          style={{flex: 1, height: '100%'}}>
+          <View style={{flex: 1, minHeight: HEIGHT}}>
             <View style={styles.headerContainer}>
               <View>
                 <Text style={styles.titletext}>{STR.WALLET.TITLE}</Text>
-                <Text style={styles.welcometext}>{STR.WALLET.WELCOME}
-                  {Object.keys(profileData).length > 0 ? ` ${profileData.enName.UnstructuredName}` : 'User'}
+                <Text style={styles.welcometext}>
+                  {STR.WALLET.WELCOME}
+                  {Object.keys(profileData).length > 0
+                    ? ` ${profileData.enName.UnstructuredName}`
+                    : 'User'}
                 </Text>
               </View>
 
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <TouchableOpacity onPress={() => scan()}>
                   <Icon
                     name="line-scan"
@@ -261,7 +314,7 @@ const Walletscreen = () => {
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{ marginLeft: 10 }}
+                  style={{marginLeft: 10}}
                   onPress={() => setting()}>
                   <Icon
                     name="settings-outline"
@@ -274,11 +327,11 @@ const Walletscreen = () => {
             </View>
 
             <View style={styles.container}>
-              <View style={{ height: 45 }}>
+              <View style={{height: 45}}>
                 <ScrollView
                   horizontal={true}
-                  style={{ height: 23 }}
-                  contentContainerStyle={{ height: 40 }}>
+                  style={{height: 23}}
+                  contentContainerStyle={{height: 40}}>
                   <View style={styles.tabcontain}>
                     {wallettype.map((type, i) => {
                       return (
@@ -358,8 +411,10 @@ const Walletscreen = () => {
                           borderBottomColor: COLOR.GRAY[100],
                         }}>
                         <View>
-                          <Text style={{ fontSize: 18, color: COLOR.BLACK[100] }}>
-                            {Object.keys(profileData).length > 0 ? profileData.enName.UnstructuredName : 'User'}
+                          <Text style={{fontSize: 18, color: COLOR.BLACK[100]}}>
+                            {Object.keys(profileData).length > 0
+                              ? profileData.enName.UnstructuredName
+                              : 'User'}
                           </Text>
                           <Text
                             style={{
@@ -367,7 +422,9 @@ const Walletscreen = () => {
                               marginTop: 10,
                               color: COLOR.BLACK[100],
                             }}>
-                            {Object.keys(profileData).length > 0 ? profileData.emailAddr : '****@gmail.com'}
+                            {Object.keys(profileData).length > 0
+                              ? profileData.emailAddr
+                              : '****@gmail.com'}
                           </Text>
                         </View>
                         <View
@@ -415,7 +472,7 @@ const Walletscreen = () => {
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        style={{ alignSelf: 'center', marginTop: 5 }}
+                        style={{alignSelf: 'center', marginTop: 5}}
                         onPress={() => editdetail()}>
                         <Text
                           style={{
@@ -428,53 +485,95 @@ const Walletscreen = () => {
                       </TouchableOpacity>
                     </View>
                     {Object.keys(profileData).length > 0 ? (
-                      <View style={{ flex: 1, width: "100%", marginBottom: 35 }}>
-
+                      <View style={{flex: 1, width: '100%', marginBottom: 35}}>
                         <View style={styles.inputbox}>
                           <Text style={styles.inputtitle}>FULL NAME</Text>
-                          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 2 }}>
-                            <Text style={styles.inputtext}>{profileData.enName.UnstructuredName}</Text>
-                            <Image source={require("../../../assets/Image/phone.png")}
-                              style={{ width: 35, height: 35 }} />
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              marginTop: 2,
+                            }}>
+                            <Text style={styles.inputtext}>
+                              {profileData.enName.UnstructuredName}
+                            </Text>
+                            <Image
+                              source={require('../../../assets/Image/phone.png')}
+                              style={{width: 35, height: 35}}
+                            />
                           </View>
                         </View>
 
-
                         <View style={styles.inputbox}>
                           <Text style={styles.inputtitle}>Birth date</Text>
-                          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 2 }}>
-                            <Text style={styles.inputtext}>{birthDayConverter(profileData.birthDate)}</Text>
-                            <Image source={require("../../../assets/Image/phone.png")}
-                              style={{ width: 35, height: 35 }} />
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              marginTop: 2,
+                            }}>
+                            <Text style={styles.inputtext}>
+                              {birthDayConverter(profileData.birthDate)}
+                            </Text>
+                            <Image
+                              source={require('../../../assets/Image/phone.png')}
+                              style={{width: 35, height: 35}}
+                            />
                           </View>
                         </View>
 
                         <View style={styles.inputbox}>
                           <Text style={styles.inputtitle}>Phone number</Text>
-                          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 2 }}>
-                            <Text style={styles.inputtext}>{`(${profileData.mobileNumber.CountryCode})-${profileData.mobileNumber.SubscriberNumber}`}</Text>
-                            <Image source={require("../../../assets/Image/phone.png")}
-                              style={{ width: 35, height: 35 }} />
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              marginTop: 2,
+                            }}>
+                            <Text
+                              style={
+                                styles.inputtext
+                              }>{`(${profileData.mobileNumber.CountryCode})-${profileData.mobileNumber.SubscriberNumber}`}</Text>
+                            <Image
+                              source={require('../../../assets/Image/phone.png')}
+                              style={{width: 35, height: 35}}
+                            />
                           </View>
                         </View>
 
                         <View style={styles.inputbox}>
                           <Text style={styles.inputtitle}>ID code</Text>
-                          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 2 }}>
-                            <Text style={styles.inputtext}>{`${profileData.idNo.Identification}-(${profileData.idNo.CheckDigit})`}</Text>
-                            <Image source={require("../../../assets/Image/phone.png")}
-                              style={{ width: 35, height: 35 }} />
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              marginTop: 2,
+                            }}>
+                            <Text
+                              style={
+                                styles.inputtext
+                              }>{`${profileData.idNo.Identification}-(${profileData.idNo.CheckDigit})`}</Text>
+                            <Image
+                              source={require('../../../assets/Image/phone.png')}
+                              style={{width: 35, height: 35}}
+                            />
                           </View>
                         </View>
 
-                        <View style={{ ...styles.lastbox }}>
-                          <Text style={{ ...styles.inputtitle, fontWeight: 'bold', color: '#000' }}>Profile Data Provided by iAM SMART</Text>
+                        <View style={{...styles.lastbox}}>
+                          <Text
+                            style={{
+                              ...styles.inputtitle,
+                              fontWeight: 'bold',
+                              color: '#000',
+                            }}>
+                            Profile Data Provided by iAM SMART
+                          </Text>
                         </View>
-
                       </View>
                     ) : (
                       <>
-                        <View style={{ alignSelf: 'center' }}>
+                        <View style={{alignSelf: 'center'}}>
                           <ProfileButton />
                         </View>
                         <View
@@ -507,7 +606,8 @@ const Walletscreen = () => {
                               textAlign: 'center',
                             }}>
                             You can self issue your own credential or receive a
-                            testimonial from your business partners or colleagues
+                            testimonial from your business partners or
+                            colleagues
                           </Text>
 
                           {/* <TouchableOpacity
@@ -539,11 +639,17 @@ const Walletscreen = () => {
                     style={{
                       alignItems: 'flex-start',
                       width: '100%',
-                      height: "100%",
+                      height: '100%',
                       alignSelf: 'flex-start',
                       flex: 1,
                     }}>
-                    <Certificate toMail={toMail} setMail={setToMail} />
+                    <Certificate
+                      toMail={toMail}
+                      setMail={setToMail}
+                      setCard={setCurrentcard}
+                      setType={setSelectedType}
+                      handleproof={addcertificate}
+                    />
                   </View>
                 )}
 
@@ -552,11 +658,21 @@ const Walletscreen = () => {
                     style={{
                       alignItems: 'flex-start',
                       width: '100%',
-                      height: "100%",
+                      height: '100%',
                       alignSelf: 'flex-start',
                       flex: 1,
                     }}>
                     <Credentials />
+                  </View>
+                )}
+
+                {selectedtype == 3 && (
+                  <View style={{flex: 1}}>
+                    <Professional
+                      changetype={setSelectedType}
+                      setProof={setCurrentproof}
+                      proofitem={proof}
+                    />
                   </View>
                 )}
               </View>
@@ -583,7 +699,7 @@ const Walletscreen = () => {
             elevation: 5,
             shadowColor: 'black',
           }}>
-          <Text style={{ fontSize: 20, color: COLOR.BLUE[300] }}>Share</Text>
+          <Text style={{fontSize: 20, color: COLOR.BLUE[300]}}>Share</Text>
           <Text
             style={{
               fontSize: 17,
@@ -599,7 +715,7 @@ const Walletscreen = () => {
 
           <Image
             source={IMG.QRCODE}
-            style={{ width: 250, height: 250, resizeMode: 'stretch' }}
+            style={{width: 250, height: 250, resizeMode: 'stretch'}}
           />
 
           <TouchableOpacity
