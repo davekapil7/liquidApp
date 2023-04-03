@@ -1,16 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
-  Alert, Dimensions,
+  Alert,
+  Dimensions,
   ActivityIndicator,
-  ImageBackground, Image
+  ImageBackground,
+  Image,
 } from 'react-native';
 
 import Carousel from 'react-native-snap-carousel';
-import { COLOR } from '../../Constant/color';
-import { proof } from '../../Constant/json';
+import {COLOR} from '../../Constant/color';
+import {proof} from '../../Constant/json';
 import moment from 'moment';
 import {
   Header as HeaderRNE,
@@ -18,19 +20,25 @@ import {
   Icon,
   BottomSheet,
 } from '@rneui/themed';
-import { useSelector, useDispatch } from "react-redux";
+import {useSelector, useDispatch} from 'react-redux';
 
 import QRCode from 'react-native-qrcode-svg';
 import axiosInstance from '../../Constant/axios';
-import { sendToverification } from '../../Function/Apicall';
-import { useNavigation } from '@react-navigation/native';
+import {sendToverification} from '../../Function/Apicall';
+import {useNavigation} from '@react-navigation/native';
 
 const WIDTH = Dimensions.get('screen').width;
 
 const HIGHT = Dimensions.get('screen').height;
 
-const Certificate = ({ toMail, setMail  , setCard , setType,handleproof}) => {
-
+const Certificate = ({
+  toMail,
+  setMail,
+  setCard,
+  check,
+  setType,
+  handleproof,
+}) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [shareopen, setShareopen] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -41,13 +49,12 @@ const Certificate = ({ toMail, setMail  , setCard , setType,handleproof}) => {
 
   const ref = useRef(null);
 
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
-  const cardData = useSelector((state) => state.appstate.cardList);
+  const cardData = useSelector(state => state.appstate.cardList);
 
-  const createProof = async (id) => {
-
-    let dataToSend = { item_id: id };
+  const createProof = async id => {
+    let dataToSend = {item_id: id};
 
     axiosInstance
       .post('auth/create-proof-qr', dataToSend)
@@ -56,34 +63,33 @@ const Certificate = ({ toMail, setMail  , setCard , setType,handleproof}) => {
           let objData = responseJson?.data;
           delete objData.err;
 
-          const id = objData?.id
+          const id = objData?.id;
 
           let stringData = JSON.stringify(objData);
-          console.log("Response json1", objData);
-          setId(stringData)
-          setApiloader(false)
+          console.log('Response json1', objData);
+          setId(stringData);
+          setApiloader(false);
           setShareopen(true);
         }
       })
-      .catch(function (error) {
-      });
+      .catch(function (error) {});
   };
 
-  const openmodal = (val) => {
-    setApiloader(true)
+  const openmodal = val => {
+    setApiloader(true);
     createProof(val);
   };
 
   useEffect(() => {
     setTimeout(() => {
-      setEmailapproval(false)
+      setEmailapproval(false);
     }, 3000);
   }, [emailApproval === true]);
 
-  const handlemailicon = async (id) => {
-    setApiloader(true)
+  const handlemailicon = async id => {
+    setApiloader(true);
 
-    let dataToSend = { item_id: id };
+    let dataToSend = {item_id: id};
 
     axiosInstance
       .post('auth/create-proof-qr', dataToSend)
@@ -91,44 +97,39 @@ const Certificate = ({ toMail, setMail  , setCard , setType,handleproof}) => {
         if (responseJson.status === 200) {
           let objData = responseJson?.data;
           delete objData.err;
-          console.log("Response json1", objData);
+          console.log('Response json1', objData);
 
           const id = objData?.id;
           const iv = objData?.iv;
           let stringData = JSON.stringify(objData);
-          const res = await sendToverification(toMail, id, iv)
-          console.log("Response from mail", res);
+          const res = await sendToverification(toMail, id, iv);
+          console.log('Response from mail', res);
           if (res) {
-            setApiloader(false)
-            setEmailapproval(true)
+            setApiloader(false);
+            setEmailapproval(true);
             setId(stringData);
-            setMail("")
+            setMail('');
           } else {
-            setMail("")
+            setMail('');
           }
         }
       })
-      .catch(function (error) {
-      });
-
-  }
+      .catch(function (error) {});
+  };
   let imgbkg = require('../../../assets/Image/card/card5.png');
   let company = require('../../../assets/Image/card/iamsmart.png');
 
-  const imageReplacer = (type) => {
+  const imageReplacer = type => {
     if (type[1] && type[1].includes('IamSmart')) {
-      imgbkg = require('../../../assets/Image/card/card8.png'),
-      company = require('../../../assets/Image/card/iamsmart.png')
+      (imgbkg = require('../../../assets/Image/card/card8.png')),
+        (company = require('../../../assets/Image/card/iamsmart.png'));
     } else if (type[1] && type[1].includes('Document')) {
-      imgbkg = require('../../../assets/Image/card/card7.png'),
-      company = require('../../../assets/Image/card/Kerry-Logistics.png')
+      (imgbkg = require('../../../assets/Image/card/card7.png')),
+        (company = require('../../../assets/Image/card/Kerry-Logistics.png'));
     }
-  }
+  };
 
-
-
-  const renderItem = ({ item, index }) => {
-
+  const renderItem = ({item, index}) => {
     const insdate = item?.data?.issuanceDate;
     const memberdate = item?.data?.proof?.created;
 
@@ -137,25 +138,33 @@ const Certificate = ({ toMail, setMail  , setCard , setType,handleproof}) => {
     const insformated = moment(insdate).format('MM/DD/YYYYY');
     const memberformated = moment(memberdate).format('MM/DD/YYYYY');
 
-    const id = item?.id
+    const id = item?.id;
 
-    const emailid = emailIcon.findIndex(value => value === id)
+    const emailid = emailIcon.findIndex(value => value === id);
 
     if (loader) {
       return (
-        <View style={{ width: '80 %' , height:150 }}>
+        <View style={{width: '80 %', height: 150}}>
           <ActivityIndicator size="large" color="#00ff00" />
         </View>
-      )
+      );
     }
 
     return (
-      <View style={{ width: '100%', height: 300 ,flexDirection:"row"}}>
-      <TouchableOpacity onPress={() =>{
-        // setCard(id),
-        // setType(3)
-        handleproof(id)
-      }} style={{width:25,height:25,marginTop:60,borderRadius:25/2,backgroundColor:"gray"}}></TouchableOpacity>
+      <View style={{width: '100%', height: 300, flexDirection: 'row'}}>
+       {check && 
+        <TouchableOpacity
+          onPress={() => {
+            handleproof(id);
+          }}
+          style={{
+            width: 25,
+            height: 25,
+            marginTop: 60,
+            borderRadius: 25 / 2,
+            backgroundColor: 'gray',
+          }}></TouchableOpacity>
+        }
         {/* {toMail && toMail.length > 0 &&
           <View style={{ alignItems: "flex-start", marginBottom: -5, marginLeft: 25, }}>
             <TouchableOpacity onPress={() => handlemailicon(id)}>
@@ -167,57 +176,106 @@ const Certificate = ({ toMail, setMail  , setCard , setType,handleproof}) => {
           </View>
         } */}
 
-        <View style={{ flex: 1, width: 320, height: 250 }}>
-          <Image source={imgbkg}
-            style={{ width: "100%", height: "100%", resizeMode: "stretch" }} />
-          <View style={{ position: "absolute", width: "80%", height: "80%", margin: 25, alignSelf: "center" }}>
-
-            <View style={{ position: "absolute", width: "100%", right: 0 , flexDirection:"row" , justifyContent:"space-between"}}>
-           <TouchableOpacity onPress={() => navigation.navigate("Cardinfo" , {data : item})}>
-            <Icon name='information-circle-outline'
-                type='ionicon'
-                color={COLOR.BLACK[100]}
-                size={40} />
-                </TouchableOpacity>
+        <View style={{flex: 1, width: 320, height: 250}}>
+          <Image
+            source={imgbkg}
+            style={{width: '100%', height: '100%', resizeMode: 'stretch'}}
+          />
+          <View
+            style={{
+              position: 'absolute',
+              width: '80%',
+              height: '80%',
+              margin: 25,
+              alignSelf: 'center',
+            }}>
+            <View
+              style={{
+                position: 'absolute',
+                width: '100%',
+                right: 0,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Cardinfo', {data: item})}>
+                <Icon
+                  name="information-circle-outline"
+                  type="ionicon"
+                  color={COLOR.BLACK[100]}
+                  size={40}
+                />
+              </TouchableOpacity>
               <Image source={company} />
             </View>
 
-            <View style={{ position: "absolute", width: "100%", bottom: 30, right: 0, alignItems: 'flex-end' }}>
-              <Image source={require("../../../assets/Image/card/logo-liquid-white.png")} />
+            <View
+              style={{
+                position: 'absolute',
+                width: '100%',
+                bottom: 30,
+                right: 0,
+                alignItems: 'flex-end',
+              }}>
+              <Image
+                source={require('../../../assets/Image/card/logo-liquid-white.png')}
+              />
             </View>
 
-            <View style={{ position: "absolute", width: "100%", height: "100%", marginTop: -10, justifyContent: "center" }}>
-              <View style={{ flexDirection: "row", alignContent: 'space-between' }}>
-                <View style={{ width: '50%' }}>
-                  <Text style={{ fontWeight: "600", color: "#FFFFFF", fontSize: 20 }}>UID</Text>
-                  <Text style={{ fontWeight: "600", color: "#FFFFFF", fontSize: 12 }}>{item.id.split(":")[2].slice(0, 6)}...{item.id.split(":")[2].slice(24, 32)}</Text>
+            <View
+              style={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                marginTop: -10,
+                justifyContent: 'center',
+              }}>
+              <View
+                style={{flexDirection: 'row', alignContent: 'space-between'}}>
+                <View style={{width: '50%'}}>
+                  <Text
+                    style={{fontWeight: '600', color: '#FFFFFF', fontSize: 20}}>
+                    UID
+                  </Text>
+                  <Text
+                    style={{fontWeight: '600', color: '#FFFFFF', fontSize: 12}}>
+                    {item.id.split(':')[2].slice(0, 6)}...
+                    {item.id.split(':')[2].slice(24, 32)}
+                  </Text>
                 </View>
-                <View style={{ position: 'absolute', right: 0, flexDirection: 'row' }} >
-                  <TouchableOpacity style={{
-                    width: 80,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderWidth: 1,
-                    borderTopLeftRadius: 25,
-                    borderBottomLeftRadius: 25,
-                    height: 40,
-                  }}
-                    onPress={() => openmodal(item?.id)}>
-                    <Text style={{ fontWeight: "600", color: "black" }}>SHARE</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={{
-                    width: 50,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderWidth: 1,
-                    borderLeftWidth: 0,
-                    borderBottomRightRadius: 25,
-                    borderTopRightRadius: 25,
-                    height: 40
+                <View
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    flexDirection: 'row',
                   }}>
-                    <Icon name='chevron-small-down'
-                      type='entypo'
-                      size={35} />
+                  <TouchableOpacity
+                    style={{
+                      width: 80,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 1,
+                      borderTopLeftRadius: 25,
+                      borderBottomLeftRadius: 25,
+                      height: 40,
+                    }}
+                    onPress={() => openmodal(item?.id)}>
+                    <Text style={{fontWeight: '600', color: 'black'}}>
+                      SHARE
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      width: 50,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 1,
+                      borderLeftWidth: 0,
+                      borderBottomRightRadius: 25,
+                      borderTopRightRadius: 25,
+                      height: 40,
+                    }}>
+                    <Icon name="chevron-small-down" type="entypo" size={35} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -227,7 +285,6 @@ const Certificate = ({ toMail, setMail  , setCard , setType,handleproof}) => {
       </View>
     );
   };
-
 
   return (
     <View
@@ -239,9 +296,9 @@ const Certificate = ({ toMail, setMail  , setCard , setType,handleproof}) => {
         justifyContent: 'center',
       }}>
       {cardData && cardData?.length < 1 ? (
-        <View style={{ height: '100%', alignItems: 'center', width: '100%' }}>
+        <View style={{height: '100%', alignItems: 'center', width: '100%'}}>
           <Text
-            style={{ fontSize: 25, color: COLOR.BLACK[100], fontWeight: '700' }}>
+            style={{fontSize: 25, color: COLOR.BLACK[100], fontWeight: '700'}}>
             You don't have any wallet data
           </Text>
           <TouchableOpacity
@@ -266,14 +323,18 @@ const Certificate = ({ toMail, setMail  , setCard , setType,handleproof}) => {
           </TouchableOpacity>
         </View>
       ) : (
-
-<View style={{width:"100%",  height:"100%",alignItems:"center",justifyContent:"center",paddingLeft:10}}>
-  {cardData.map((item , i)=>{
-return(
-  renderItem({item})
-);
-  })}
-</View>
+        <View
+          style={{
+            width: '100%',
+            height: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingLeft: 10,
+          }}>
+          {cardData.map((item, i) => {
+            return renderItem({item});
+          })}
+        </View>
         // <Carousel
         //   layout="default"
         //   // layoutCardOffset={'18'}
@@ -286,23 +347,46 @@ return(
         //   onSnapToItem={index => setActiveIndex(index)}
         // />
       )}
-      {apiloader &&
-
-        <View style={{ flex: 1, position: "absolute", paddingTop: "30%", backgroundColor: "rgba(255, 255, 255,0.5)", width: "100%", height: "100%", }}>
-          <ActivityIndicator size={40}
-            color={COLOR.BLUE[300]} />
+      {apiloader && (
+        <View
+          style={{
+            flex: 1,
+            position: 'absolute',
+            paddingTop: '30%',
+            backgroundColor: 'rgba(255, 255, 255,0.5)',
+            width: '100%',
+            height: '100%',
+          }}>
+          <ActivityIndicator size={40} color={COLOR.BLUE[300]} />
         </View>
-      }
+      )}
 
-      <BottomSheet isVisible={emailApproval}
+      <BottomSheet
+        isVisible={emailApproval}
         containerStyle={{
           backgroundColor: 'rgba(255, 255, 255,0.5)',
           //alignItems:"center",
           justifyContent: 'center',
         }}>
-
-        <View style={{ width: "80%", alignItems: "flex-start", paddingLeft: 15, backgroundColor: "white", alignSelf: "center", paddingVertical: 30, borderRadius: 15 }}>
-          <Text style={{ fontSize: 18, color: COLOR.BLUE[300], fontWeight: "bold", textAlign: "center" }}>Your Card have been successfully sent</Text>
+        <View
+          style={{
+            width: '80%',
+            alignItems: 'flex-start',
+            paddingLeft: 15,
+            backgroundColor: 'white',
+            alignSelf: 'center',
+            paddingVertical: 30,
+            borderRadius: 15,
+          }}>
+          <Text
+            style={{
+              fontSize: 18,
+              color: COLOR.BLUE[300],
+              fontWeight: 'bold',
+              textAlign: 'center',
+            }}>
+            Your Card have been successfully sent
+          </Text>
         </View>
       </BottomSheet>
 
@@ -339,12 +423,8 @@ return(
               // shadowColor: 'black',
               // paddingVertical: 150,
             }}>
-            <QRCode
-              value={id ? id : null}
-              size={WIDTH - 100}
-            />
+            <QRCode value={id ? id : null} size={WIDTH - 100} />
           </View>
-
         </TouchableOpacity>
       </BottomSheet>
     </View>

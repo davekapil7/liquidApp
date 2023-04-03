@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -13,28 +13,32 @@ import {
   Linking,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import { IMG } from '../../Constant/image';
-import { STR } from '../../Constant/string';
-import { styles } from './style';
+import {useNavigation} from '@react-navigation/native';
+import {IMG} from '../../Constant/image';
+import {STR} from '../../Constant/string';
+import {styles} from './style';
 import {
   Header as HeaderRNE,
   HeaderProps,
   Icon,
   BottomSheet,
 } from '@rneui/themed';
-import { COLOR } from '../../Constant/color';
-import { wallettype } from '../../Constant/json';
+import {COLOR} from '../../Constant/color';
+import {wallettype} from '../../Constant/json';
 import Carousel from 'react-native-snap-carousel';
 import Certificate from './Certificate';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import axiosInstance from '../../Constant/axios';
-import { getCarddata, getProofdata } from '../../Function/Apicall';
+import {
+  createProofforOR,
+  getCarddata,
+  getProofdata,
+} from '../../Function/Apicall';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Credentials from './Credentials';
 import Professional from './Professional';
-import { onLoad } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
+import {onLoad} from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 
 const HEIGHT = Dimensions.get('screen').height;
 
@@ -47,26 +51,30 @@ const Walletscreen = () => {
   const profileData = useSelector(state => state?.appstate?.profileData);
   const [currentcard, setCurrentcard] = useState();
   const [currentproof, setCurrentproof] = useState('');
-  const proof = useSelector(state => state?.certificate.proofdata)
+  const proof = useSelector(state => state?.certificate.proofdata);
 
-  const addcertificate = id => {
-    if (currentproof.length > 0) {
-      const newdata = {
-        proof: currentproof,
-        card: id,
-      };
+  const addcertificate = async id => {
+    const result = await createProofforOR(id);
+
+    console.log('$$$$$', result);
+    if (currentproof.length > 0 && result !== 'error') {
+      // const newdata = {
+      //   proof: currentproof,
+      //   card: id,
+      // };
+      const newdata = {id: 'testing', iv: 'testing', name: currentproof};
 
       let oldarr = proof;
 
       let newarr = oldarr.push(newdata);
 
       dispatch({
-        type: "ADD_PROOF",
-        payload: oldarr
-      })
+        type: 'ADD_PROOF',
+        payload: oldarr,
+      });
 
-
-      setSelectedType(3)
+      setSelectedType(3);
+      setCheck(false);
     }
   };
   const logout = () => {
@@ -99,7 +107,6 @@ const Walletscreen = () => {
     }
   }, [email]);
 
-
   const sessionCheck = async () => {
     let date = new Date(); // some mock date
     let currentMs = date.getTime();
@@ -131,8 +138,8 @@ const Walletscreen = () => {
         getProofdata(verificationId, dispatch);
         console.log('Email =', email);
         console.log('VerificationId =', verificationId);
-        dispatch({ type: 'ADD_EMAIL', payload: email });
-        dispatch({ type: 'VERIFICATION_ID', payload: verificationId });
+        dispatch({type: 'ADD_EMAIL', payload: email});
+        dispatch({type: 'VERIFICATION_ID', payload: verificationId});
         // setToMail(email);
         setSelectedType(3);
       }
@@ -140,7 +147,9 @@ const Walletscreen = () => {
   }, []);
   //  const proofdata = proof?.data;
   //  const prrofarr = proofdata?.askedFor;
-  const verificationId = useSelector(state => state?.certificate?.verificationId)
+  const verificationId = useSelector(
+    state => state?.certificate?.verificationId,
+  );
 
   useEffect(() => {
     if (!cardData) {
@@ -229,6 +238,7 @@ const Walletscreen = () => {
 
   const navigation = useNavigation();
   const [selectedtype, setSelectedType] = useState(0);
+  const [check, setCheck] = useState(false);
 
   const [shareopen, setShareopen] = useState(false);
   const getmycredential = () => {
@@ -264,16 +274,27 @@ const Walletscreen = () => {
     );
   }
 
+  const handletype = i => {
+    console.log('##', proof.length, currentproof.length);
+
+    if (selectedtype == 3 && i == 1 && currentproof.length > 0) {
+      setCheck(true);
+      setSelectedType(i);
+    } else {
+      setSelectedType(i);
+    }
+  };
+
   return (
     <View style={styles.safeContainer}>
-      <ScrollView style={{ flex: 1, height: '100%' }}>
+      <ScrollView style={{flex: 1, height: '100%'}}>
         <LinearGradient
-          start={{ x: 0.0, y: 0.4 }}
-          end={{ x: 0.85, y: 0.5 }}
+          start={{x: 0.0, y: 0.4}}
+          end={{x: 0.85, y: 0.5}}
           locations={[0, 0.9]}
           colors={['#454dbc', '#bd59fa']}
-          style={{ flex: 1, height: '100%' }}>
-          <View style={{ flex: 1, minHeight: HEIGHT }}>
+          style={{flex: 1, height: '100%'}}>
+          <View style={{flex: 1, minHeight: HEIGHT}}>
             <View style={styles.headerContainer}>
               <View>
                 <Text style={styles.titletext}>{STR.WALLET.TITLE}</Text>
@@ -285,7 +306,7 @@ const Walletscreen = () => {
                 </Text>
               </View>
 
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <TouchableOpacity onPress={() => scan()}>
                   <Icon
                     name="line-scan"
@@ -295,7 +316,7 @@ const Walletscreen = () => {
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{ marginLeft: 10 }}
+                  style={{marginLeft: 10}}
                   onPress={() => setting()}>
                   <Icon
                     name="settings-outline"
@@ -308,11 +329,11 @@ const Walletscreen = () => {
             </View>
 
             <View style={styles.container}>
-              <View style={{ height: 45 }}>
+              <View style={{height: 45}}>
                 <ScrollView
                   horizontal={true}
-                  style={{ height: 23 }}
-                  contentContainerStyle={{ height: 40 }}>
+                  style={{height: 23}}
+                  contentContainerStyle={{height: 40}}>
                   <View style={styles.tabcontain}>
                     {wallettype.map((type, i) => {
                       return (
@@ -332,7 +353,7 @@ const Walletscreen = () => {
                             borderBottomRightRadius: i === 3 ? 10 : 0,
                             borderTopRightRadius: i === 3 ? 10 : 0,
                           }}
-                          onPress={() => setSelectedType(i)}>
+                          onPress={() => handletype(i)}>
                           <Icon
                             name={type.iname}
                             type={type.itype}
@@ -392,7 +413,7 @@ const Walletscreen = () => {
                           borderBottomColor: COLOR.GRAY[100],
                         }}>
                         <View>
-                          <Text style={{ fontSize: 18, color: COLOR.BLACK[100] }}>
+                          <Text style={{fontSize: 18, color: COLOR.BLACK[100]}}>
                             {Object.keys(profileData).length > 0
                               ? profileData.enName.UnstructuredName
                               : 'User'}
@@ -453,7 +474,7 @@ const Walletscreen = () => {
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        style={{ alignSelf: 'center', marginTop: 5 }}
+                        style={{alignSelf: 'center', marginTop: 5}}
                         onPress={() => editdetail()}>
                         <Text
                           style={{
@@ -466,7 +487,7 @@ const Walletscreen = () => {
                       </TouchableOpacity>
                     </View>
                     {Object.keys(profileData).length > 0 ? (
-                      <View style={{ flex: 1, width: '100%', marginBottom: 35 }}>
+                      <View style={{flex: 1, width: '100%', marginBottom: 35}}>
                         <View style={styles.inputbox}>
                           <Text style={styles.inputtitle}>FULL NAME</Text>
                           <View
@@ -480,7 +501,7 @@ const Walletscreen = () => {
                             </Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
-                              style={{ width: 35, height: 35 }}
+                              style={{width: 35, height: 35}}
                             />
                           </View>
                         </View>
@@ -498,7 +519,7 @@ const Walletscreen = () => {
                             </Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
-                              style={{ width: 35, height: 35 }}
+                              style={{width: 35, height: 35}}
                             />
                           </View>
                         </View>
@@ -511,13 +532,18 @@ const Walletscreen = () => {
                               justifyContent: 'space-between',
                               marginTop: 2,
                             }}>
-                            <Text
-                              style={
-                                styles.inputtext
-                              }>{`(${profileData.mobileNumber?.CountryCode ? profileData.mobileNumber?.CountryCode : ''})-${profileData.mobileNumber?.SubscriberNumber ? profileData.mobileNumber?.SubscriberNumber : ''}`}</Text>
+                            <Text style={styles.inputtext}>{`(${
+                              profileData.mobileNumber?.CountryCode
+                                ? profileData.mobileNumber?.CountryCode
+                                : ''
+                            })-${
+                              profileData.mobileNumber?.SubscriberNumber
+                                ? profileData.mobileNumber?.SubscriberNumber
+                                : ''
+                            }`}</Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
-                              style={{ width: 35, height: 35 }}
+                              style={{width: 35, height: 35}}
                             />
                           </View>
                         </View>
@@ -536,12 +562,12 @@ const Walletscreen = () => {
                               }>{`${profileData.idNo.Identification}-(${profileData.idNo.CheckDigit})`}</Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
-                              style={{ width: 35, height: 35 }}
+                              style={{width: 35, height: 35}}
                             />
                           </View>
                         </View>
 
-                        <View style={{ ...styles.lastbox }}>
+                        <View style={{...styles.lastbox}}>
                           <Text
                             style={{
                               ...styles.inputtitle,
@@ -554,7 +580,7 @@ const Walletscreen = () => {
                       </View>
                     ) : (
                       <>
-                        <View style={{ alignSelf: 'center' }}>
+                        <View style={{alignSelf: 'center'}}>
                           <ProfileButton />
                         </View>
                         <View
@@ -630,6 +656,7 @@ const Walletscreen = () => {
                       setCard={setCurrentcard}
                       setType={setSelectedType}
                       handleproof={addcertificate}
+                      check={check}
                     />
                   </View>
                 )}
@@ -648,7 +675,7 @@ const Walletscreen = () => {
                 )}
 
                 {selectedtype == 3 && (
-                  <View style={{ flex: 1 }}>
+                  <View style={{flex: 1}}>
                     <Professional
                       changetype={setSelectedType}
                       setProof={setCurrentproof}
@@ -680,7 +707,7 @@ const Walletscreen = () => {
             elevation: 5,
             shadowColor: 'black',
           }}>
-          <Text style={{ fontSize: 20, color: COLOR.BLUE[300] }}>Share</Text>
+          <Text style={{fontSize: 20, color: COLOR.BLUE[300]}}>Share</Text>
           <Text
             style={{
               fontSize: 17,
@@ -696,7 +723,7 @@ const Walletscreen = () => {
 
           <Image
             source={IMG.QRCODE}
-            style={{ width: 250, height: 250, resizeMode: 'stretch' }}
+            style={{width: 250, height: 250, resizeMode: 'stretch'}}
           />
 
           <TouchableOpacity

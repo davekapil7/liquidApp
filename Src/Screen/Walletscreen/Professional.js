@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { useSelector } from 'react-redux';
-import { findIndex } from 'lodash';
+import React, {useEffect, useState} from 'react';
+import {View, Text, TouchableOpacity, ScrollView, Modal} from 'react-native';
+import {useSelector} from 'react-redux';
+import {findIndex} from 'lodash';
+import {Header as HeaderRNE, HeaderProps, Icon} from '@rneui/themed';
+import { updateVerification } from '../../Function/Apicall';
 
 const proof = {
   data: {
@@ -14,35 +16,34 @@ const proof = {
   error: false,
 };
 
-const Professional = ({ changetype, setProof }) => {
+const Professional = ({changetype, setProof}) => {
+  const proofitem = useSelector(state => state?.certificate?.proofdata);
+  const proofdata = useSelector(state => state?.certificate?.verification);
+  const verificationId = useSelector(
+    state => state?.certificate?.verificationId,
+  );
+  const [clickNext , setClickNext] = useState(false)
+  const [clickSubmit , setClickSubmit] = useState(false)
+  const [modalVisible, setModalvisible] = useState(false);
 
-  const proofitem = useSelector(state => state?.certificate?.proofdata)
-  const proofdata = useSelector(state => state?.certificate?.verification)
+const prrofarr = proofdata?.askedFor ? proofdata?.askedFor : {};
+// const prrofarr = ['Address_proof', 'Delivery_proof']
+  const handlepress = item => {
+    setProof(item);
+    changetype(1);
+  };
 
-  const prrofarr = proofdata?.askedFor ? proofdata?.askedFor : {};
-
-  const handlepress = (item) => {
-    setProof(item)
-    changetype(1)
-  }
-
-  const press = () => {
-    var formdata = new FormData();
-    formdata.append("to", "prashantbarge22@gmail.com");
-    formdata.append("data", "{verificaitonId:\"\"}");
-    formdata.append("message", "hello from form data ");
-
-    var requestOptions = {
-      method: 'POST',
-      body: formdata,
-      redirect: 'follow'
-    };
-
-    fetch("https://api.liquid.com.hk/api/mail/transferDID", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
-  }
+  const press = async () => {
+    if(clickNext == true) {
+   const res = await  updateVerification(verificationId , proofitem)
+   if(res !== "error"){
+    setClickSubmit(true)
+   }
+    }else{
+      setClickNext(true)
+    }
+   
+  };
   return (
     <View
       style={{
@@ -68,7 +69,7 @@ const Professional = ({ changetype, setProof }) => {
               marginTop: 10,
               color: 'black',
             }}>
-            PAYMART CAPILAT LTD.
+          {clickNext ? "CONFIRMATION" : "PAYMART CAPILAT LTD." }  
           </Text>
           <Text
             style={{
@@ -77,7 +78,7 @@ const Professional = ({ changetype, setProof }) => {
               marginTop: 5,
               color: 'black',
             }}>
-            Documents requested from the bank
+          {clickNext ? null : "Documents requested from the bank"}  
           </Text>
           <Text
             style={{
@@ -88,8 +89,24 @@ const Professional = ({ changetype, setProof }) => {
               alignSelf: 'flex-start',
               marginLeft: 10,
             }}>
-            Message:
+          {clickNext ? null : "Message:"}  
           </Text>
+          {clickNext ? (
+             <Text
+             style={{
+               fontSize: 14,
+               fontWeight: 'normal',
+               marginTop: 15,
+               color: 'black',
+               alignSelf: 'flex-start',
+               marginLeft: 10,
+               marginRight: 10,
+             }}>
+             When you click on submit you confirm that you are sharing these
+             credentials to the verifier{' '}
+             <Text style={{fontWeight: 'bold'}}>(Paysmart Capital Ltd.)</Text>
+           </Text>
+          ) : (
           <Text
             style={{
               fontSize: 14,
@@ -100,42 +117,42 @@ const Professional = ({ changetype, setProof }) => {
               marginLeft: 10,
               marginRight: 10,
             }}>
-            Loan Application for ABC company. Lorem Ipsum is simply dummy text of
-            theprining and typesetting industry. Lorem lpsum has been the industry
-            standard dummy text ever since the 1500s,
+            Loan Application for ABC company. Lorem Ipsum is simply dummy text
+            of theprining and typesetting industry. Lorem lpsum has been the
+            industry standard dummy text ever since the 1500s,
           </Text>
-          <View style={{ flex: 1, width: '100%' }}>
-            <ScrollView style={{ flex: 1, height: '100%' }}>
-              <View style={{ flex: 1, alignItems: 'center', marginTop: 25 }}>
+          )}
+          <View style={{flex: 1, width: '100%'}}>
+            <ScrollView style={{flex: 1, height: '100%'}}>
+              <View style={{flex: 1, alignItems: 'center', marginTop: 25}}>
                 {prrofarr.map((item, i) => {
-                  console.log("Proofitem====>", proofitem, typeof proofitem);
-                  //  const pindex = proofitem?.map((pitem ,i )=> {
-                  //     if(pitem.proof == item){
-                  //         console.log("###",pitem.proof , item);
-                  //         return i
-                  //     }else{
-                  //         return -1
-                  //     }
-
-                  //  }) 
+                  console.log('Proofitem====>', proofitem, typeof proofitem);
+                
                   const pindex = findIndex(proofitem, function (chr) {
                     return chr.proof == item;
                   });
 
-                  console.log("%%%", pindex, item, pindex);
+                  console.log('%%%', pindex, item, pindex);
 
                   return (
-                    <View style={{ width: "100%", alignItems: "center", marginBottom: 20, }}>
+                    <View
+                      style={{
+                        width: '100%',
+                        alignItems: 'center',
+                        marginBottom: 20,
+                      }}>
                       <TouchableOpacity
                         disabled={pindex === -1 ? false : true}
                         style={{
                           width: '70%',
                           marginBottom: 5,
                           alignItems: 'center',
-                          backgroundColor: pindex === -1 ? '#427BC8' : '#3EA492',
+                          backgroundColor:
+                            pindex === -1 ? '#427BC8' : '#3EA492',
                           padding: 8,
                           borderRadius: 15,
-                        }} onPress={() => handlepress(item)}>
+                        }}
+                        onPress={() => handlepress(item)}>
                         <Text
                           style={{
                             color: 'white',
@@ -148,28 +165,33 @@ const Professional = ({ changetype, setProof }) => {
                       </TouchableOpacity>
                       {pindex !== -1 && pindex !== undefined && (
                         <>
-                          <Text style={{ color: "black", fontSize: 14 }}> Selected Card : </Text>
-                          <Text style={{ color: "black", fontSize: 14 }}>{proofitem[pindex].card}</Text>
+                          <Text style={{color: 'black', fontSize: 14}}>
+                            {' '}
+                            Selected Card :{' '}
+                          </Text>
+                          <Text style={{color: 'black', fontSize: 14}}>
+                            {proofitem[pindex].card}
+                          </Text>
                         </>
-                      )
-                      }
+                      )}
                     </View>
                   );
                 })}
               </View>
 
-              {proofitem?.length === prrofarr.length &&
+              {proofitem?.length === prrofarr.length && (
                 <TouchableOpacity
                   style={{
                     width: '70%',
                     marginTop: '10%',
                     marginBottom: 5,
-                    alignSelf: "center",
+                    alignSelf: 'center',
                     alignItems: 'center',
                     backgroundColor: '#427BC8',
                     padding: 8,
                     borderRadius: 15,
-                  }} onPress={() => press()}>
+                  }}
+                  onPress={() => press()}>
                   <Text
                     style={{
                       color: 'white',
@@ -177,16 +199,57 @@ const Professional = ({ changetype, setProof }) => {
                       textTransform: 'uppercase',
                       fontWeight: 'bold',
                     }}>
-                    Next
+                  {clickNext ? "SUBMIT" : "NEXT"}
                   </Text>
                 </TouchableOpacity>
-              }
+               )}
             </ScrollView>
           </View>
+          <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}
+        >
+          <TouchableOpacity style={{flex:1}} onPress={()=> setModalvisible(false)}>
+        <View
+          style={{
+            height: 150,
+            marginTop: '90%',
+            width: '95%',
+            borderRadius: 15,
+            borderWidth: 1,
+            borderColor: 'black',
+            alignSelf: 'center',
+            
+            backgroundColor: '#ECF2FF',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex:-999
+          }}></View>
+            <View style={{marginTop:"75%",position:"absolute",zIndex:999,flexDirection: 'row',justifyContent:"center",width:"100%",height:"100%"}}>
+          <Icon
+            name="water"
+            type="material-community"
+            color="black"
+            size={280}
+            
+            
+          />
+          <View style={{}}>
+          <Text style={{fontSize: 15, color: 'black',fontWeight:"bold",marginTop:110,marginLeft:-35,marginRight:35}}>SUCCESSFULLY</Text>
+          <Text style={{fontSize: 15, color: 'black',fontWeight:"bold",marginLeft:-18,marginRight:35}}>SUBMITTED</Text>
+          </View>
+          </View>
+          </TouchableOpacity>
+      </Modal>
         </View>
       ) : (
-        <View style={{ marginTop: 15, }}>
-          <Text style={{ color: "black" }}>Not active right now</Text>
+        <View style={{marginTop: 15}}>
+          <Text style={{color: 'black'}}>Not active right now</Text>
         </View>
       )}
     </View>

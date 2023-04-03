@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,16 +10,16 @@ import {
   Alert,
 } from 'react-native';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
-import { IMG } from '../../Constant/image';
-import { STR } from '../../Constant/string';
-import { styles } from './style';
-import { Header as HeaderRNE, HeaderProps, Icon } from '@rneui/themed';
-import { COLOR } from '../../Constant/color';
+import {useNavigation} from '@react-navigation/native';
+import {IMG} from '../../Constant/image';
+import {STR} from '../../Constant/string';
+import {styles} from './style';
+import {Header as HeaderRNE, HeaderProps, Icon} from '@rneui/themed';
+import {COLOR} from '../../Constant/color';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import axiosInstance from '../../Constant/axios';
-import { CountryPicker } from "react-native-country-codes-picker";
+import {CountryPicker} from 'react-native-country-codes-picker';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -55,7 +55,7 @@ const LoginScreen = () => {
     }
     if (!lastname && !(lastname.length > 0)) {
       alert('Please fill last name');
-      return
+      return;
     }
     if (!email && !(email.length > 0)) {
       alert('Please fill Email');
@@ -66,7 +66,7 @@ const LoginScreen = () => {
       return;
     }
 
-    const fullnumber = `${countryCode}${number}`
+    const fullnumber = `${countryCode}${number}`;
 
     let dataToSend = {
       firstname: firstname,
@@ -75,20 +75,24 @@ const LoginScreen = () => {
       mobile: fullnumber,
     };
 
-    console.log("NUmber is =====> ", fullnumber);
+    console.log('NUmber is =====> ', fullnumber);
 
     console.log(dataToSend, 'test');
 
     axios
       .post('https://api.liquid.com.hk/api/auth/signup', dataToSend)
       .then(function (responseJson) {
-        console.log("Register data ====>", responseJson?.data?.data);
+        console.log('Register data ====>', responseJson?.data?.data);
         // If server response message same as Data Matched
         if (responseJson?.data?.data) {
           //  storeData(responseJson?.data?.data);
           // setType(STR.LOGIN)
 
-          navigation.navigate("Otpscreen", { screen: type, email: email, data: responseJson?.data?.data })
+          navigation.navigate('Otpscreen', {
+            screen: type,
+            email: email,
+            data: responseJson?.data?.data,
+          });
           console.log('Registration Successful. Please Login to proceed');
         } else {
           // setErrortext(responseJson?.data?.error);
@@ -120,9 +124,9 @@ const LoginScreen = () => {
 
     await rnBiometrics.isSensorAvailable().then(resultObject => {
       rnBiometrics
-        .simplePrompt({ promptMessage: 'Confirm fingerprint' })
+        .simplePrompt({promptMessage: 'Confirm fingerprint'})
         .then(resultObject => {
-          const { success } = resultObject;
+          const {success} = resultObject;
 
           if (success) {
             navigation.navigate('DrawerNavigationRoutes');
@@ -141,7 +145,7 @@ const LoginScreen = () => {
 
   const handleLogin = () => {
     if (email.length > 0) {
-      let dataToSend = { email: email };
+      let dataToSend = {email: email};
 
       axiosInstance
         .post('auth/login', dataToSend)
@@ -152,7 +156,7 @@ const LoginScreen = () => {
           if (responseJson?.data?.data === 'OTP SENT') {
             // setOtpInput(true);
             // Alert.alert('OTP SENT');
-            navigation.navigate('Otpscreen', { screen: type, email: email });
+            navigation.navigate('Otpscreen', {screen: type, email: email});
           } else {
             Alert.alert('Please check your email');
             console.log('Please check your email id or password');
@@ -178,7 +182,9 @@ const LoginScreen = () => {
                 borderBottomColor:
                   type == STR.REGISTER ? COLOR.GREEN[100] : COLOR.GRAY[300],
               }}
-              onPress={() => { setType(STR.REGISTER), setEmail('') }}>
+              onPress={() => {
+                setType(STR.REGISTER), setEmail('');
+              }}>
               <View
                 style={{
                   ...styles.iconView,
@@ -203,7 +209,9 @@ const LoginScreen = () => {
                 borderBottomColor:
                   type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300],
               }}
-              onPress={() => { setType(STR.LOGIN), setEmail('') }}>
+              onPress={() => {
+                setType(STR.LOGIN), setEmail('');
+              }}>
               <View
                 style={{
                   ...styles.iconView,
@@ -224,19 +232,20 @@ const LoginScreen = () => {
 
           {type === STR.REGISTER && (
             <View style={styles.registerView}>
-              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <TextInput
                   placeholder="First name"
-                  placeholderTextColor={"gray"}
-                  style={{ ...styles.textinputView, width: "48%" }}
+                  placeholderTextColor={'gray'}
+                  style={{...styles.textinputView, width: '48%'}}
                   onChangeText={text => setFirstName(text)}
                   value={firstname}
                 />
 
                 <TextInput
                   placeholder="Last name"
-                  placeholderTextColor={"gray"}
-                  style={{ ...styles.textinputView, width: "48%" }}
+                  placeholderTextColor={'gray'}
+                  style={{...styles.textinputView, width: '48%'}}
                   onChangeText={text => setLastName(text)}
                   value={lastname}
                 />
@@ -249,15 +258,20 @@ const LoginScreen = () => {
                 onChangeText={text => setEmail(text)}
                 value={email}
               />
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{flexDirection: 'row'}}>
                 <TouchableOpacity
                   onPress={() => setShow(true)}
-                  style={{ ...styles.textinputView, justifyContent: 'center', padding: 10, width: '22%', }}
-                >
-                  <Text style={{
-                    color: 'black',
-                    fontSize: 12,
+                  style={{
+                    ...styles.textinputView,
+                    justifyContent: 'center',
+                    padding: 10,
+                    width: '22%',
                   }}>
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontSize: 12,
+                    }}>
                     {countryCode && countryCode.length > 0 ? countryCode : '--'}
                   </Text>
                 </TouchableOpacity>
@@ -265,7 +279,11 @@ const LoginScreen = () => {
                 <TextInput
                   placeholder={'Enter Mobile'}
                   placeholderTextColor={COLOR.GRAY[300]}
-                  style={{ ...styles.textinputView, width: '75%', marginLeft: 10 }}
+                  style={{
+                    ...styles.textinputView,
+                    width: '75%',
+                    marginLeft: 10,
+                  }}
                   onChangeText={text => setNumber(text)}
                   value={number}
                   keyboardType={'numeric'}
@@ -283,7 +301,7 @@ const LoginScreen = () => {
               <CountryPicker
                 show={show}
                 // when picker button press you will get the country object with dial code
-                pickerButtonOnPress={(item) => {
+                pickerButtonOnPress={item => {
                   setCountryCode(item.dial_code);
                   setShow(false);
                 }}
