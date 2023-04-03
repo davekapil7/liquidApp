@@ -14,6 +14,7 @@ import { seetingjson } from '../../Constant/json';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../Constant/axios';
+import { useDispatch } from 'react-redux';
 const Settingscreen = () => {
   const navigation = useNavigation();
 
@@ -21,6 +22,7 @@ const Settingscreen = () => {
 
   const [isTouch, setIsTouch] = useState(false);
   const [isEnable, setIsEnable] = useState(false);
+  const dispatch = useDispatch();
 
   console.log('@@@@@@@@@@@@@@@', isTouch);
 
@@ -49,6 +51,9 @@ const Settingscreen = () => {
         'auth/logout',
       )
       .then(function (responseJson) {
+        dispatch({
+          type: "CLEAR_ALL",
+        })
         console.log("Logged out");
       })
       .catch(function (error) {

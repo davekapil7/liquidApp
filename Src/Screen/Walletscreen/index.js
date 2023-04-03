@@ -540,7 +540,7 @@ const Walletscreen = () => {
                             <Text
                               style={
                                 styles.inputtext
-                              }>{`(${profileData.mobileNumber.CountryCode})-${profileData.mobileNumber.SubscriberNumber}`}</Text>
+                              }>{`(${profileData.mobileNumber?.CountryCode ? profileData.mobileNumber?.CountryCode : ''})-${profileData.mobileNumber?.SubscriberNumber ? profileData.mobileNumber?.SubscriberNumber : ''}`}</Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
                               style={{ width: 35, height: 35 }}

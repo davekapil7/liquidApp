@@ -22,6 +22,10 @@ const initialState = {
           ...state,
           verificationId : action.payload
          }
+         case "CLEAR_ALL" : 
+         return{
+          ...initialState,
+         }
        
    
        default:

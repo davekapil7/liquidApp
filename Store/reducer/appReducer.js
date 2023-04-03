@@ -28,6 +28,10 @@ const appReducer = (state = initialState, action) => {
         ...state,
         email: action.payload,
       };
+    case "CLEAR_ALL":
+      return {
+        ...initialState,
+      };
 
     default:
       return state;
