@@ -24,6 +24,7 @@ import { COLOR } from '../../Constant/color';
 import axiosInstance from '../../Constant/axios';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import { getProofdata } from '../../Function/Apicall';
 
 const VerifyProofScreen = () => {
   const [qrvalue, setQrvalue] = useState('');
@@ -53,6 +54,7 @@ const VerifyProofScreen = () => {
     console.log("Qr value", obj);
     if (obj.type == 'verification_request') {
       // onOpneScanner(obj);
+      getProofdata(obj.data.verification_id, dispatch);
       dispatch({ type: 'ADD_EMAIL', payload: obj.email });
       dispatch({ type: 'VERIFICATION_ID', payload: obj.data.verification_id });
       navigation.reset({

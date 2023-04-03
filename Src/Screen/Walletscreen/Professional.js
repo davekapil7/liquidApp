@@ -162,6 +162,7 @@ const Professional = ({ changetype, setProof }) => {
                 <TouchableOpacity
                   style={{
                     width: '70%',
+                    marginTop: '10%',
                     marginBottom: 5,
                     alignSelf: "center",
                     alignItems: 'center',
@@ -185,7 +186,7 @@ const Professional = ({ changetype, setProof }) => {
         </View>
       ) : (
         <View style={{ marginTop: 15, }}>
-          <Text style={{ clor: "black" }}>Not active right now</Text>
+          <Text style={{ color: "black" }}>Not active right now</Text>
         </View>
       )}
     </View>

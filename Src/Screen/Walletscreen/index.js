@@ -30,7 +30,7 @@ import Certificate from './Certificate';
 import { useSelector, useDispatch } from 'react-redux';
 
 import axiosInstance from '../../Constant/axios';
-import { getCarddata } from '../../Function/Apicall';
+import { getCarddata, getProofdata } from '../../Function/Apicall';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Credentials from './Credentials';
 import Professional from './Professional';
@@ -102,28 +102,6 @@ const Walletscreen = () => {
     }
   }, [email]);
 
-  useEffect(() => {
-    getProofdata()
-  }, [])
-
-  const getProofdata = () => {
-    var requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
-    };
-
-    fetch("https://dev.liquid.com.hk/api/verifier/getRequest?verification_id=64239bba773ec0693f7368d4", requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        const res = JSON.parse(result)
-        console.log("Verification result ===> ", res?.data);
-        dispatch({
-          type: "VERIFICATION_DATA",
-          payload: res?.data
-        })
-      })
-      .catch(error => console.log('error', error));
-  }
 
   const sessionCheck = async () => {
     let date = new Date(); // some mock date
@@ -153,6 +131,7 @@ const Walletscreen = () => {
       if (linkUrl.includes('email=')) {
         let email = getStringBetween(linkUrl, 'email=', '&verificationId');
         let verificationId = getStringBetween(linkUrl, 'verificationId=', ' ');
+        getProofdata(verificationId, dispatch);
         console.log('Email =', email);
         console.log('VerificationId =', verificationId);
         dispatch({ type: 'ADD_EMAIL', payload: email });

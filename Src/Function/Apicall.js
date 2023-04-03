@@ -17,7 +17,7 @@ export const getCarddata = (dispatch) => {
 }
 
 
-export const sendToverification = async (email,id, iv) => {
+export const sendToverification = async (email, id, iv) => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
@@ -37,7 +37,7 @@ export const sendToverification = async (email,id, iv) => {
     redirect: 'follow'
   };
 
-  const res =  fetch("https://api.liquid.com.hk/api/mail/transferDID", requestOptions)
+  const res = fetch("https://api.liquid.com.hk/api/mail/transferDID", requestOptions)
     .then(response => response.text())
     .then(result => {
       const res = JSON.parse(result)
@@ -51,10 +51,30 @@ export const sendToverification = async (email,id, iv) => {
         return true
       }
     })
-    .catch(error =>{
+    .catch(error => {
       return false
     });
 
 
-    return res
+  return res
+}
+
+
+export const getProofdata = (verificationId, dispatch) => {
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+
+  fetch(`https://dev.liquid.com.hk/api/verifier/getRequest?verification_id=${verificationId}`, requestOptions)
+    .then(response => response.text())
+    .then(result => {
+      const res = JSON.parse(result)
+      console.log("Verification result ===> ", res?.data);
+      dispatch({
+        type: "VERIFICATION_DATA",
+        payload: res?.data
+      })
+    })
+    .catch(error => console.log('error', error));
 }
