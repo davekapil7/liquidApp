@@ -7,7 +7,6 @@ import {useNavigation} from '@react-navigation/native';
 
 export const Tabbar = (props) => {
   const navigation = useNavigation();
-  console.log("##########",props?.state.index);
   return (
     <View
       style={{

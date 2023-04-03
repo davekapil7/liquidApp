@@ -15,7 +15,6 @@ const WalletPinscreen = props => {
   const [value4, setValue4] = useState();
   const navigation = useNavigation();
 
-  console.log('%%%%%%', recovery);
   const pressdata = val => {
     if (value1 === undefined) {
       console.log('WWWW');

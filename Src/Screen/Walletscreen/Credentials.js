@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import axiosInstance from '../../Constant/axios';
 import Toast from 'react-native-simple-toast';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getCarddata } from '../../Function/Apicall';
 
 const Credentials = () => {
 
@@ -95,6 +96,8 @@ const Credentials = () => {
             .then(function (responseJson) {
                 if (responseJson.status === 200) {
                     console.log("I am smart credential created ", responseJson.data);
+                    getCarddata();
+                    AsyncStorage.setItem('isIamSmartCreated', 'true');
                     setCreated(true);
                 }
             })

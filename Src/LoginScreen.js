@@ -40,14 +40,12 @@ const LoginScreen = () => {
   //   const fetchData = async () => {
   //     const value = await AsyncStorage.getItem('access_token');
   //     setAccessToken(value);
-  //     console.log(value, 'val');
   //   };
   //   fetchData();
   // }, []);
 
   useEffect(() => {
     AsyncStorage.getItem('login').then(value => {
-      console.log('Hello acyncn', value);
       if (value === 'true') {
         handlebiomatric();
       }
@@ -56,7 +54,6 @@ const LoginScreen = () => {
 
   useEffect(() => {
     AsyncStorage.getItem('login').then(value => {
-      console.log('Hello acynca', value);
       if (value === 'true') {
         handlebiomatric();
       }
@@ -77,7 +74,6 @@ const LoginScreen = () => {
         .post('https://api.liquid.com.hk/api/auth/login', dataToSend)
         .then(function (responseJson) {
           setLoading(false);
-          console.log(responseJson, 'ressss');
 
           // If server response message same as Data Matched
           if (responseJson?.data?.data === 'OTP SENT') {
@@ -88,7 +84,6 @@ const LoginScreen = () => {
             Toast.show('Please check your email', Toast.LONG, {
               backgroundColor: 'blue',
             });
-            console.log('Please check your email id or password');
           }
         })
         .catch(function (error) {
@@ -100,12 +95,10 @@ const LoginScreen = () => {
         });
     } else {
       let dataToSend = {otp: otp};
-      // console.log(dataToSend, 'fshsh');
       axios
         .post('https://api.liquid.com.hk/api/auth/verify-otp', dataToSend)
         .then(function (responseJson) {
           setLoading(false);
-          console.log(responseJson, 'ressss');
           if (responseJson?.data?.data === 'Authorized') {
           
             Toast.show('Login Successful', Toast.LONG, {
@@ -177,9 +170,6 @@ const LoginScreen = () => {
         });
     });
   };
-
-
-  console.log("HEllo login ");
 
   return (
     

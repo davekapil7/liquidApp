@@ -114,7 +114,6 @@ const VerifyProofScreen = () => {
           let obj = responseJson.data;
           delete obj.err;
           obj = { ...obj, qr_id: qrVal }
-          // console.log("Login QR", obj);
           shareMobileToken(obj);
         }
       })
@@ -162,7 +161,6 @@ const VerifyProofScreen = () => {
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         // If CAMERA Permission is granted
 
-        console.log("$$$$$$", granted);
         setQrvalue('');
         setOpneScanner(true);
       } else {
@@ -259,7 +257,6 @@ const VerifyProofScreen = () => {
             </View>
             <View style={{ flexDirection: "row", flexWrap: "wrap", width: "100%" }}>
               {Object.entries(validresult).map((item, i) => {
-                console.log("@@@@", item[0]);
                 return (
                   <View style={{ width: "50%", flexWrap: "wrap" }}>
                     {item[1]?.isValid == true ?

@@ -49,9 +49,7 @@ const Walletscreen = () => {
   const [currentproof, setCurrentproof] = useState('');
   const proof = useSelector(state => state?.certificate.proofdata)
 
-  console.log("Index proof ===>", proof);
   const addcertificate = id => {
-    console.log('@@@@', currentproof, currentproof.length);
     if (currentproof.length > 0) {
       const newdata = {
         proof: currentproof,
@@ -62,7 +60,6 @@ const Walletscreen = () => {
 
       let newarr = oldarr.push(newdata);
 
-      console.log("New arr is=====>", newarr, oldarr);
       dispatch({
         type: "ADD_PROOF",
         payload: oldarr
@@ -227,7 +224,6 @@ const Walletscreen = () => {
     let day = dateString.substring(6, 8);
 
     let date = new Date(year, month - 1, day);
-    console.log('Date length', date.toDateString());
     return date.toDateString();
   };
 
@@ -243,7 +239,6 @@ const Walletscreen = () => {
     navigation.navigate('Scanscreen');
   };
   const setting = () => {
-    console.log('Under production....');
     navigation.navigate('Settingscreen');
   };
 

@@ -123,14 +123,12 @@ const Certificate = ({ toMail, setMail  , setCard , setType,handleproof}) => {
       imgbkg = require('../../../assets/Image/card/card7.png'),
       company = require('../../../assets/Image/card/Kerry-Logistics.png')
     }
-    console.log("Image type", imgbkg);
   }
 
 
 
   const renderItem = ({ item, index }) => {
 
-   // console.log("item is " , item);
     const insdate = item?.data?.issuanceDate;
     const memberdate = item?.data?.proof?.created;
 

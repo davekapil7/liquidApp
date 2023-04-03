@@ -24,7 +24,6 @@ const Settingscreen = () => {
   const [isEnable, setIsEnable] = useState(false);
   const dispatch = useDispatch();
 
-  console.log('@@@@@@@@@@@@@@@', isTouch);
 
   const copy = parameter => {
     Clipboard.setString(parameter);

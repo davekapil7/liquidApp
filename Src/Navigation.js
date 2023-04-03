@@ -127,13 +127,11 @@ const Rootnavigation = () => {
 
   useEffect(() => {
     Linking.addEventListener('url', (url) => {
-      console.log('this is the url: ', url);
       let linkUrl = url.url;
       linkUrl = linkUrl + " ";
       if (linkUrl.includes('state=')) {
         let myState = getStringBetween(linkUrl, 'state=', '&code');
         let myCode = getStringBetween(linkUrl, '&code=', ' ');
-        console.log("My state", typeof myState);
         if (myState !== 'null') {
           getAuthToken(myState, myCode);
         } else {

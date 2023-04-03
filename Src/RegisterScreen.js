@@ -70,7 +70,6 @@ const RegisterScreen = props => {
       mobile: userMobile,
     };
 
-    console.log(dataToSend, 'test');
 
     axios
       .post('https://api.liquid.com.hk/api/auth/signup', dataToSend)
@@ -82,7 +81,6 @@ const RegisterScreen = props => {
           storeData(responseJson?.data?.data);
           setIsRegistraionSuccess(true);
           Toast.show('OTP SENT', Toast.LONG, {backgroundColor: 'blue'});
-          console.log('Registration Successful. Please Login to proceed');
         } else {
           setErrortext(responseJson?.data?.error);
         }
