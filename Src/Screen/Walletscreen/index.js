@@ -56,21 +56,29 @@ const Walletscreen = () => {
   const addcertificate = async id => {
     const result = await createProofforOR(id);
 
-    console.log('$$$$$', result);
+    const resid = result?.id
+    const resiv = result?.iv
+    console.log('$$$$$', result?.id);
     if (currentproof.length > 0 && result !== 'error') {
       // const newdata = {
       //   proof: currentproof,
       //   card: id,
       // };
-      const newdata = {id: 'testing', iv: 'testing', name: currentproof};
-
+      const newdata = {id: resid, iv: resiv, name: currentproof ,  card: id,};
+      const apidata  = {id: resid, iv: resiv, name: currentproof}
       let oldarr = proof;
+      let apiarr = proof
 
       let newarr = oldarr.push(newdata);
+      let newapiarr = apiarr.push(apidata)
 
       dispatch({
         type: 'ADD_PROOF',
         payload: oldarr,
+      });
+      dispatch({
+        type: 'ADD_PROOF_API',
+        payload: apiarr,
       });
 
       setSelectedType(3);
@@ -128,6 +136,9 @@ const Walletscreen = () => {
     setTimeout(() => {
       setLoader(false);
     }, 1000);
+   // const verificationId = "64239bba773ec0693f7368d4"
+   // getProofdata(verificationId, dispatch);
+
 
     Linking.addEventListener('url', url => {
       let linkUrl = url.url;
@@ -135,7 +146,7 @@ const Walletscreen = () => {
       if (linkUrl.includes('email=')) {
         let email = getStringBetween(linkUrl, 'email=', '&verificationId');
         let verificationId = getStringBetween(linkUrl, 'verificationId=', ' ');
-        getProofdata(verificationId, dispatch);
+      getProofdata(verificationId, dispatch);
         console.log('Email =', email);
         console.log('VerificationId =', verificationId);
         dispatch({type: 'ADD_EMAIL', payload: email});
@@ -277,12 +288,13 @@ const Walletscreen = () => {
   const handletype = i => {
     console.log('##', proof.length, currentproof.length);
 
-    if (selectedtype == 3 && i == 1 && currentproof.length > 0) {
-      setCheck(true);
-      setSelectedType(i);
-    } else {
-      setSelectedType(i);
-    }
+    setSelectedType(i);
+    // if (selectedtype == 3 && i == 1 && currentproof.length > 0) {
+    //   setCheck(true);
+    //   setSelectedType(i);
+    // } else {
+    //   setSelectedType(i);
+    // }
   };
 
   return (
@@ -680,6 +692,7 @@ const Walletscreen = () => {
                       changetype={setSelectedType}
                       setProof={setCurrentproof}
                       proofitem={proof}
+                      setcheck = {setCheck}
                     />
                   </View>
                 )}

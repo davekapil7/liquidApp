@@ -3,6 +3,7 @@ const initialState = {
     proofdata : [],
     verification:{},
     verificationId: '',
+    prrofdataApi : []
    };
    
    const certificateReducer = (state = initialState, action) => {
@@ -11,6 +12,11 @@ const initialState = {
          return {
            ...state,
            proofdata: action.payload,
+         };
+         case "ADD_PROOF_API":
+         return {
+           ...state,
+           prrofdataApi: action.payload,
          };
          case "VERIFICATION_DATA" : 
          return{

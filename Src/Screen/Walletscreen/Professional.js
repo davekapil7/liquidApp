@@ -16,33 +16,38 @@ const proof = {
   error: false,
 };
 
-const Professional = ({changetype, setProof}) => {
+const Professional = ({changetype, setProof  , setcheck}) => {
   const proofitem = useSelector(state => state?.certificate?.proofdata);
+
   const proofdata = useSelector(state => state?.certificate?.verification);
   const verificationId = useSelector(
     state => state?.certificate?.verificationId,
   );
+ const prrofapi = useSelector(state => state?.certificate?.prrofdataApi)
+ 
   const [clickNext , setClickNext] = useState(false)
   const [clickSubmit , setClickSubmit] = useState(false)
   const [modalVisible, setModalvisible] = useState(false);
 
-const prrofarr = proofdata?.askedFor ? proofdata?.askedFor : {};
+const prrofarr = proofdata?.askedFor ? proofdata?.askedFor : [];
+
 // const prrofarr = ['Address_proof', 'Delivery_proof']
   const handlepress = item => {
     setProof(item);
     changetype(1);
+    setcheck(true)
   };
 
   const press = async () => {
     if(clickNext == true) {
-   const res = await  updateVerification(verificationId , proofitem)
+   const res = await  updateVerification(verificationId , prrofapi)
+   console.log("$$",res);
    if(res !== "error"){
     setClickSubmit(true)
    }
     }else{
       setClickNext(true)
     }
-   
   };
   return (
     <View
@@ -129,7 +134,7 @@ const prrofarr = proofdata?.askedFor ? proofdata?.askedFor : {};
                   console.log('Proofitem====>', proofitem, typeof proofitem);
                 
                   const pindex = findIndex(proofitem, function (chr) {
-                    return chr.proof == item;
+                    return chr.name == item;
                   });
 
                   console.log('%%%', pindex, item, pindex);
