@@ -11,6 +11,7 @@ import {
   ScrollView,
   Share,
   Linking,
+  Modal,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
@@ -46,6 +47,7 @@ const Walletscreen = () => {
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
   const [toMail, setToMail] = useState('');
+  const [alertmodal , setAlertmodal] = useState(false)
   const cardData = useSelector(state => state.appstate.cardList);
   const email = useSelector(state => state.appstate.email);
   const profileData = useSelector(state => state?.appstate?.profileData);
@@ -64,21 +66,27 @@ const Walletscreen = () => {
       //   proof: currentproof,
       //   card: id,
       // };
+console.log("Redux data,",proof);
       const newdata = {id: resid, iv: resiv, name: currentproof ,  card: id,};
       const apidata  = {id: resid, iv: resiv, name: currentproof}
       let oldarr = proof;
       let apiarr = proof
 
-      let newarr = oldarr.push(newdata);
-      let newapiarr = apiarr.push(apidata)
+      console.log("OLd data before" , oldarr , newdata);
+let newarr = [...oldarr , newdata]
+let newapiarr = [... apiarr , apidata ] 
+    //  let newarr = oldarr.push(newdata);
+     // let newapiarr = apiarr.push(apidata)
+    //r  console.log("O222222222" , aaa);
 
+      console.log("WWWWWWW",oldarr);
       dispatch({
         type: 'ADD_PROOF',
-        payload: oldarr,
+        payload: newarr,
       });
       dispatch({
         type: 'ADD_PROOF_API',
-        payload: apiarr,
+        payload: newapiarr,
       });
 
       setSelectedType(3);
@@ -132,7 +140,7 @@ const Walletscreen = () => {
     getData();
     setSelectedType(0);
 
-    sessionCheck();
+   // sessionCheck();
     setTimeout(() => {
       setLoader(false);
     }, 1000);
@@ -146,13 +154,20 @@ const Walletscreen = () => {
       if (linkUrl.includes('email=')) {
         let email = getStringBetween(linkUrl, 'email=', '&verificationId');
         let verificationId = getStringBetween(linkUrl, 'verificationId=', ' ');
-      getProofdata(verificationId, dispatch);
+    const result =   getProofdata(verificationId, dispatch);
+        if(result !== "error"){
         console.log('Email =', email);
         console.log('VerificationId =', verificationId);
         dispatch({type: 'ADD_EMAIL', payload: email});
         dispatch({type: 'VERIFICATION_ID', payload: verificationId});
         // setToMail(email);
+        setAlertmodal(true)
+       
         setSelectedType(3);
+        setTimeout(() => {
+          setAlertmodal(false)
+        }, 3000);
+        }
       }
     });
   }, []);
@@ -783,6 +798,21 @@ const Walletscreen = () => {
           </TouchableOpacity>
         </View>
       </BottomSheet>
+
+
+      <Modal
+      transparent={true}
+      animationType={'none'}
+      visible={alertmodal}
+      onRequestClose={() => {
+        console.log('close modal');
+      }}>
+      <View style={{flex:1, alignItems:"center" , justifyContent:"center"}}>
+       <View style={{width:"80%",alignItems:"center",paddingHorizontal:10,justifyContent:"center",backgroundColor:COLOR.BLUE[100],paddingVertical:50,elevation:15,borderRadius:15}}>
+        <Text style={{fontSize:18,fontWeight:"bold",color:"black" , textAlign:"center"}}>Your verification ID has been proceed now the Professional screen is ready with your verification Id</Text>
+       </View>
+      </View>
+    </Modal>
     </View>
   );
 };

@@ -1,6 +1,67 @@
 import axiosInstance from '../Constant/axios';
 import axiosLocal from '../Constant/axioslocal';
 
+export const getAuthToken = (state, code) =>{
+  let dataToSend = {state: state, code: code};
+
+  axiosInstance
+    .post('iamsmart/getauthtokenformobile', dataToSend)
+    .then(function (responseJson) {
+      if (responseJson.status === 200) {
+        console.log('Request Profile Authority ', responseJson.data);
+        if (
+          responseJson.data.data.token &&
+          responseJson.data.data.token.length > 0
+        ) {
+          getProfileForMobile();
+        }
+      }
+    })
+    .catch(function (error) {});
+}
+
+export const getProfileForMobile = () => {
+  axiosInstance
+    .get('iamsmart/profilerequest', {
+      params: {
+        source: 'android',
+      },
+    })
+    .then(function (responseJson) {
+      if (responseJson.status === 200) {
+        console.log('The Ticket Data ', responseJson.data);
+        if (
+          responseJson.data.data.ticketID &&
+          responseJson.data.data.ticketID.length > 0
+        ) {
+          Linking.openURL('hk.gov.iamsmart.testapp://auth');
+        }
+      }
+    })
+    .catch(function (error) {});
+};
+
+export const getProfile = (dispatch) => {
+  axiosInstance
+    .get('iamsmart/getProfile', {
+      params: {
+        source: 'android',
+      },
+    })
+    .then(function (responseJson) {
+      if (responseJson.status === 200) {
+        let profileData = JSON.stringify(responseJson.data.profile);
+        profileData = JSON.parse(profileData);
+        console.log('Profile Data', profileData);
+        dispatch({
+          type: 'ADD_PROFILE',
+          payload: responseJson.data.profile.Eme,
+        });
+      }
+    })
+    .catch(function (error) {});
+};
+
 export const getCarddata = dispatch => {
   axiosInstance
     .get('api/getDid')
@@ -18,16 +79,14 @@ export const getCarddata = dispatch => {
     });
 };
 
-export const sendToverification = async (email, id, iv) => {
+export const sendToverification = async (verificationId , email) => {
   var myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/json');
 
   var raw = JSON.stringify({
     to: email,
     data: {
-      email: 'hsbc@gmail.com',
-      id: id,
-      iv: iv,
+      verificaitonId : verificationId
     },
   });
 
@@ -63,7 +122,7 @@ export const sendToverification = async (email, id, iv) => {
 };
 
 export const getProofdata = (verificationId, dispatch) => {
-  axiosInstance
+const res =   axiosInstance
     .get(`/verifier/getRequest?verification_id=${verificationId}`)
     .then(function (responseJson) {
       if (responseJson.status === 200) {
@@ -75,11 +134,17 @@ export const getProofdata = (verificationId, dispatch) => {
           type: 'VERIFICATION_DATA',
           payload: res,
         });
+
+        return res
+
       }
     })
     .catch(function (error) {
       console.log('Error==>', error);
+      return "error"
     });
+
+    return res
 };
 export const createProofforOR = async id => {
   let dataToSend = {item_id: id};
@@ -100,6 +165,7 @@ export const createProofforOR = async id => {
 };
 
 export const updateVerification = async (verificationId, proofitem) => {
+  console.log("%%%%%",verificationId , proofitem);
   let dataToSend = {verification_id: verificationId, did: proofitem};
 
   const result = axiosInstance
@@ -115,35 +181,4 @@ export const updateVerification = async (verificationId, proofitem) => {
     });
 
   return result;
-  // var myHeaders = new Headers();
-  // myHeaders.append('Content-Type', 'application/json');
-
-  // console.log('PRRR', proofitem, verificationId);
-  // var raw = JSON.stringify({
-  //   verification_id: verificationId,
-  //   did: proofitem,
-  // });
-
-  // var requestOptions = {
-  //   method: 'POST',
-  //   headers: myHeaders,
-  //   body: raw,
-  //   redirect: 'follow',
-  // };
-
-  // const result = await fetch(
-  //   'https://api.liquid.com.hk/api/verifier/updateDIDForVerificationId',
-  //   requestOptions,
-  // )
-  //   .then(response => response.text())
-  //   .then(result => {
-  //     const resJson = JSON.parse(result);
-
-  //     return resJson;
-  //   })
-  //   .catch(error => {
-  //     return 'error';
-  //   });
-
-  // return result;
 };
