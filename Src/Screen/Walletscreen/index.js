@@ -140,7 +140,7 @@ let newapiarr = [... apiarr , apidata ]
     getData();
     setSelectedType(0);
 
-   // sessionCheck();
+    sessionCheck();
     setTimeout(() => {
       setLoader(false);
     }, 1000);
