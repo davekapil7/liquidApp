@@ -1,5 +1,12 @@
-import React, {useState} from 'react';
-import {View, Text, Image, TouchableOpacity, Alert} from 'react-native';
+import React, {useState, useRef} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Alert,
+  TextInput,
+} from 'react-native';
 import Swiper from 'react-native-swiper';
 import {COLOR} from '../../Constant/color';
 import {Onbording} from '../../Constant/json';
@@ -10,111 +17,150 @@ import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../Constant/axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { getCarddata } from '../../Function/Apicall';
-const Otpscreen = (params) => {
+import {useDispatch, useSelector} from 'react-redux';
+import {getCarddata} from '../../Function/Apicall';
+import Toast from 'react-native-toast-message';
+const Otpscreen = params => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const cardData = useSelector((state) => state.appstate.cardList);
+  const cardData = useSelector(state => state.appstate.cardList);
 
-  const screen = params?.route?.params?.screen
-  const email = params?.route?.params?.email
-  const datatoken = params?.route?.params?.data
-  
-  const [otp, setOtp] = useState();
+  const screen = params?.route?.params?.screen;
+  const email = params?.route?.params?.email;
+  const datatoken = params?.route?.params?.data;
+
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const inputs = useRef([]);
 
   const rnBiometrics = new ReactNativeBiometrics({
     allowDeviceCredentials: true,
   });
 
   const initialapicall = () => {
-    if(cardData.length == 0) {
-      getCarddata(dispatch)
+    if (cardData.length == 0) {
+      getCarddata(dispatch);
     }
-  }
+  };
+
+
+  const handleOtpChange = (index, value) => {
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (value && index < 5) {
+      inputs.current[index + 1].focus();
+    } else if (!value && index > 0) {
+      inputs.current[index - 1].focus();
+    }
+  };
+
+  
   const handleotp = () => {
+    const code = otp.join('');
+    console.log(typeof code)
+    console.log(code);
     console.log('HELLO');
-    let dataToSend = {otp: otp};
+    let dataToSend = {otp: code};
     // console.log(dataToSend, 'fshsh');
     axiosInstance
       .post('auth/verify-otp', dataToSend)
       .then(function (responseJson) {
-        console.log("Verified user", responseJson.data, 'responce');
+        console.log('Verified user', responseJson.data, 'responce');
         if (responseJson?.data?.data === 'Authorized') {
-
           // dispatch({ type: 'ADD_EXPIRY', payload: responseJson.data.expires });
           AsyncStorage.setItem('login', 'true');
-         
+
           AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
 
-          AsyncStorage.setItem('isIamSmartCreated', JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated));
+          AsyncStorage.setItem(
+            'isIamSmartCreated',
+            JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated),
+          );
 
-          initialapicall()
-           navigation.navigate('Tabnavigationroute');
-      //   handlebiomatric();
+          initialapicall();
+         // navigation.navigate('Tabnavigationroute');
+            handlebiomatric();
         } else {
-          Alert.alert('Please Enter Right OTP');
-          console.log('Please check your email id or password');
+          Toast.show({
+            topOffset: 100,
+            type: "error",
+            text1: "ERROR",
+           text2: `Please Enter right OTP`,
+            visibilityTime: 3000,
+            props: {
+              text1NumberOfLines:2 //number of how many lines you want
+            }
+          });
         }
       })
       .catch(error => {
         //Hide Loader
 
-        console.error(error);
-        Alert.alert('Please Enter Right OTP');
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `Please enter right otp`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
+        });
       });
   };
 
 
-  const handleregisterotp= () => {
+
+  const handleregisterotp = () => {
     console.log('HELLO');
-    let dataToSend = {data : datatoken , otp: otp};
-    console.log(dataToSend , datatoken, 'fshsh');
+    let dataToSend = {data: datatoken, otp: otp};
+    console.log(dataToSend, datatoken, 'fshsh');
     axiosInstance
       .post('auth/verifySignupOtp', dataToSend)
       .then(function (responseJson) {
-        console.log("Verified user", responseJson.data, 'responce');
+        console.log('Verified user', responseJson.data, 'responce');
         if (responseJson?.data?.error === false) {
-
           // dispatch({ type: 'ADD_EXPIRY', payload: responseJson.data.expires });
           AsyncStorage.setItem('login', 'true');
-         
+
           AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
 
-          initialapicall()
+          initialapicall();
           // navigation.navigate('Tabnavigationroute');
-       //  handlebiomatric();
+            handlebiomatric();
         } else {
-          Alert.alert('Please Enter Right OTP');
-          console.log('Please check your email id or password');
+          Toast.show({
+            topOffset: 100,
+            type: "error",
+            text1: "ERROR",
+           text2: `Please enter right otp`,
+            visibilityTime: 3000,
+            props: {
+              text1NumberOfLines:2 //number of how many lines you want
+            }
+          });
+          // Alert.alert('Please Enter Right OTP');
+          // console.log('Please check your email id or password');
         }
       })
       .catch(error => {
         //Hide Loader
 
-        console.error(error);
-        Alert.alert('Please Enter Right OTP');
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `Please enter right OTP`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
+        });
       });
   };
 
   const handlebiomatric = async () => {
-    // const biometryType = await rnBiometrics.isSensorAvailable()
-    //   rnBiometrics.isSensorAvailable()
-    //   .then((resultObject) => {
-    //     const { available, biometryType } = resultObject
-
-    //     console.log("%%%%%%%",biometryType , available);
-    //  if (available && biometryType === BiometryTypes.FaceID) {
-    //       console.log('FaceID is supported')
-    //     } else{
-    //       console.log("Not suppoted%%%%%");
-    //     }
-    //   })
-    // Touch ID
-
-    // console.log("@@@@",check);
-    // const biometryType = await rnBiometrics.isSensorAvailable();
-
     await rnBiometrics.isSensorAvailable().then(resultObject => {
       rnBiometrics
         .simplePrompt({promptMessage: 'Confirm fingerprint'})
@@ -124,13 +170,31 @@ const Otpscreen = (params) => {
           if (success) {
             navigation.navigate('Tabnavigationroute');
           } else {
-            Alert.alert(
-              'Fingerprint not exist or were deleted . Please add fingerprint in system ',
-            );
+           
+            Toast.show({
+              topOffset: 100,
+              type: "error",
+              text1: "ERROR",
+             text2: `Fingerprint not exist or were deleted . Please add fingerprint in system`,
+              visibilityTime: 3000,
+              props: {
+                text1NumberOfLines:2 //number of how many lines you want
+              }
+            });
           }
         })
         .catch(e => {
-          Alert.alert('Fail login with senser . Please try with login');
+       //   Alert.alert('Fail login with senser . Please try with login');
+          Toast.show({
+            topOffset: 100,
+            type: "error",
+            text1: "ERROR",
+           text2: `Fail login with senser . Please try with login`,
+            visibilityTime: 3000,
+            props: {
+              text1NumberOfLines:2 //number of how many lines you want
+            }
+          });
           AsyncStorage.removeItem('login');
         });
     });
@@ -151,7 +215,7 @@ const Otpscreen = (params) => {
           position: 'absolute',
           backgroundColor: 'white',
           flex: 1,
-          width: '80%',
+          width: '90%',
           height: '75%',
           borderTopLeftRadius: 25,
           borderTopRightRadius: 25,
@@ -171,10 +235,11 @@ const Otpscreen = (params) => {
             color: COLOR.BLACK[100],
             fontWeight: '300',
           }}>
-          Please enter the verification code that we have sent to the email id {email}
+          Please enter the verification code that we have sent to the email id{' '}
+          {email}
         </Text>
 
-        <OtpInputs
+        {/* <OtpInputs
           handleChange={code => setOtp(code)}
           numberOfInputs={6}
           style={{
@@ -198,7 +263,20 @@ const Otpscreen = (params) => {
             alignItems: 'center',
             justifyContent: 'center',
           }}
-        />
+        /> */}
+        <View style={styles.otpContainer}>
+          {otp.map((value, index) => (
+            <TextInput
+              key={index}
+              ref={ref => (inputs.current[index] = ref)}
+              style={styles.otpInput}
+              keyboardType="number-pad"
+              maxLength={1}
+              value={value}
+              onChangeText={text => handleOtpChange(index, text)}
+            />
+          ))}
+        </View>
 
         <TouchableOpacity
           style={{
@@ -211,10 +289,10 @@ const Otpscreen = (params) => {
             justifyContent: 'center',
           }}
           onPress={() => {
-            if(screen === "Register Account"){
-              handleregisterotp()
-            }else{
-              handleotp()
+            if (screen === 'Register Account') {
+              handleregisterotp();
+            } else {
+              handleotp();
             }
           }}>
           <Text
@@ -285,5 +363,111 @@ const Otpscreen = (params) => {
     </View>
   );
 };
+
+// const styles = StyleSheet.create({
+//   keyContainer: {
+//     flex: 1,
+//     alignItems: 'center',
+//   },
+//   container: {
+//     width: '100%',
+//     height: '100%',
+//     alignItems: 'center',
+//   },
+//   otpMsg: {
+//     marginTop: 30,
+//   },
+//   mobContainer: {
+//     marginTop: 10,
+//   },
+//   mobNumber: {
+//     color: '#182958',
+//     fontSize: 20,
+//     fontWeight: '700',
+//   },
+//   subtitle: {
+//     fontSize: 18,
+//     textAlign: 'center',
+//   },
+//   otpContainer: {
+//     marginTop: 30,
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     marginBottom: 20,
+//   },
+//   timerText: {
+//     color: '#465479',
+//     fontSize: 15,
+//   },
+//   resendBox: {
+//     marginTop: 10,
+//   },
+//   resendText: {
+//     color: '#4A4BFE',
+//     fontSize: 18,
+//   },
+//   otpInput: {
+//     fontSize: 24,
+//     fontWeight: 'bold',
+//     textAlign: 'center',
+//     borderWidth: 1,
+//     borderColor: '#A3A9BC',
+//     borderRadius: 10,
+//     alignSelf: 'center',
+//     // paddingHorizontal: 10,
+//     // paddingVertical: 10,
+//     width: 50,
+//     height: 50,
+//     marginHorizontal: 4,
+//   },
+//   buttonDisabled: {
+//     backgroundColor: '#E5E5E5',
+//     width: '90%',
+//     borderRadius: 25,
+//     height: 50,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     alignSelf: 'center',
+//   },
+//   bottomLink: {
+//     position: 'absolute',
+//     bottom: '5%',
+//     width: '100%',
+//   },
+//   horizontal: {
+//     flexDirection: 'row',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     marginTop: 15,
+//   },
+//   accLink1: {
+//     color: '#465479',
+//     fontSize: 16,
+//   },
+//   accLink2: {
+//     color: '#4A4BFE',
+//     fontSize: 16,
+//   },
+//   button: {
+//     backgroundColor: '#4A4BFE',
+//     width: '90%',
+//     borderRadius: 25,
+//     height: 50,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     alignSelf: 'center',
+//   },
+//   buttonText: {
+//     color: '#fff',
+//     fontSize: 17,
+//     fontWeight: '700',
+//   },
+//   disabledButtonText: {
+//     color: '#747E9B',
+//     fontSize: 17,
+//     fontWeight: '700',
+//   },
+// });
 
 export default Otpscreen;

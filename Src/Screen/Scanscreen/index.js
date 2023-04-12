@@ -18,14 +18,13 @@ import {
 
 import { CameraScreen } from 'react-native-camera-kit';
 import axios from 'axios';
-import Toast from 'react-native-simple-toast';
 import Theambackground from '../../Components/Theambackground';
 import { COLOR } from '../../Constant/color';
 import axiosInstance from '../../Constant/axios';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { getProofdata } from '../../Function/Apicall';
-
+import { Toast } from 'react-native-toast-message';
 const VerifyProofScreen = () => {
   const [qrvalue, setQrvalue] = useState('');
   const [opneScanner, setOpneScanner] = useState(false);
@@ -62,7 +61,16 @@ const VerifyProofScreen = () => {
         routes: [{ name: 'Tabnavigationroute' }],
       });
     } else if (obj.type == 'login-qr') {
-      console.log("Login check qr");
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+       text2: `Login check QR`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines:2 //number of how many lines you want
+        }
+      });
       loginScanner(obj.id);
     }
     else {
@@ -96,12 +104,31 @@ const VerifyProofScreen = () => {
         console.log("Scanned data", scData);
         console.log("Scanned proof", JSON.stringify(scannedObj.proof));
         if (scannedObj?.proof) {
-          Toast.show('Successfully Proof Created', Toast.LONG, {
-            backgroundColor: 'blue',
+        
+          Toast.show({
+            topOffset: 100,
+            
+            text1: "Success",
+           text2: `Successfully Proof Created`,
+            visibilityTime: 3000,
+            props: {
+              text1NumberOfLines:2 //number of how many lines you want
+            }
           });
         }
       })
-      .catch(error => console.log('error', error));
+      .catch(error =>{
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `Something went wrong , Please try again`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
+        });
+      });
   };
 
   const loginScanner = (qrVal) => {
@@ -121,8 +148,16 @@ const VerifyProofScreen = () => {
         //Hide Loader
         console.error(error);
         // Alert.alert("Login didn't worked");
-        Toast.show("Login didn't worked", Toast.LONG, {
-          backgroundColor: 'red',
+       
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `Login didn't worked`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
         });
       });
   };
@@ -133,8 +168,15 @@ const VerifyProofScreen = () => {
       .post('api/share-mobile-token', data)
       .then(function (responseJson) {
         if (responseJson.status === 200) {
-          Toast.show('Logged in Mobile Token Created', Toast.LONG, {
-            backgroundColor: 'blue',
+         
+          Toast.show({
+            topOffset: 100,
+            text1: "Success",
+           text2: `Logged in Mobile Token Created`,
+            visibilityTime: 3000,
+            props: {
+              text1NumberOfLines:2 //number of how many lines you want
+            }
           });
           console.log("Share QR token", responseJson.data);
         }
@@ -142,8 +184,15 @@ const VerifyProofScreen = () => {
       .catch(error => {
         //Hide Loader
         console.error(error);
-        Toast.show("Login didn't worked", Toast.LONG, {
-          backgroundColor: 'red',
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `Login didn't worked`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
         });
       });
   }
@@ -164,10 +213,30 @@ const VerifyProofScreen = () => {
         setQrvalue('');
         setOpneScanner(true);
       } else {
-        alert('CAMERA permission denied');
+       // alert('CAMERA permission denied');
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `CAMERA permission denied`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
+        });
       }
     } catch (err) {
-      alert('Camera permission err', err);
+    //  alert('Camera permission err', err);
+    Toast.show({
+      topOffset: 100,
+      type: "error",
+      text1: "ERROR",
+     text2: `Camera permission err`,
+      visibilityTime: 3000,
+      props: {
+        text1NumberOfLines:2 //number of how many lines you want
+      }
+    });
       console.warn(err);
     }
 

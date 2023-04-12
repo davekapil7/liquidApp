@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import axiosInstance from '../../Constant/axios';
 import {CountryPicker} from 'react-native-country-codes-picker';
+import  Toast  from 'react-native-toast-message';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -96,32 +97,35 @@ const LoginScreen = () => {
           console.log('Registration Successful. Please Login to proceed');
         } else {
           // setErrortext(responseJson?.data?.error);
+          Toast.show({
+            topOffset: 100,
+            type: "error",
+            text1: "ERROR",
+           text2: `Somthing went wrong. Please check your connection`,
+            visibilityTime: 3000,
+            props: {
+              text1NumberOfLines:2 //number of how many lines you want
+            }
+          });
         }
       })
       .catch(function (error) {
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `Somthing went wrong. Please check your connection`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
+        });
         console.log(error);
         //  setLoading(false);
       });
   };
 
   const handlebiomatric = async () => {
-    // const biometryType = await rnBiometrics.isSensorAvailable()
-    //   rnBiometrics.isSensorAvailable()
-    //   .then((resultObject) => {
-    //     const { available, biometryType } = resultObject
-
-    //     console.log("%%%%%%%",biometryType , available);
-    //  if (available && biometryType === BiometryTypes.FaceID) {
-    //       console.log('FaceID is supported')
-    //     } else{
-    //       console.log("Not suppoted%%%%%");
-    //     }
-    //   })
-    // Touch ID
-
-    // console.log("@@@@",check);
-    // const biometryType = await rnBiometrics.isSensorAvailable();
-
     await rnBiometrics.isSensorAvailable().then(resultObject => {
       rnBiometrics
         .simplePrompt({promptMessage: 'Confirm fingerprint'})
@@ -131,13 +135,33 @@ const LoginScreen = () => {
           if (success) {
             navigation.navigate('DrawerNavigationRoutes');
           } else {
-            Alert.alert(
-              'Fingerprint not exist or were deleted . Please add fingerprint in system ',
-            );
+            // Alert.alert(
+            //   'Fingerprint not exist or were deleted . Please add fingerprint in system ',
+            // );
+            Toast.show({
+              topOffset: 100,
+              type: "error",
+              text1: "ERROR",
+             text2: `Fingerprint not exist or were deleted . Please add fingerprint in system`,
+              visibilityTime: 3000,
+              props: {
+                text1NumberOfLines:2 //number of how many lines you want
+              }
+            });
           }
         })
         .catch(e => {
-          Alert.alert('Fail login with senser . Please try with login');
+          Toast.show({
+            topOffset: 100,
+            type: "error",
+            text1: "ERROR",
+           text2: `Fail login with senser . Please try with login`,
+            visibilityTime: 3000,
+            props: {
+              text1NumberOfLines:2 //number of how many lines you want
+            }
+          });
+         // Alert.alert('Fail login with senser . Please try with login');
           AsyncStorage.removeItem('login');
         });
     });
@@ -158,12 +182,33 @@ const LoginScreen = () => {
             // Alert.alert('OTP SENT');
             navigation.navigate('Otpscreen', {screen: type, email: email});
           } else {
-            Alert.alert('Please check your email');
+            Toast.show({
+              topOffset: 100,
+              type: "error",
+              text1: "ERROR",
+             text2: `Something went wrong Please check your email`,
+              visibilityTime: 2000,
+              props: {
+                text1NumberOfLines:2 //number of how many lines you want
+              }
+            });
+          
+           // Alert.alert('Please check your email');
             console.log('Please check your email id or password');
           }
         })
         .catch(function (error) {
-          console.log(error);
+         
+          Toast.show({
+            topOffset: 100,
+            type: "error",
+            text1: "ERROR",
+           text2: `Something went wrong Please check your network connection or after sme time`,
+            visibilityTime: 2000,
+            props: {
+              text1NumberOfLines:2 //number of how many lines you want
+            }
+          });
         });
     }
   };

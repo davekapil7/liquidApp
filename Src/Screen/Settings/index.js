@@ -14,6 +14,7 @@ import { seetingjson } from '../../Constant/json';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../Constant/axios';
+import { Toast } from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
 const Settingscreen = () => {
   const navigation = useNavigation();
@@ -61,6 +62,16 @@ const Settingscreen = () => {
         //   backgroundColor: 'blue',
         // });
         // setLoading(false);
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `Somthing Went Wrong Scan Again`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
+        });
       });
   }
 

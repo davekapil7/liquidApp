@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import axiosInstance from '../../Constant/axios';
-import Toast from 'react-native-simple-toast';
+import { Toast } from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getCarddata } from '../../Function/Apicall';
 
@@ -63,9 +63,17 @@ const Credentials = () => {
                 .catch(error => {
                     //Hide Loader
                     console.error(error);
-                    Toast.show("Template couldn't be fetched", Toast.LONG, {
-                        backgroundColor: 'red',
-                    });
+                   
+                    Toast.show({
+                        topOffset: 100,
+                        type: "error",
+                        text1: "ERROR",
+                       text2: `Template couldn't be fetched`,
+                        visibilityTime: 3000,
+                        props: {
+                          text1NumberOfLines:2 //number of how many lines you want
+                        }
+                      });
                 });
         }
     }
@@ -104,9 +112,19 @@ const Credentials = () => {
             .catch(error => {
                 //Hide Loader
                 console.error(error);
-                Toast.show("Credential couldn't be created", Toast.LONG, {
-                    backgroundColor: 'red',
-                });
+                // Toast.show("Credential couldn't be created", Toast.LONG, {
+                //     backgroundColor: 'red',
+                // });
+                Toast.show({
+                    topOffset: 100,
+                    type: "error",
+                    text1: "ERROR",
+                   text2: `Credential couldn't be created`,
+                    visibilityTime: 3000,
+                    props: {
+                      text1NumberOfLines:2 //number of how many lines you want
+                    }
+                  });
             });
     }
 

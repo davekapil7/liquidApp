@@ -8,7 +8,7 @@ import { AppState, Linking, StyleSheet, Text, View } from 'react-native';
 // Import Navigators from React Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import Toast from 'react-native-toast-message'
 // Import Screens
 import SplashScreen from './SplashScreen';
 // import SplashScreen from './Screen/SplashScreen';
@@ -48,8 +48,9 @@ const Auth = () => {
   // Stack Navigator for Login and Sign up Screen
   return (
     <Stack.Navigator
-      //initialRouteName="Otpscreen"
-      initialRouteName="OnbordingScreen">
+     // initialRouteName="Otpscreen"
+      initialRouteName="OnbordingScreen"
+      >
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
@@ -158,6 +159,16 @@ const Rootnavigation = () => {
         }
       })
       .catch(function (error) {
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `Something went wrong , Please try again`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
+        });
       });
   }
 
@@ -180,6 +191,16 @@ const Rootnavigation = () => {
         }
       })
       .catch(function (error) {
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `Somthing went wrong , Please try again`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
+        });
       });
   }
 
@@ -202,14 +223,25 @@ const Rootnavigation = () => {
         }
       })
       .catch(function (error) {
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `Somthing went wrong , Please try again`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
+        });
+
       });
   }
 
   return (
     <NavigationContainer linking={linking}>
       <Stack.Navigator
-        initialRouteName="SplashScreen"
-      //   initialRouteName='Tabnavigationroute'
+     // initialRouteName=''
+       initialRouteName="SplashScreen"
       >
         {/* SplashScreen which will come once for 5 Seconds */}
         <Stack.Screen
@@ -224,13 +256,7 @@ const Rootnavigation = () => {
           component={Auth}
           options={{ headerShown: false }}
         />
-        {/* Navigation Drawer as a landing page */}
-        {/* <Stack.Screen
-          name="DrawerNavigationRoutes"
-          component={DrawerNavigationRoutes}
-          // Hiding header for Navigation Drawer
-          options={{headerShown: false}}
-        /> */}
+        
 
         <Stack.Screen
           name="Tabnavigationroute"
@@ -313,6 +339,8 @@ const Rootnavigation = () => {
           }}
         />
       </Stack.Navigator>
+
+      <Toast position='bottom'  />
     </NavigationContainer>
   );
 };

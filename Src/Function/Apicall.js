@@ -1,5 +1,6 @@
 import axiosInstance from '../Constant/axios';
 import axiosLocal from '../Constant/axioslocal';
+import Toast from 'react-native-toast-message'
 
 export const getAuthToken = (state, code) =>{
   let dataToSend = {state: state, code: code};
@@ -17,7 +18,18 @@ export const getAuthToken = (state, code) =>{
         }
       }
     })
-    .catch(function (error) {});
+    .catch(function (error) {
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+       text2: `Something went wrong , Please try again`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines:2 //number of how many lines you want
+        }
+      });
+    });
 }
 
 export const getProfileForMobile = () => {
@@ -38,7 +50,18 @@ export const getProfileForMobile = () => {
         }
       }
     })
-    .catch(function (error) {});
+    .catch(function (error) {
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+       text2: `Something went wrong , Please try again`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines:2 //number of how many lines you want
+        }
+      });
+    });
 };
 
 export const getProfile = (dispatch) => {
@@ -59,7 +82,18 @@ export const getProfile = (dispatch) => {
         });
       }
     })
-    .catch(function (error) {});
+    .catch(function (error) {
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+       text2: `Something went wrong , Please try again`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines:2 //number of how many lines you want
+        }
+      });
+    });
 };
 
 export const getCarddata = dispatch => {
@@ -75,7 +109,16 @@ export const getCarddata = dispatch => {
       }
     })
     .catch(function (error) {
-      console.log('Error==>', error);
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+       text2: `Something went wrong , Please try again`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines:2 //number of how many lines you want
+        }
+      });
     });
 };
 
@@ -115,6 +158,16 @@ export const sendToverification = async (verificationId , email) => {
       }
     })
     .catch(error => {
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+       text2: `Something went wrong , Please try again`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines:2 //number of how many lines you want
+        }
+      });
       return false;
     });
 
@@ -140,7 +193,16 @@ const res =   axiosInstance
       }
     })
     .catch(function (error) {
-      console.log('Error==>', error);
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+       text2: `Something went wrong , Please try again`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines:2 //number of how many lines you want
+        }
+      });
       return "error"
     });
 
@@ -156,9 +218,19 @@ export const createProofforOR = async id => {
       return responseJson.data;
     })
     .catch(error => {
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+       text2: `Something went wrong , Please try again`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines:2 //number of how many lines you want
+        }
+      });
       //Hide Loader
       return 'error';
-      console.error(error);
+    
     });
 
   return result;
@@ -176,8 +248,18 @@ export const updateVerification = async (verificationId, proofitem) => {
     })
     .catch(error => {
       //Hide Loader
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+       text2: `Something went wrong , Please try again`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines:2 //number of how many lines you want
+        }
+      });
       return 'error';
-      console.error(error);
+   
     });
 
   return result;

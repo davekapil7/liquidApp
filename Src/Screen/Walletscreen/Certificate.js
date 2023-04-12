@@ -24,6 +24,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import QRCode from 'react-native-qrcode-svg';
 import axiosInstance from '../../Constant/axios';
+import { Toast } from 'react-native-toast-message';
 import {sendToverification} from '../../Function/Apicall';
 import {useNavigation} from '@react-navigation/native';
 
@@ -72,7 +73,18 @@ const Certificate = ({
           setShareopen(true);
         }
       })
-      .catch(function (error) {});
+      .catch(function (error) {
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `Something went wrong , Please try again`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
+        });
+      });
   };
 
   const openmodal = val => {
@@ -114,7 +126,18 @@ const Certificate = ({
           }
         }
       })
-      .catch(function (error) {});
+      .catch(function (error) {
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+         text2: `Something went wrong , Please try again`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines:2 //number of how many lines you want
+          }
+        });
+      });
   };
   let imgbkg = require('../../../assets/Image/card/card5.png');
   let company = require('../../../assets/Image/card/iamsmart.png');
