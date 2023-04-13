@@ -93,6 +93,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
     marginTop: '5%',
+    color:COLOR.GRAY[300]
   },
   buttonView: {
     width: '70%',

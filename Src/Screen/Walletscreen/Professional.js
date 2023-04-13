@@ -6,18 +6,18 @@ import {Header as HeaderRNE, HeaderProps, Icon} from '@rneui/themed';
 import {sendToverification, updateVerification} from '../../Function/Apicall';
 import { useNavigation } from '@react-navigation/native';
 
-// const proofdata = {
-//   _id: '64239bba773ec0693f7368d4',
-//   raisedTo: 'davekapil071@gmail.com',
-//   askedFor: ['Address_proof', 'Delivery_proof'],
-//   did: [],
-//   __v: 0,
-// };
+const proofdata = {
+  _id: '64239bba773ec0693f7368d4',
+  raisedTo: 'davekapil071@gmail.com',
+  askedFor: ['Address_proof', 'Delivery_proof'],
+  did: [],
+  __v: 0,
+};
 
 const Professional = ({changetype, setProof, setcheck}) => {
   const proofitem = useSelector(state => state?.certificate?.proofdata);
 
-  const proofdata = useSelector(state => state?.certificate?.verification);
+  //const proofdata = useSelector(state => state?.certificate?.verification);
   const verificationId = useSelector(
     state => state?.certificate?.verificationId,
   );

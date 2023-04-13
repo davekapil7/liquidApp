@@ -48,6 +48,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
+    color:"black",
     borderWidth: 1,
     borderColor: '#A3A9BC',
     borderRadius: 10,

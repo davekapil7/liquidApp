@@ -55,6 +55,7 @@ const Settingscreen = () => {
           type: "CLEAR_ALL",
         })
         console.log("Logged out");
+        navigation.navigate("OnbordingScreen")
       })
       .catch(function (error) {
         //  setErrortext(responseJson?.data?.error);
