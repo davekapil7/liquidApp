@@ -54,7 +54,7 @@ const email = useSelector(state => state?.appstate?.email)
         })
         setTimeout(() => {
           setModalvisible(false)
-          navigation.navigate("Tabnavigationroute")
+          navigation.navigate('Postauth' ,{screen: "Tabnavigationroute"})
         }, 2000);
        
         }

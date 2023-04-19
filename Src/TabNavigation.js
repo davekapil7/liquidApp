@@ -12,14 +12,7 @@ import { useSelector } from 'react-redux';
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigationRoute() {
-  // const appstatus = useSelector(state => state?.appstate?.appState);
 
-
-  // useEffect(() =>{
-  //     if(appstatus === "background"){
-  //       navigation.replace("LoginScreen")
-  //     }
-  // },[appstatus])
 
   return (
     <Tab.Navigator

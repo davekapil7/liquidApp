@@ -24,7 +24,8 @@ const ProofListingScreen = () => {
   const renderItem = ({item, index}) => (
     <Pressable
       onPress={() =>
-        navigation.navigate('ProofScreenStack', {
+        navigation.navigate( 'Postauth', {
+          screen : "ProofScreenStack",
           paramKey: item.id,
         })
       }
@@ -54,7 +55,8 @@ const ProofListingScreen = () => {
       <Text></Text>
       <Button
         onPress={() =>
-          navigation.navigate('ProofScreenStack', {
+          navigation.navigate('Postauth', {
+            screen : "ProofScreenStack",
             paramKey: item.id,
           })
         }

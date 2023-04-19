@@ -105,7 +105,10 @@ const InfoScreen = () => {
               alignItems: 'center',
               justifyContent: 'center',
             }}
-            onPress={() => navigation.navigate('LoginScreen')}>
+            onPress={() => 
+            //  console.log("HEllo")
+           navigation.navigate('Preauth' ,{screen:'LoginScreen'})
+            }>
             <Text
               style={{
                 fontSize: 15,

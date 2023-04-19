@@ -35,7 +35,7 @@ const Settingscreen = () => {
   };
 
   const wallet = () => {
-    navigation.navigate('Walletconnection');
+    navigation.navigate('Postauth' ,{screen: 'Walletconnection'});
   };
 
   const deletewallet = () => {
@@ -44,8 +44,8 @@ const Settingscreen = () => {
   };
 
   const logout = () => {
-    AsyncStorage.removeItem('login')
-    navigation.navigate("Auth")
+   
+   // navigation.navigate("Preauth")
     axiosInstance
       .get(
         'auth/logout',
@@ -55,7 +55,8 @@ const Settingscreen = () => {
           type: "CLEAR_ALL",
         })
         console.log("Logged out");
-        navigation.navigate("OnbordingScreen")
+        AsyncStorage.removeItem('login')
+      //  navigation.navigate('Preauth' ,{screen: "OnbordingScreen"})
       })
       .catch(function (error) {
         //  setErrortext(responseJson?.data?.error);
@@ -82,7 +83,7 @@ const Settingscreen = () => {
         copy(parameter);
         break;
       case 'recovery':
-        navigation.navigate('Walletpinscreen', { params: 'recovery' });
+        navigation.navigate('Postauth' ,{screen:'Walletpinscreen',  params: 'recovery' });
         break;
 
       case 'wallet':
@@ -98,11 +99,11 @@ const Settingscreen = () => {
         break;
 
       case 'Walletpin':
-        navigation.navigate('Walletpinscreen', { params: 'Wallet' });
+        navigation.navigate('Postauth' ,{screen: 'Walletpinscreen',  params: 'Wallet' });
         break;
 
       case 'recover':
-        navigation.navigate('Recoverscreen');
+        navigation.navigate('Postauth' ,{screen: 'Recoverscreen'});
         break;
       default:
         break;
@@ -143,7 +144,7 @@ const Settingscreen = () => {
                 </Text>
                 {item.title == 'Email Addresses' && (
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('EmailAddress')}>
+                    onPress={() => navigation.navigate('Postauth' ,{screen: 'EmailAddress'})}>
                     <Text
                       style={{
                         backgroundColor: COLOR.BLUE[100],

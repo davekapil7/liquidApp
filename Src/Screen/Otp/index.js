@@ -77,10 +77,15 @@ const Otpscreen = params => {
             'isIamSmartCreated',
             JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated),
           );
+          dispatch({
+            type: "SET_LOGIN",
+            payload:true
+          })
 
           initialapicall();
-         // navigation.navigate('Tabnavigationroute');
-            handlebiomatric();
+       //   navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
+
+         //   handlebiomatric();
         } else {
           Toast.show({
             topOffset: 100,
@@ -114,7 +119,11 @@ const Otpscreen = params => {
 
   const handleregisterotp = () => {
     console.log('HELLO');
-    let dataToSend = {data: datatoken, otp: otp};
+    const code = otp.join('');
+    console.log(typeof code)
+    console.log(code);
+    console.log('HELLO');
+    let dataToSend = {data: datatoken, otp: code};
     console.log(dataToSend, datatoken, 'fshsh');
     axiosInstance
       .post('auth/verifySignupOtp', dataToSend)
@@ -125,10 +134,13 @@ const Otpscreen = params => {
           AsyncStorage.setItem('login', 'true');
 
           AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
-
+          dispatch({
+            type: "SET_LOGIN",
+            payload:true
+          })
           initialapicall();
-          // navigation.navigate('Tabnavigationroute');
-            handlebiomatric();
+         //  navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
+           // handlebiomatric();
         } else {
           Toast.show({
             topOffset: 100,
@@ -168,7 +180,11 @@ const Otpscreen = params => {
           const {success} = resultObject;
 
           if (success) {
-            navigation.navigate('Tabnavigationroute');
+            dispatch({
+              type: "SET_LOGIN",
+              payload:true
+            })
+           // navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
           } else {
            
             Toast.show({
@@ -196,6 +212,10 @@ const Otpscreen = params => {
             }
           });
           AsyncStorage.removeItem('login');
+          dispatch({
+            type: "SET_LOGIN",
+            payload:false
+          })
         });
     });
   };

@@ -11,6 +11,7 @@ const axiosInstance = axios.create({
     origin:true,
     withCredentials:true,
    // httpAgent:httpAgent,
+   
     headers:{
      "Access-Control-Allow-Origin":"https://api.liquid.com.hk/api/",
     },

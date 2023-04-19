@@ -7,7 +7,7 @@ import { COLOR } from '../../Constant/color';
 
 const Cardinfo = (params) => {
     const Data = params?.route?.params?.data?.data
-    console.log("PArams ===>", Object.entries(Data));
+    console.log("PArams ===>",params);
     return (
         <Theambackground
         // title="Settings"
@@ -25,13 +25,13 @@ const Cardinfo = (params) => {
                         return null
                     } else {
                         return (
-                            <View style={{ padding: 12, flexDirection: typeofvalue == "string" ? "row" : "column" }}>
+                            <View style={{ padding: 12, flexDirection: typeofvalue == "string" ? "row" : "column" ,width:"100%"}}>
                                 <Text style={{ fontSize: 20, color: COLOR.BLUE[300], fontWeight: "bold", textTransform: "capitalize" }}>{item[0]} :</Text>
 
 
                                 {typeofvalue == "string" ? (
-                                    <View style={{ alignItems: "flex-start", marginLeft: 15 }}>
-                                        <Text style={{ fontSize: 16, color: "black", }}>{value}</Text>
+                                    <View style={{ alignItems: "flex-start", marginLeft: 15 ,width:"100%",flex:1}}>
+                                        <Text style={{ fontSize: 16, color: "black",flex:1 ,width:"100%"}}>{value}</Text>
                                     </View>
                                 ) : (
                                     <View style={{ alignItems: "center", flex: 1 }}>
@@ -39,7 +39,7 @@ const Cardinfo = (params) => {
                                             return (
                                                 <View style={{ flexDirection: "row", width: "100%", alignItems: "center", marginBottom: 2, marginTop: 5, }}>
                                                     <Text style={{ fontSize: 18, fontWeight: "600", textTransform: "capitalize", color: "black", alignSelf: "flex-start" }}>{val[0]} : </Text>
-                                                    <Text style={{ fontSize: 16, color: "black" }}>{val[1]}</Text>
+                                                    <Text style={{ fontSize: 16, flex:1,color: "black",width:"90%"}}>{val[1]}</Text>
                                                 </View>
                                             );
                                         })}

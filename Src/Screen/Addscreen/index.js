@@ -36,11 +36,11 @@ const Addscreen = () => {
   }, [fadeAnim]);
 
   const testimonial = () => {
-   navigation.navigate("Testimonial")
+   navigation.navigate('Postauth' ,{screen: "Testimonial"})
   };
 
   const credential = () => {
-    navigation.navigate("Selfissue")
+    navigation.navigate('Postauth' ,{screen: "Selfissue"})
   };
   return (
     <Theambackground

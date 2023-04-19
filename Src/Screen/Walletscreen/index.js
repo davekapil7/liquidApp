@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -15,32 +15,34 @@ import {
 } from 'react-native';
 import { Toast } from 'react-native-toast-message';
 import LinearGradient from 'react-native-linear-gradient';
-import {useNavigation} from '@react-navigation/native';
-import {IMG} from '../../Constant/image';
-import {STR} from '../../Constant/string';
-import {styles} from './style';
+import { useNavigation } from '@react-navigation/native';
+import { IMG } from '../../Constant/image';
+import { STR } from '../../Constant/string';
+import { styles } from './style';
 import {
   Header as HeaderRNE,
   HeaderProps,
   Icon,
   BottomSheet,
 } from '@rneui/themed';
-import {COLOR} from '../../Constant/color';
-import {wallettype} from '../../Constant/json';
+import { COLOR } from '../../Constant/color';
+import { wallettype } from '../../Constant/json';
 import Carousel from 'react-native-snap-carousel';
 import Certificate from './Certificate';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import axiosInstance from '../../Constant/axios';
 import {
   createProofforOR,
   getCarddata,
+  getProfile,
+  getProfileForMobile,
   getProofdata,
 } from '../../Function/Apicall';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Credentials from './Credentials';
 import Professional from './Professional';
-import {onLoad} from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
+import { onLoad } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 
 const HEIGHT = Dimensions.get('screen').height;
 
@@ -56,6 +58,7 @@ const Walletscreen = () => {
   const [currentproof, setCurrentproof] = useState('');
   const proof = useSelector(state => state?.certificate.proofdata);
 
+  console.log("PRofile ==>",profileData);
   const addcertificate = async id => {
     const result = await createProofforOR(id);
 
@@ -67,9 +70,9 @@ const Walletscreen = () => {
       //   proof: currentproof,
       //   card: id,
       // };
-      console.log('Redux data,', proof);
-      const newdata = {id: resid, iv: resiv, name: currentproof, card: id};
-      const apidata = {id: resid, iv: resiv, name: currentproof};
+ 
+      const newdata = { id: resid, iv: resiv, name: currentproof, card: id };
+      const apidata = { id: resid, iv: resiv, name: currentproof };
       let oldarr = proof;
       let apiarr = proof;
 
@@ -96,7 +99,12 @@ const Walletscreen = () => {
   };
   const logout = () => {
     AsyncStorage.removeItem('login');
-    navigation.navigate('Auth');
+
+    dispatch({
+      type: "SET_LOGIN",
+      payload:false
+    })
+    //navigation.navigate('Preauth');
     axiosInstance
       .get('auth/logout')
       .then(function (responseJson) {
@@ -112,10 +120,10 @@ const Walletscreen = () => {
           topOffset: 100,
           type: "error",
           text1: "ERROR",
-         text2: `Somthing Went Wrong Scan Again`,
+          text2: `Somthing Went Wrong Scan Again`,
           visibilityTime: 3000,
           props: {
-            text1NumberOfLines:2 //number of how many lines you want
+            text1NumberOfLines: 2 //number of how many lines you want
           }
         });
       });
@@ -168,8 +176,8 @@ const Walletscreen = () => {
         if (result !== 'error') {
           console.log('Email =', email);
           console.log('VerificationId =', verificationId);
-          dispatch({type: 'ADD_EMAIL', payload: email});
-          dispatch({type: 'VERIFICATION_ID', payload: verificationId});
+          dispatch({ type: 'ADD_EMAIL', payload: email });
+          dispatch({ type: 'VERIFICATION_ID', payload: verificationId });
           // setToMail(email);
           setAlertmodal(true);
 
@@ -219,10 +227,10 @@ const Walletscreen = () => {
           topOffset: 100,
           type: "error",
           text1: "ERROR",
-         text2: `Somthing Went Wrong Scan Again`,
+          text2: `Somthing Went Wrong Scan Again`,
           visibilityTime: 3000,
           props: {
-            text1NumberOfLines:2 //number of how many lines you want
+            text1NumberOfLines: 2 //number of how many lines you want
           }
         });
       });
@@ -258,14 +266,36 @@ const Walletscreen = () => {
           topOffset: 100,
           type: "error",
           text1: "ERROR",
-         text2: `Somthing Went Wrong Scan Again`,
+          text2: `Somthing Went Wrong Scan Again`,
           visibilityTime: 3000,
           props: {
-            text1NumberOfLines:2 //number of how many lines you want
+            text1NumberOfLines: 2 //number of how many lines you want
           }
         });
       });
   };
+
+  const text = () => {
+ 
+    axiosInstance
+      .get('/api/info', {
+        params: {
+          source: 'android',
+        },
+      })
+      .then(function (responseJson) {
+        if (responseJson.status === 200) {
+          console.log("responce ===>", responseJson.data);
+          dispatch({
+            type:"ADD_PROFILE",
+            payload : responseJson.data?.data?.details
+          })
+        }
+      })
+      .catch(function (error) {
+        console.log("Reeoe", error);
+      });
+  }
 
   const ProfileButton = () => {
     return (
@@ -298,14 +328,14 @@ const Walletscreen = () => {
 
   const [shareopen, setShareopen] = useState(false);
   const getmycredential = () => {
-    navigation.navigate('Addscreen');
+    navigation.navigate('Postauth' ,{screen: 'Addscreen'});
   };
 
   const scan = () => {
-    navigation.navigate('Scanscreen');
+    navigation.navigate('Postauth' ,{screen: 'Scanscreen'});
   };
   const setting = () => {
-    navigation.navigate('Settingscreen');
+    navigation.navigate('Postauth' ,{screen: 'Settingscreen'});
   };
 
   const share = () => {
@@ -313,7 +343,7 @@ const Walletscreen = () => {
   };
 
   const editdetail = () => {
-    navigation.navigate('Editdetail');
+    navigation.navigate('Postauth' ,{screen: 'Editdetail'});
   };
 
   if (loader) {
@@ -344,14 +374,14 @@ const Walletscreen = () => {
 
   return (
     <View style={styles.safeContainer}>
-      <ScrollView style={{flex: 1, height: '100%'}}>
+      <ScrollView style={{ flex: 1, height: '100%' }}>
         <LinearGradient
-          start={{x: 0.0, y: 0.4}}
-          end={{x: 0.85, y: 0.5}}
+          start={{ x: 0.0, y: 0.4 }}
+          end={{ x: 0.85, y: 0.5 }}
           locations={[0, 0.9]}
           colors={['#454dbc', '#bd59fa']}
-          style={{flex: 1, height: '100%'}}>
-          <View style={{flex: 1, minHeight: HEIGHT}}>
+          style={{ flex: 1, height: '100%' }}>
+          <View style={{ flex: 1, minHeight: HEIGHT }}>
             <View style={styles.headerContainer}>
               <View>
                 <Text style={styles.titletext}>{STR.WALLET.TITLE}</Text>
@@ -362,8 +392,7 @@ const Walletscreen = () => {
                     : 'User'}
                 </Text>
               </View>
-
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <TouchableOpacity onPress={() => scan()}>
                   <Icon
                     name="line-scan"
@@ -373,7 +402,7 @@ const Walletscreen = () => {
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{marginLeft: 10}}
+                  style={{ marginLeft: 10 }}
                   onPress={() => setting()}>
                   <Icon
                     name="settings-outline"
@@ -386,11 +415,11 @@ const Walletscreen = () => {
             </View>
 
             <View style={styles.container}>
-              <View style={{height: 45}}>
+              <View style={{ height: 45 }}>
                 <ScrollView
                   horizontal={true}
-                  style={{height: 23}}
-                  contentContainerStyle={{height: 40}}>
+                  style={{ height: 23 }}
+                  contentContainerStyle={{ height: 40 }}>
                   <View style={styles.tabcontain}>
                     {wallettype.map((type, i) => {
                       return (
@@ -470,7 +499,7 @@ const Walletscreen = () => {
                           borderBottomColor: COLOR.GRAY[100],
                         }}>
                         <View>
-                          <Text style={{fontSize: 18, color: COLOR.BLACK[100]}}>
+                          <Text style={{ fontSize: 18, color: COLOR.BLACK[100] }}>
                             {Object.keys(profileData).length > 0
                               ? profileData.enName.UnstructuredName
                               : 'User'}
@@ -531,7 +560,7 @@ const Walletscreen = () => {
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        style={{alignSelf: 'center', marginTop: 5}}
+                        style={{ alignSelf: 'center', marginTop: 5 }}
                         onPress={() => editdetail()}>
                         <Text
                           style={{
@@ -544,7 +573,7 @@ const Walletscreen = () => {
                       </TouchableOpacity>
                     </View>
                     {Object.keys(profileData).length > 0 ? (
-                      <View style={{flex: 1, width: '100%', marginBottom: 35}}>
+                      <View style={{ flex: 1, width: '100%', marginBottom: 35 }}>
                         <View style={styles.inputbox}>
                           <Text style={styles.inputtitle}>FULL NAME</Text>
                           <View
@@ -558,7 +587,7 @@ const Walletscreen = () => {
                             </Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
-                              style={{width: 35, height: 35}}
+                              style={{ width: 35, height: 35 }}
                             />
                           </View>
                         </View>
@@ -576,7 +605,7 @@ const Walletscreen = () => {
                             </Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
-                              style={{width: 35, height: 35}}
+                              style={{ width: 35, height: 35 }}
                             />
                           </View>
                         </View>
@@ -589,18 +618,16 @@ const Walletscreen = () => {
                               justifyContent: 'space-between',
                               marginTop: 2,
                             }}>
-                            <Text style={styles.inputtext}>{`(${
-                              profileData.mobileNumber?.CountryCode
+                            <Text style={styles.inputtext}>{`(${profileData.mobileNumber?.CountryCode
                                 ? profileData.mobileNumber?.CountryCode
                                 : ''
-                            })-${
-                              profileData.mobileNumber?.SubscriberNumber
+                              })-${profileData.mobileNumber?.SubscriberNumber
                                 ? profileData.mobileNumber?.SubscriberNumber
                                 : ''
-                            }`}</Text>
+                              }`}</Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
-                              style={{width: 35, height: 35}}
+                              style={{ width: 35, height: 35 }}
                             />
                           </View>
                         </View>
@@ -619,12 +646,12 @@ const Walletscreen = () => {
                               }>{`${profileData.idNo.Identification}-(${profileData.idNo.CheckDigit})`}</Text>
                             <Image
                               source={require('../../../assets/Image/phone.png')}
-                              style={{width: 35, height: 35}}
+                              style={{ width: 35, height: 35 }}
                             />
                           </View>
                         </View>
 
-                        <View style={{...styles.lastbox}}>
+                        <View style={{ ...styles.lastbox }}>
                           <Text
                             style={{
                               ...styles.inputtitle,
@@ -637,7 +664,7 @@ const Walletscreen = () => {
                       </View>
                     ) : (
                       <>
-                        <View style={{alignSelf: 'center'}}>
+                        <View style={{ alignSelf: 'center' }}>
                           <ProfileButton />
                         </View>
                         <View
@@ -732,7 +759,7 @@ const Walletscreen = () => {
                 )}
 
                 {selectedtype == 3 && (
-                  <View style={{flex: 1}}>
+                  <View style={{ flex: 1 }}>
                     <Professional
                       changetype={setSelectedType}
                       setProof={setCurrentproof}
@@ -765,7 +792,7 @@ const Walletscreen = () => {
             elevation: 5,
             shadowColor: 'black',
           }}>
-          <Text style={{fontSize: 20, color: COLOR.BLUE[300]}}>Share</Text>
+          <Text style={{ fontSize: 20, color: COLOR.BLUE[300] }}>Share</Text>
           <Text
             style={{
               fontSize: 17,
@@ -781,7 +808,7 @@ const Walletscreen = () => {
 
           <Image
             source={IMG.QRCODE}
-            style={{width: 250, height: 250, resizeMode: 'stretch'}}
+            style={{ width: 250, height: 250, resizeMode: 'stretch' }}
           />
 
           <TouchableOpacity
@@ -836,7 +863,7 @@ const Walletscreen = () => {
         onRequestClose={() => {
           console.log('close modal');
         }}>
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <View
             style={{
               width: '80%',

@@ -59,7 +59,7 @@ const OnbordingScreen = () => {
           alignItems: 'center',
           justifyContent: 'center',
         }}
-        onPress={() => navigation.navigate("InfoScreen")}>
+        onPress={() => navigation.navigate('Preauth' ,{screen: "InfoScreen"})}>
         <Text style={{fontSize:15,color:COLOR.WHITE[100],fontWeight:"400"}}>GET STARTED</Text>
       </TouchableOpacity>
     </View>

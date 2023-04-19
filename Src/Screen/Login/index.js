@@ -33,6 +33,9 @@ const LoginScreen = () => {
   const [passvisible, setPassvisible] = useState(false);
   const [show, setShow] = useState(false);
   const [countryCode, setCountryCode] = useState('');
+  const [password , setPassword] = useState('')
+  const [confirmpass , setConfirmpas] = useState('')
+  const [companyname , setCompanyname] = useState('')
   const navigation = useNavigation();
 
   const rnBiometrics = new ReactNativeBiometrics({
@@ -66,6 +69,16 @@ const LoginScreen = () => {
       alert('Please fill Mobile number');
       return;
     }
+    if(!password && !(password.length > 0)){
+      if(password !== confirmpass){
+        alert('Please enter same password')
+        return;
+      }
+    }
+    if (!companyname && !(companyname.length > 0)) {
+      alert('Please Companyname');
+      return;
+    }
 
     const fullnumber = `${countryCode}${number}`;
 
@@ -74,7 +87,11 @@ const LoginScreen = () => {
       lastname: lastname,
       email: email,
       mobile: fullnumber,
+      password : password,
+      confirm_password : confirmpass,
+      company_name : companyname
     };
+ 
 
     console.log('NUmber is =====> ', fullnumber);
 
@@ -89,11 +106,11 @@ const LoginScreen = () => {
           //  storeData(responseJson?.data?.data);
           // setType(STR.LOGIN)
 
-          navigation.navigate('Otpscreen', {
+          navigation.navigate( 'Preauth' ,{screen: 'Otpscreen', params: {
             screen: type,
             email: email,
             data: responseJson?.data?.data,
-          });
+          }});
           console.log('Registration Successful. Please Login to proceed');
         } else {
           // setErrortext(responseJson?.data?.error);
@@ -133,7 +150,7 @@ const LoginScreen = () => {
           const {success} = resultObject;
 
           if (success) {
-            navigation.navigate('DrawerNavigationRoutes');
+            navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
           } else {
             // Alert.alert(
             //   'Fingerprint not exist or were deleted . Please add fingerprint in system ',
@@ -163,6 +180,10 @@ const LoginScreen = () => {
           });
          // Alert.alert('Fail login with senser . Please try with login');
           AsyncStorage.removeItem('login');
+          dispatch({
+            type: "SET_LOGIN",
+            payload:false
+          })
         });
     });
   };
@@ -180,7 +201,7 @@ const LoginScreen = () => {
           if (responseJson?.data?.data === 'OTP SENT') {
             // setOtpInput(true);
             // Alert.alert('OTP SENT');
-            navigation.navigate('Otpscreen', {screen: type, email: email});
+            navigation.navigate( 'Preauth' ,{screen: 'Otpscreen', params:{screen: type, email: email}});
           } else {
             Toast.show({
               topOffset: 100,
@@ -334,7 +355,49 @@ const LoginScreen = () => {
                   keyboardType={'numeric'}
                   maxLength={10}
                 />
+                
               </View>
+
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <TextInput
+                  placeholder="Password"
+                  placeholderTextColor={'gray'}
+                  style={{...styles.textinputView, width: '48%'}}
+                  onChangeText={text => setPassword(text)}
+                  value={password}
+                />
+
+                <TextInput
+                  placeholder="Confirm password"
+                  placeholderTextColor={'gray'}
+                  style={{...styles.textinputView, width: '48%'}}
+                  onChangeText={text => setConfirmpas(text)}
+                  value={confirmpass}
+                />
+              </View>
+
+              {/* <TextInput
+                placeholder={'Password'}
+                placeholderTextColor={COLOR.GRAY[300]}
+                style={styles.textinputView}
+                onChangeText={text => setEmail(text)}
+                value={email}
+              />
+              <TextInput
+                placeholder={'Enter Email'}
+                placeholderTextColor={COLOR.GRAY[300]}
+                style={styles.textinputView}
+                onChangeText={text => setEmail(text)}
+                value={email}
+              /> */}
+              <TextInput
+                placeholder={'company name'}
+                placeholderTextColor={COLOR.GRAY[300]}
+                style={styles.textinputView}
+                onChangeText={text => setCompanyname(text)}
+                value={companyname}
+              />
               <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
 
               <TouchableOpacity

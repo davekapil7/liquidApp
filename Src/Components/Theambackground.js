@@ -23,10 +23,10 @@ import { Dimensions } from 'react-native';
 const Theambackground = ({ children, scan, scanscreen, setting, back, title, subtitle, }) => {
   const navigation = useNavigation();
   const handlescan = () => {
-    navigation.navigate("Scanscreen")
+    navigation.navigate( 'Postauth' ,{screen: "Scanscreen"})
   };
   const handlesetting = () => {
-    navigation.navigate('Settingscreen');
+    navigation.navigate('Postauth' ,{screen:'Settingscreen'});
   };
 
   const HEIGHT = Dimensions.get('window').height;

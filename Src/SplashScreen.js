@@ -12,32 +12,33 @@ const SplashScreen = ({navigation}) => {
   const [animating, setAnimating] = useState(true);
 
   const dispatch = useDispatch()
-  useEffect(() => {
-    setTimeout(() => {
-      setAnimating(false);
-      //Check if user_id is set or not
-      //If not then send for Authentication
-      //else send to Home Screen
-      AsyncStorage.getItem('login').then(
-        value =>{
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setAnimating(false);
+  //     //Check if user_id is set or not
+  //     //If not then send for Authentication
+  //     //else send to Home Screen
+  //     AsyncStorage.getItem('login').then(
+  //       value =>{
         
 
-          if(value !== null){
-            console.log("Hello Splash");
-            getCarddata(dispatch)
-          }
-
-          navigation.replace(
-            value === null ? 'Auth' : 'Tabnavigationroute'
-          )
-
-        }
-        // navigation.replace('Auth'),
+  //         if(value !== null){
+  //           console.log("Hello Splash");
+  //           getCarddata(dispatch)
+  //         }
+          
+  //         if(value === null){
+  //           navigation.replace('OnbordingScreen' )
+  //         }else{
+  //           navigation.replace( 'Postauth' , {screen : 'Tabnavigationroute'})
+  //         }
+  //       }
+  //       // navigation.replace('Auth'),
       
         
-      );
-    }, 5000);
-  }, []);
+  //     );
+  //   }, 5000);
+  // }, []);
 
   return (
     <View style={styles.container}>

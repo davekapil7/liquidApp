@@ -106,6 +106,7 @@ const LoginScreen = () => {
             });
             setOtpInput(false);
             AsyncStorage.setItem('login', 'true');
+           
             handlebiomatric();
 
           } else {
@@ -167,6 +168,10 @@ const LoginScreen = () => {
         .catch(e => {
           Alert.alert('Fail login with senser . Please try with login');
           AsyncStorage.removeItem('login');
+          dispatch({
+            type: "SET_LOGIN",
+            payload:false
+          })
         });
     });
   };

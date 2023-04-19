@@ -37,6 +37,7 @@ import Selfissue from './Screen/Addscreen/Selfissue';
 import Testimonial from './Screen/Addscreen/Testimonial';
 import axiosInstance from './Constant/axios';
 import Cardinfo from './Screen/Walletscreen/CardInfo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
 
@@ -48,9 +49,9 @@ const Auth = () => {
   // Stack Navigator for Login and Sign up Screen
   return (
     <Stack.Navigator
-     // initialRouteName="Otpscreen"
+      // initialRouteName="Otpscreen"
       initialRouteName="OnbordingScreen"
-      >
+    >
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
@@ -94,14 +95,166 @@ const Auth = () => {
   );
 };
 
+const Preauth = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="OnbordingScreen"
+    // initialRouteName="SplashScreen"
+    >
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="OnbordingScreen"
+        component={OnbordingScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="InfoScreen"
+        component={InfoScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Otpscreen"
+        component={Otpscreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SignLoginScreen"
+        component={SignLoginScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RegisterScreen"
+        component={RegisterScreen}
+        options={{
+          title: 'Register', //Set Header Title
+          headerStyle: {
+            backgroundColor: '#307ecc', //Set Header color
+          },
+          headerTintColor: '#fff', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+
+}
+
+const Postauth = () => {
+  return (
+    <Stack.Navigator
+      // initialRouteName="Otpscreen"
+      // initialRouteName="OnbordingScreen"
+      initialRouteName='Tabnavigationroute'
+    >
+
+      <Stack.Screen
+        name="Tabnavigationroute"
+        component={TabNavigationRoute}
+        // Hiding header for Navigation Drawer
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Selfissue"
+        component={Selfissue}
+        // Hiding header for Navigation Drawer
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Testimonial"
+        component={Testimonial}
+        // Hiding header for Navigation Drawer
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Settingscreen"
+        component={Settingscreen}
+        // Hiding header for Navigation Drawer
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Walletconnection"
+        component={WalletconnectionScreen}
+        // Hiding header for Navigation Drawer
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Cardinfo"
+        component={Cardinfo}
+        // Hiding header for Navigation Drawer
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="EmailAddress"
+        component={EmailAddScreen}
+        // Hiding header for Navigation Drawer
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Recoverscreen"
+        component={RecoverScreen}
+        // Hiding header for Navigation Drawer
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Scanscreen"
+        component={Scanscreen}
+        // Hiding header for Navigation Drawer
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Editdetail"
+        component={Editdetail}
+        // Hiding header for Navigation Drawer
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Walletpinscreen"
+        component={WalletPinscreen}
+        // Hiding header for Navigation Drawer
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ProofScreenStack"
+        component={CreateProofScreen}
+        options={{
+          title: 'Proof Screen', //Set Header Title
+          headerStyle: {
+            backgroundColor: '#307ecc', //Set Header color
+          },
+          headerTintColor: '#fff', //Set Header text color
+          headerTitleStyle: {
+            fontWeight: 'bold', //Set Header text style
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
 const Rootnavigation = () => {
   const appstatus = useSelector(state => state?.appstate?.appState);
+  const loginstatus = useSelector(state => state?.appstate?.login);
+  const [login, setLogin] = useState(false)
 
   const dispatch = useDispatch();
 
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  const [splash, setSplash] = useState(true)
 
+  useEffect(() => {
+    setTimeout(() => {
+
+      setSplash(false)
+
+    }, 5000);
+  })
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (
@@ -142,6 +295,31 @@ const Rootnavigation = () => {
     });
   }, [])
 
+  const getloginstatus = async () => {
+    const login = await AsyncStorage.getItem('login')
+
+    console.log("!!!!!!",login);
+    if (login === "true") {
+      console.log("HEllo true");
+      dispatch({
+        type: "SET_LOGIN",
+        payload:true
+      })
+
+    } else {
+      dispatch({
+        type: "SET_LOGIN",
+        payload: false
+      })
+    }
+  
+  }
+  useEffect(() => {
+    getloginstatus()
+  }, [loginstatus])
+
+  console.log("EEEE",loginstatus);
+
   const getAuthToken = async (state, code) => {
 
     let dataToSend = { state: state, code: code };
@@ -163,10 +341,10 @@ const Rootnavigation = () => {
           topOffset: 100,
           type: "error",
           text1: "ERROR",
-         text2: `Something went wrong , Please try again`,
+          text2: `Something went wrong , Please try again`,
           visibilityTime: 3000,
           props: {
-            text1NumberOfLines:2 //number of how many lines you want
+            text1NumberOfLines: 2 //number of how many lines you want
           }
         });
       });
@@ -195,10 +373,10 @@ const Rootnavigation = () => {
           topOffset: 100,
           type: "error",
           text1: "ERROR",
-         text2: `Somthing went wrong , Please try again`,
+          text2: `Somthing went wrong , Please try again`,
           visibilityTime: 3000,
           props: {
-            text1NumberOfLines:2 //number of how many lines you want
+            text1NumberOfLines: 2 //number of how many lines you want
           }
         });
       });
@@ -227,10 +405,10 @@ const Rootnavigation = () => {
           topOffset: 100,
           type: "error",
           text1: "ERROR",
-         text2: `Somthing went wrong , Please try again`,
+          text2: `Somthing went wrong , Please try again`,
           visibilityTime: 3000,
           props: {
-            text1NumberOfLines:2 //number of how many lines you want
+            text1NumberOfLines: 2 //number of how many lines you want
           }
         });
 
@@ -239,108 +417,30 @@ const Rootnavigation = () => {
 
   return (
     <NavigationContainer linking={linking}>
-      <Stack.Navigator
-     // initialRouteName=''
-       initialRouteName="SplashScreen"
-      >
-        {/* SplashScreen which will come once for 5 Seconds */}
-        <Stack.Screen
-          name="SplashScreen"
-          component={SplashScreen}
-          // Hiding header for Splash Screen
-          options={{ headerShown: false }}
-        />
-        {/* Auth Navigator: Include Login and Signup */}
-        <Stack.Screen
-          name="Auth"
-          component={Auth}
-          options={{ headerShown: false }}
-        />
-        
 
-        <Stack.Screen
-          name="Tabnavigationroute"
-          component={TabNavigationRoute}
-          // Hiding header for Navigation Drawer
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Selfissue"
-          component={Selfissue}
-          // Hiding header for Navigation Drawer
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Testimonial"
-          component={Testimonial}
-          // Hiding header for Navigation Drawer
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Settingscreen"
-          component={Settingscreen}
-          // Hiding header for Navigation Drawer
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Walletconnection"
-          component={WalletconnectionScreen}
-          // Hiding header for Navigation Drawer
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Cardinfo"
-          component={Cardinfo}
-          // Hiding header for Navigation Drawer
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="EmailAddress"
-          component={EmailAddScreen}
-          // Hiding header for Navigation Drawer
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Recoverscreen"
-          component={RecoverScreen}
-          // Hiding header for Navigation Drawer
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Scanscreen"
-          component={Scanscreen}
-          // Hiding header for Navigation Drawer
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Editdetail"
-          component={Editdetail}
-          // Hiding header for Navigation Drawer
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Walletpinscreen"
-          component={WalletPinscreen}
-          // Hiding header for Navigation Drawer
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ProofScreenStack"
-          component={CreateProofScreen}
-          options={{
-            title: 'Proof Screen', //Set Header Title
-            headerStyle: {
-              backgroundColor: '#307ecc', //Set Header color
-            },
-            headerTintColor: '#fff', //Set Header text color
-            headerTitleStyle: {
-              fontWeight: 'bold', //Set Header text style
-            },
-          }}
-        />
+      <Stack.Navigator >
+
+        {splash ? (
+          <Stack.Screen
+            name="SplashScreen"
+            component={SplashScreen}
+            // Hiding header for Splash Screen
+            options={{ headerShown: false }}
+          />
+        ) : (
+        <>
+          {loginstatus === true ? (
+            <Stack.Screen name='Postauth' component={Postauth} options={{ headerShown: false }} />
+          ) : (
+
+            <Stack.Screen name='Preauth' component={Preauth} options={{ headerShown: false }} />
+          )}
+        </>
+      )} 
+
       </Stack.Navigator>
 
-      <Toast position='bottom'  />
+      <Toast position='bottom' />
     </NavigationContainer>
   );
 };

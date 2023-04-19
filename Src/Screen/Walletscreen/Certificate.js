@@ -221,7 +221,7 @@ const Certificate = ({
                 justifyContent: 'space-between',
               }}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Cardinfo', {data: item})}>
+                onPress={() => navigation.navigate('Postauth' ,{screen: 'Cardinfo',params :{ data: item}})}>
                 <Icon
                   name="information-circle-outline"
                   type="ionicon"

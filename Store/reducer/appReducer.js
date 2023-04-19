@@ -1,6 +1,7 @@
 
 const initialState = {
  appState : "",
+ login:false,
  cardList: [],
  email: '',
  profileData: {},
@@ -8,6 +9,11 @@ const initialState = {
 
 const appReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "SET_LOGIN" : 
+    return {
+      ...state,
+      login : action.payload
+    }
     case "CHANGE_STATE":
       return {
         ...state,
