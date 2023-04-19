@@ -557,7 +557,7 @@ const Walletscreen = () => {
                               {profileData.enName.UnstructuredName}
                             </Text>
                             <Image
-                              source={require('../../../assets/Image/phone.png')}
+                              source={require('../../../assets/Image/ismart.png')}
                               style={{width: 35, height: 35}}
                             />
                           </View>
@@ -575,7 +575,7 @@ const Walletscreen = () => {
                               {birthDayConverter(profileData.birthDate)}
                             </Text>
                             <Image
-                              source={require('../../../assets/Image/phone.png')}
+                              source={require('../../../assets/Image/ismart.png')}
                               style={{width: 35, height: 35}}
                             />
                           </View>
@@ -599,7 +599,7 @@ const Walletscreen = () => {
                                 : ''
                             }`}</Text>
                             <Image
-                              source={require('../../../assets/Image/phone.png')}
+                              source={require('../../../assets/Image/ismart.png')}
                               style={{width: 35, height: 35}}
                             />
                           </View>
@@ -618,7 +618,7 @@ const Walletscreen = () => {
                                 styles.inputtext
                               }>{`${profileData.idNo.Identification}-(${profileData.idNo.CheckDigit})`}</Text>
                             <Image
-                              source={require('../../../assets/Image/phone.png')}
+                              source={require('../../../assets/Image/ismart.png')}
                               style={{width: 35, height: 35}}
                             />
                           </View>
