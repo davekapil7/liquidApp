@@ -69,6 +69,10 @@ const Otpscreen = params => {
         console.log('Verified user', responseJson.data, 'responce');
         if (responseJson?.data?.data === 'Authorized') {
           // dispatch({ type: 'ADD_EXPIRY', payload: responseJson.data.expires });
+          dispatch({
+            type : "ADD_PROFILE",
+            payload : responseJson.data?.user
+          })
           AsyncStorage.setItem('login', 'true');
 
           AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
@@ -131,6 +135,10 @@ const Otpscreen = params => {
         console.log('Verified user', responseJson.data, 'responce');
         if (responseJson?.data?.error === false) {
           // dispatch({ type: 'ADD_EXPIRY', payload: responseJson.data.expires });
+          dispatch({
+            type : "ADD_PROFILE",
+            payload : responseJson.data?.user
+          })
           AsyncStorage.setItem('login', 'true');
 
           AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
@@ -140,7 +148,7 @@ const Otpscreen = params => {
           })
           initialapicall();
          //  navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
-           // handlebiomatric();
+          handlebiomatric();
         } else {
           Toast.show({
             topOffset: 100,

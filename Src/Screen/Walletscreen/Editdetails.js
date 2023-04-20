@@ -10,15 +10,57 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {COLOR} from '../../Constant/color';
+import { useSelector } from 'react-redux';
+import ImagePicker from 'react-native-image-picker';
 
 const Editdetail = () => {
-  const [firstname, setFirstName] = useState('');
-  const [company, setCompany] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [email, setEmail] = useState('');
-
+  
+  const profileData = useSelector(state => state?.appstate?.profileData);
+  const [firstname, setFirstName] = useState(Object.keys(profileData).length > 0 ? profileData?.firstname : '' );
+  const [company, setCompany] = useState(Object.keys(profileData).length > 0 ? profileData?.company_name : '');
+  const [lastname, setLastname] = useState(Object.keys(profileData).length > 0 ? profileData?.lastname : '');
+  const [email, setEmail] = useState(Object.keys(profileData).length > 0 ? profileData?.email : '');
 
   const navigation = useNavigation()
+
+  const selectimage = async () =>{
+    ImagePicker.launchImageLibrary()
+    // let options = {
+    //   title: 'Select Image',
+    //   customButtons: [
+    //     {
+    //       name: 'customOptionKey',
+    //       title: 'Choose Photo from Custom Option'
+    //     },
+    //   ],
+    //   storageOptions: {
+    //     skipBackup: true,
+    //     path: 'images',
+    //   },
+    // };
+    // ImagePicker.showImagePicker(options, (response) => {
+    //   console.log('Response = ', response);
+
+    //   if (response.didCancel) {
+    //     console.log('User cancelled image picker');
+    //   } else if (response.error) {
+    //     console.log('ImagePicker Error: ', response.error);
+    //   } else if (response.customButton) {
+    //     console.log(
+    //       'User tapped custom button: ',
+    //       response.customButton
+    //     );
+    //     alert(response.customButton);
+    //   } else {
+    //     let source = response;
+    //     // You can also display the image using data:
+    //     // let source = {
+    //     //   uri: 'data:image/jpeg;base64,' + response.data
+    //     // };
+    //     setFilePath(source);
+    //   }
+    // });
+  }
   return (
     <SafeAreaView style={{flex: 1, width: '100%'}}>
       <View
@@ -66,7 +108,7 @@ const Editdetail = () => {
                 <Text style={styles.inputtitle}>Email Address</Text>
                 <TextInput
                   value={email}
-                  onChangeText={text => email(text)}
+                  onChangeText={text => setEmail(text)}
                   style={styles.inputtext}
                 />
               </View>
@@ -81,7 +123,7 @@ const Editdetail = () => {
 
               <View style={styles.inputbox}>
                 <Text style={styles.inputtitle}>Your Company Logo</Text>
-                <View
+                <TouchableOpacity
                   style={{
                     width: '100%',
                     borderWidth: 1,
@@ -91,7 +133,7 @@ const Editdetail = () => {
                     borderRadius: 10,
                     alignItems: 'center',
                     justifyContent: 'center',
-                  }}>
+                  }} onPress={() => selectimage()}>
                   <Text
                     style={{
                       fontSize: 20,
@@ -100,7 +142,7 @@ const Editdetail = () => {
                     }}>
                     SELECT IMAGE
                   </Text>
-                </View>
+                </TouchableOpacity>
               </View>
 
               {/* <View style={styles.linetextView}>

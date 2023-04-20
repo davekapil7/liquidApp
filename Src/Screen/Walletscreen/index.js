@@ -43,6 +43,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Credentials from './Credentials';
 import Professional from './Professional';
 import { onLoad } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
+import { SvgUri } from 'react-native-svg';
 
 const HEIGHT = Dimensions.get('screen').height;
 
@@ -388,7 +389,7 @@ const Walletscreen = () => {
                 <Text style={styles.welcometext}>
                   {STR.WALLET.WELCOME}
                   {Object.keys(profileData).length > 0
-                    ? ` ${profileData.enName.UnstructuredName}`
+                    ? ` ${profileData.firstname}`
                     : 'User'}
                 </Text>
               </View>
@@ -501,7 +502,7 @@ const Walletscreen = () => {
                         <View>
                           <Text style={{ fontSize: 18, color: COLOR.BLACK[100] }}>
                             {Object.keys(profileData).length > 0
-                              ? profileData.enName.UnstructuredName
+                              ? `${profileData.firstname} ${profileData.lastname}`
                               : 'User'}
                           </Text>
                           <Text
@@ -511,10 +512,11 @@ const Walletscreen = () => {
                               color: COLOR.BLACK[100],
                             }}>
                             {Object.keys(profileData).length > 0
-                              ? profileData.emailAddr
+                              ? profileData.email
                               : '****@gmail.com'}
                           </Text>
                         </View>
+                        
                         <View
                           style={{
                             width: 85,
@@ -524,12 +526,28 @@ const Walletscreen = () => {
                             justifyContent: 'center',
                             backgroundColor: COLOR.BLUE[200],
                           }}>
-                          <Icon
+                           {Object.keys(profileData).length > 0
+                              ? (
+                                <SvgUri
+                                height={85}
+                                width={75}
+                                uri={profileData?.logo}
+                              />
+                              )
+                              : (
+                                <Icon
+                                name="emoji-happy"
+                                color={COLOR.BLUE[300]}
+                                size={30}
+                                type="entypo"
+                              />
+                              )}
+                          {/* <Icon
                             name="emoji-happy"
                             color={COLOR.BLUE[300]}
                             size={30}
                             type="entypo"
-                          />
+                          /> */}
                         </View>
                       </View>
 
@@ -583,7 +601,7 @@ const Walletscreen = () => {
                               marginTop: 2,
                             }}>
                             <Text style={styles.inputtext}>
-                              {profileData.enName.UnstructuredName}
+                              {profileData.email}
                             </Text>
                             <Image
                               source={require('../../../assets/Image/ismart.png')}
@@ -600,9 +618,9 @@ const Walletscreen = () => {
                               justifyContent: 'space-between',
                               marginTop: 2,
                             }}>
-                            <Text style={styles.inputtext}>
+                            {/* <Text style={styles.inputtext}>
                               {birthDayConverter(profileData.birthDate)}
-                            </Text>
+                            </Text> */}
                             <Image
                               source={require('../../../assets/Image/ismart.png')}
                               style={{width: 35, height: 35}}
@@ -618,13 +636,13 @@ const Walletscreen = () => {
                               justifyContent: 'space-between',
                               marginTop: 2,
                             }}>
-                            <Text style={styles.inputtext}>{`(${profileData.mobileNumber?.CountryCode
+                            {/* <Text style={styles.inputtext}>{`(${profileData.mobileNumber?.CountryCode
                                 ? profileData.mobileNumber?.CountryCode
                                 : ''
                               })-${profileData.mobileNumber?.SubscriberNumber
                                 ? profileData.mobileNumber?.SubscriberNumber
                                 : ''
-                              }`}</Text>
+                              }`}</Text> */}
                             <Image
                               source={require('../../../assets/Image/ismart.png')}
                               style={{width: 35, height: 35}}
@@ -640,10 +658,10 @@ const Walletscreen = () => {
                               justifyContent: 'space-between',
                               marginTop: 2,
                             }}>
-                            <Text
+                            {/* <Text
                               style={
                                 styles.inputtext
-                              }>{`${profileData.idNo.Identification}-(${profileData.idNo.CheckDigit})`}</Text>
+                              }>{`${profileData.idNo.Identification}-(${profileData.idNo.CheckDigit})`}</Text> */}
                             <Image
                               source={require('../../../assets/Image/ismart.png')}
                               style={{width: 35, height: 35}}

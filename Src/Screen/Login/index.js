@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,21 +10,23 @@ import {
   Alert,
 } from 'react-native';
 import axios from 'axios';
-import {useNavigation} from '@react-navigation/native';
-import {IMG} from '../../Constant/image';
-import {STR} from '../../Constant/string';
-import {styles} from './style';
-import {Header as HeaderRNE, HeaderProps, Icon} from '@rneui/themed';
-import {COLOR} from '../../Constant/color';
+import { useNavigation } from '@react-navigation/native';
+import { IMG } from '../../Constant/image';
+import { STR } from '../../Constant/string';
+import { styles } from './style';
+import { Header as HeaderRNE, HeaderProps, Icon } from '@rneui/themed';
+import { COLOR } from '../../Constant/color';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import axiosInstance from '../../Constant/axios';
-import {CountryPicker} from 'react-native-country-codes-picker';
-import  Toast  from 'react-native-toast-message';
+import { CountryPicker } from 'react-native-country-codes-picker';
+import Toast from 'react-native-toast-message';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
+
   const [firstname, setFirstName] = useState('');
+
   const [lastname, setLastName] = useState('');
   const [prenumber, setPrenumber] = useState(91);
   const [number, setNumber] = useState();
@@ -33,10 +35,18 @@ const LoginScreen = () => {
   const [passvisible, setPassvisible] = useState(false);
   const [show, setShow] = useState(false);
   const [countryCode, setCountryCode] = useState('');
-  const [password , setPassword] = useState('')
-  const [confirmpass , setConfirmpas] = useState('')
-  const [companyname , setCompanyname] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmpass, setConfirmpas] = useState('')
+  const [companyname, setCompanyname] = useState('')
   const navigation = useNavigation();
+
+  const [firstvalid, setFirstvalid] = useState(false)
+  const [lastvalid, setLastvalid] = useState(false)
+  const [emailvalid, setEmailvalid] = useState(false)
+  const [numbervalid, setNumbervalid] = useState(false)
+  const [passwordvalid, setPasswordvalid] = useState(false)
+
+  const [confirmpasswordvalid, setConfirmPasswordvalid] = useState(false)
 
   const rnBiometrics = new ReactNativeBiometrics({
     allowDeviceCredentials: true,
@@ -69,8 +79,8 @@ const LoginScreen = () => {
       alert('Please fill Mobile number');
       return;
     }
-    if(!password && !(password.length > 0)){
-      if(password !== confirmpass){
+    if (!password && !(password.length > 0)) {
+      if (password !== confirmpass) {
         alert('Please enter same password')
         return;
       }
@@ -87,11 +97,11 @@ const LoginScreen = () => {
       lastname: lastname,
       email: email,
       mobile: fullnumber,
-      password : password,
-      confirm_password : confirmpass,
-      company_name : companyname
+      password: password,
+      confirm_password: confirmpass,
+      company_name: companyname
     };
- 
+
 
     console.log('NUmber is =====> ', fullnumber);
 
@@ -106,11 +116,13 @@ const LoginScreen = () => {
           //  storeData(responseJson?.data?.data);
           // setType(STR.LOGIN)
 
-          navigation.navigate( 'Preauth' ,{screen: 'Otpscreen', params: {
-            screen: type,
-            email: email,
-            data: responseJson?.data?.data,
-          }});
+          navigation.navigate('Preauth', {
+            screen: 'Otpscreen', params: {
+              screen: type,
+              email: email,
+              data: responseJson?.data?.data,
+            }
+          });
           console.log('Registration Successful. Please Login to proceed');
         } else {
           // setErrortext(responseJson?.data?.error);
@@ -118,10 +130,10 @@ const LoginScreen = () => {
             topOffset: 100,
             type: "error",
             text1: "ERROR",
-           text2: `Somthing went wrong. Please check your connection`,
+            text2: `Somthing went wrong. Please check your connection`,
             visibilityTime: 3000,
             props: {
-              text1NumberOfLines:2 //number of how many lines you want
+              text1NumberOfLines: 2 //number of how many lines you want
             }
           });
         }
@@ -131,16 +143,199 @@ const LoginScreen = () => {
           topOffset: 100,
           type: "error",
           text1: "ERROR",
-         text2: `Somthing went wrong. Please check your connection`,
+          text2: `Somthing went wrong. Please check your connection`,
           visibilityTime: 3000,
           props: {
-            text1NumberOfLines:2 //number of how many lines you want
+            text1NumberOfLines: 2 //number of how many lines you want
           }
         });
         console.log(error);
         //  setLoading(false);
       });
   };
+
+  // const handlebiomatric = async () => {
+  //   await rnBiometrics.isSensorAvailable().then(resultObject => {
+  //     rnBiometrics
+  //       .simplePrompt({ promptMessage: 'Confirm fingerprint' })
+  //       .then(resultObject => {
+  //         const { success } = resultObject;
+
+  //         if (success) {
+  //           navigation.navigate('Postauth', { screen: 'Tabnavigationroute' });
+  //         } else {
+  //           // Alert.alert(
+  //           //   'Fingerprint not exist or were deleted . Please add fingerprint in system ',
+  //           // );
+  //           Toast.show({
+  //             topOffset: 100,
+  //             type: "error",
+  //             text1: "ERROR",
+  //             text2: `Fingerprint not exist or were deleted . Please add fingerprint in system`,
+  //             visibilityTime: 3000,
+  //             props: {
+  //               text1NumberOfLines: 2 //number of how many lines you want
+  //             }
+  //           });
+  //         }
+  //       })
+  //       .catch(e => {
+  //         Toast.show({
+  //           topOffset: 100,
+  //           type: "error",
+  //           text1: "ERROR",
+  //           text2: `Fail login with senser . Please try with login`,
+  //           visibilityTime: 3000,
+  //           props: {
+  //             text1NumberOfLines: 2 //number of how many lines you want
+  //           }
+  //         });
+  //         // Alert.alert('Fail login with senser . Please try with login');
+  //         AsyncStorage.removeItem('login');
+  //         dispatch({
+  //           type: "SET_LOGIN",
+  //           payload: false
+  //         })
+  //       });
+  //   });
+  // };
+
+  const handleLogin = () => {
+    if (email.length > 0) {
+      let dataToSend = { email: email };
+
+      axiosInstance
+        .post('auth/login', dataToSend)
+        .then(function (responseJson) {
+          console.log(responseJson, 'ressss');
+
+          // If server response message same as Data Matched
+          if (responseJson?.data?.data === 'OTP SENT') {
+            // setOtpInput(true);
+            // Alert.alert('OTP SENT');
+            navigation.navigate('Preauth', { screen: 'Otpscreen', params: { screen: type, email: email } });
+          } else {
+            Toast.show({
+              topOffset: 100,
+              type: "error",
+              text1: "ERROR",
+              text2: `Something went wrong Please check your email`,
+              visibilityTime: 2000,
+              props: {
+                text1NumberOfLines: 2 //number of how many lines you want
+              }
+            });
+
+            // Alert.alert('Please check your email');
+            console.log('Please check your email id or password');
+          }
+        })
+        .catch(function (error) {
+
+          Toast.show({
+            topOffset: 100,
+            type: "error",
+            text1: "ERROR",
+            text2: `Something went wrong Please check your network connection or after sme time`,
+            visibilityTime: 2000,
+            props: {
+              text1NumberOfLines: 2 //number of how many lines you want
+            }
+          });
+        });
+    }
+  };
+
+  const handlepasswordLogin = () => {
+    console.log("PPPPP" , typeof password);
+    if (email.length > 0 && password.length > 0) {
+      let dataToSend = { email: email , password : password };
+
+      axiosInstance
+        .post('auth/LoginByPassword', dataToSend)
+        .then(function (responseJson) {
+          console.log(responseJson?.data?.data, 'ressss');
+
+          // If server response message same as Data Matched
+          if (responseJson?.data?.data === 'Authorized') {
+            // setOtpInput(true);
+            // Alert.alert('OTP SENT');
+            dispatch({
+              type : "ADD_PROFILE",
+              payload : responseJson.data?.user
+            })
+            AsyncStorage.setItem('login', 'true');
+  
+            AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
+            dispatch({
+              type: "SET_LOGIN",
+              payload:true
+            })
+           handlebiomatric()
+            //navigation.navigate('P', { screen: 'Otpscreen', params: { screen: type, email: email } });
+          } else {
+            Toast.show({
+              topOffset: 100,
+              type: "error",
+              text1: "ERROR",
+              text2: `Something went wrong Please check your email`,
+              visibilityTime: 2000,
+              props: {
+                text1NumberOfLines: 2 //number of how many lines you want
+              }
+            });
+
+            // Alert.alert('Please check your email');
+            console.log('Please check your email id or password');
+          }
+        })
+        .catch(function (error) {
+
+          Toast.show({
+            topOffset: 100,
+            type: "error",
+            text1: "ERROR",
+            text2: `Something went wrong Please check your network connection or after sme time`,
+            visibilityTime: 2000,
+            props: {
+              text1NumberOfLines: 2 //number of how many lines you want
+            }
+          });
+        });
+    }
+  };
+
+  const validation = (val) => {
+    const nameRegex = new RegExp("^[A-Za-z ]+$")
+    const emailRegex = new RegExp("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+    const passRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+[\]{}|;:,.<>?]).{8,}$")
+    const numberRegex = new RegExp("^\d{10}$")
+    if (val === "firstname") {
+      if (!nameRegex.test(firstname)) {
+        setFirstvalid(true)
+      } else {
+        setFirstvalid(false)
+      }
+    } else if (val === "lastname") {
+      if (!nameRegex.test(lastname)) {
+        setLastvalid(true)
+      } else {
+        setLastvalid(false)
+      }
+    } else if (val === "email") {
+      if (!emailRegex.test(email)) {
+        setEmailvalid(true)
+      } else {
+        setEmailvalid(false)
+      }
+    } else if (val === "number") {
+      if (!numberRegex.test(number)) {
+        setNumbervalid(true)
+      } else {
+        setNumbervalid(false)
+      }
+    }
+  }
 
   const handlebiomatric = async () => {
     await rnBiometrics.isSensorAvailable().then(resultObject => {
@@ -150,11 +345,13 @@ const LoginScreen = () => {
           const {success} = resultObject;
 
           if (success) {
-            navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
+            dispatch({
+              type: "SET_LOGIN",
+              payload:true
+            })
+           // navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
           } else {
-            // Alert.alert(
-            //   'Fingerprint not exist or were deleted . Please add fingerprint in system ',
-            // );
+           
             Toast.show({
               topOffset: 100,
               type: "error",
@@ -168,6 +365,7 @@ const LoginScreen = () => {
           }
         })
         .catch(e => {
+       //   Alert.alert('Fail login with senser . Please try with login');
           Toast.show({
             topOffset: 100,
             type: "error",
@@ -178,7 +376,6 @@ const LoginScreen = () => {
               text1NumberOfLines:2 //number of how many lines you want
             }
           });
-         // Alert.alert('Fail login with senser . Please try with login');
           AsyncStorage.removeItem('login');
           dispatch({
             type: "SET_LOGIN",
@@ -186,52 +383,6 @@ const LoginScreen = () => {
           })
         });
     });
-  };
-
-  const handleLogin = () => {
-    if (email.length > 0) {
-      let dataToSend = {email: email};
-
-      axiosInstance
-        .post('auth/login', dataToSend)
-        .then(function (responseJson) {
-          console.log(responseJson, 'ressss');
-
-          // If server response message same as Data Matched
-          if (responseJson?.data?.data === 'OTP SENT') {
-            // setOtpInput(true);
-            // Alert.alert('OTP SENT');
-            navigation.navigate( 'Preauth' ,{screen: 'Otpscreen', params:{screen: type, email: email}});
-          } else {
-            Toast.show({
-              topOffset: 100,
-              type: "error",
-              text1: "ERROR",
-             text2: `Something went wrong Please check your email`,
-              visibilityTime: 2000,
-              props: {
-                text1NumberOfLines:2 //number of how many lines you want
-              }
-            });
-          
-           // Alert.alert('Please check your email');
-            console.log('Please check your email id or password');
-          }
-        })
-        .catch(function (error) {
-         
-          Toast.show({
-            topOffset: 100,
-            type: "error",
-            text1: "ERROR",
-           text2: `Something went wrong Please check your network connection or after sme time`,
-            visibilityTime: 2000,
-            props: {
-              text1NumberOfLines:2 //number of how many lines you want
-            }
-          });
-        });
-    }
   };
 
   return (
@@ -249,7 +400,7 @@ const LoginScreen = () => {
                   type == STR.REGISTER ? COLOR.GREEN[100] : COLOR.GRAY[300],
               }}
               onPress={() => {
-                setType(STR.REGISTER), setEmail('');
+                setType(STR.REGISTER), setEmail('') , setPassword('');
               }}>
               <View
                 style={{
@@ -299,22 +450,34 @@ const LoginScreen = () => {
           {type === STR.REGISTER && (
             <View style={styles.registerView}>
               <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <TextInput
-                  placeholder="First name"
-                  placeholderTextColor={'gray'}
-                  style={{...styles.textinputView, width: '48%'}}
-                  onChangeText={text => setFirstName(text)}
-                  value={firstname}
-                />
+                style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ width: "50%" }}>
+                  <TextInput
+                    placeholder="First name"
+                    placeholderTextColor={'gray'}
 
-                <TextInput
-                  placeholder="Last name"
-                  placeholderTextColor={'gray'}
-                  style={{...styles.textinputView, width: '48%'}}
-                  onChangeText={text => setLastName(text)}
-                  value={lastname}
-                />
+                    style={{ ...styles.textinputView, width: '94%' }}
+                    onChangeText={text => setFirstName(text)}
+                    onEndEditing={() => validation("firstname")}
+                    value={firstname}
+                  />
+                  {firstvalid &&
+                    <Text style={{ color: "red", marginTop: 2 }}>{firstname.length > 0 ? "*First Name must be alphabet" : "*Please enter your first name"} </Text>
+                  }
+                </View>
+                <View style={{ width: "50%", alignItems: "flex-end" }}>
+                  <TextInput
+                    placeholder="Last name"
+                    placeholderTextColor={'gray'}
+                    style={{ ...styles.textinputView, width: '94%' }}
+                    onChangeText={text => setLastName(text)}
+                    onEndEditing={() => validation("lastname")}
+                    value={lastname}
+                  />
+                  {lastvalid &&
+                    <Text style={{ color: "red", marginTop: 2 }}>{lastname.length > 0 ? "*Last Name must be alphabet" : "*Please enter your last name"} </Text>
+                  }
+                </View>
               </View>
 
               <TextInput
@@ -322,9 +485,13 @@ const LoginScreen = () => {
                 placeholderTextColor={COLOR.GRAY[300]}
                 style={styles.textinputView}
                 onChangeText={text => setEmail(text)}
+                onEndEditing={() => validation("email")}
                 value={email}
               />
-              <View style={{flexDirection: 'row'}}>
+              {emailvalid &&
+                <Text style={{ color: "red", marginTop: 2 }}>{email.length > 0 ? "*Enter valid email id" : "*Please enter your email"} </Text>
+              }
+              <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity
                   onPress={() => setShow(true)}
                   style={{
@@ -341,56 +508,54 @@ const LoginScreen = () => {
                     {countryCode && countryCode.length > 0 ? countryCode : '--'}
                   </Text>
                 </TouchableOpacity>
+                <View style={{ width: "75%" }}>
 
-                <TextInput
-                  placeholder={'Enter Mobile'}
-                  placeholderTextColor={COLOR.GRAY[300]}
-                  style={{
-                    ...styles.textinputView,
-                    width: '75%',
-                    marginLeft: 10,
-                  }}
-                  onChangeText={text => setNumber(text)}
-                  value={number}
-                  keyboardType={'numeric'}
-                  maxLength={10}
-                />
-                
+
+                  <TextInput
+                    placeholder={'Enter Mobile'}
+                    placeholderTextColor={COLOR.GRAY[300]}
+                    style={{
+                      ...styles.textinputView,
+                      width: '100%',
+                      marginLeft: 10,
+                    }}
+                    onChangeText={text => setNumber(text)}
+
+                    onEndEditing={() => validation("number")}
+                    value={number}
+                    keyboardType={'numeric'}
+                    maxLength={10}
+                  />
+                  {/* 
+                  {numbervalid &&
+                    <Text style={{ color: "red", marginTop: 2, marginLeft: 10, }}>{number.length > 0 ? "*Ener 10 digit number" : "*Please enter your email"} </Text>
+                  } */}
+                </View>
               </View>
 
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <TextInput
-                  placeholder="Password"
-                  placeholderTextColor={'gray'}
-                  style={{...styles.textinputView, width: '48%'}}
-                  onChangeText={text => setPassword(text)}
-                  value={password}
-                />
-
-                <TextInput
-                  placeholder="Confirm password"
-                  placeholderTextColor={'gray'}
-                  style={{...styles.textinputView, width: '48%'}}
-                  onChangeText={text => setConfirmpas(text)}
-                  value={confirmpass}
-                />
-              </View>
-
-              {/* <TextInput
-                placeholder={'Password'}
-                placeholderTextColor={COLOR.GRAY[300]}
-                style={styles.textinputView}
-                onChangeText={text => setEmail(text)}
-                value={email}
-              />
               <TextInput
-                placeholder={'Enter Email'}
-                placeholderTextColor={COLOR.GRAY[300]}
+                placeholder="Password"
+                placeholderTextColor={'gray'}
                 style={styles.textinputView}
-                onChangeText={text => setEmail(text)}
-                value={email}
-              /> */}
+                secureTextEntry={true}
+                onChangeText={text => setPassword(text)}
+                value={password}
+              />
+
+              {/* {passwordvalid &&
+                <Text style={{ color: "red", marginTop: 2, marginLeft: 10, }}>{password.length > 0 ? "*" : "*Please enter your password"} </Text>
+              } */}
+              <TextInput
+                placeholder="Confirm password"
+                placeholderTextColor={'gray'}
+                style={styles.textinputView}
+                secureTextEntry={true}
+                onChangeText={text => setConfirmpas(text)}
+                value={confirmpass}
+              />
+              {/* {confirmpasswordvalid &&
+                <Text style={{ color: "red", marginTop: 2, marginLeft: 10, }}>{confirmpass.length > 0 ? "*Ener 10 digit number" : "*Please enter your password"} </Text>
+              } */}
               <TextInput
                 placeholder={'company name'}
                 placeholderTextColor={COLOR.GRAY[300]}
@@ -401,8 +566,9 @@ const LoginScreen = () => {
               <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
 
               <TouchableOpacity
-                style={styles.buttonView}
-                onPress={() => handleregister()}>
+                style={{ ...styles.buttonView, backgroundColor: firstname.length === 0 || lastname.length === 0 || email.length === 0 || password.length === 0 || confirmpass.length === 0 || companyname.length === 0 ? "rgba(49,195,151,0.2)" : "#31C397" }}
+                onPress={() => handleregister()}
+                disabled={firstname.length === 0 || lastname.length === 0 || email.length === 0 || password.length === 0 || confirmpass.length === 0 || companyname.length === 0 ? true : false}>
                 <Text style={styles.bottontext}>{STR.CONTINUE}</Text>
               </TouchableOpacity>
 
@@ -426,11 +592,30 @@ const LoginScreen = () => {
                 onChangeText={text => setEmail(text)}
                 value={email}
               />
-              <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
+               <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
+
+<TouchableOpacity
+                style={{...styles.buttonView,height:45}}
+                onPress={() => handleLogin()}>
+                <Text style={{...styles.bottontext}}>Login with OTP</Text>
+              </TouchableOpacity>
+              <Text style={{fontSize:18 , textAlign:"center",color:"black",fontWeight:"bold"}}>Or </Text>
+              <Text style={{fontSize:18, textAlign:"center",color:"black",fontWeight:"bold"}}>login with Password</Text>
+
+              <TextInput
+                placeholder={'Enter Password'}
+                placeholderTextColor={COLOR.GRAY[300]}
+                style={styles.textinputView}
+                secureTextEntry={true}
+                onChangeText={text => setPassword(text)}
+                value={password}
+              />
+       
+             
 
               <TouchableOpacity
-                style={styles.buttonView}
-                onPress={() => handleLogin()}>
+                style={{...styles.buttonView,height:45}}
+                onPress={() => handlepasswordLogin()}>
                 <Text style={styles.bottontext}>{STR.CONTINUE}</Text>
               </TouchableOpacity>
             </View>
