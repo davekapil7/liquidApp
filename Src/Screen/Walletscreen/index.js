@@ -590,99 +590,7 @@ const Walletscreen = () => {
                         </Text>
                       </TouchableOpacity>
                     </View>
-                    {Object.keys(profileData).length > 0 ? (
-                      <View style={{ flex: 1, width: '100%', marginBottom: 35 }}>
-                        <View style={styles.inputbox}>
-                          <Text style={styles.inputtitle}>FULL NAME</Text>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                              marginTop: 2,
-                            }}>
-                            <Text style={styles.inputtext}>
-                              {profileData.email}
-                            </Text>
-                            <Image
-                              source={require('../../../assets/Image/ismart.png')}
-                              style={{width: 35, height: 35}}
-                            />
-                          </View>
-                        </View>
-
-                        <View style={styles.inputbox}>
-                          <Text style={styles.inputtitle}>Birth date</Text>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                              marginTop: 2,
-                            }}>
-                            {/* <Text style={styles.inputtext}>
-                              {birthDayConverter(profileData.birthDate)}
-                            </Text> */}
-                            <Image
-                              source={require('../../../assets/Image/ismart.png')}
-                              style={{width: 35, height: 35}}
-                            />
-                          </View>
-                        </View>
-
-                        <View style={styles.inputbox}>
-                          <Text style={styles.inputtitle}>Phone number</Text>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                              marginTop: 2,
-                            }}>
-                            {/* <Text style={styles.inputtext}>{`(${profileData.mobileNumber?.CountryCode
-                                ? profileData.mobileNumber?.CountryCode
-                                : ''
-                              })-${profileData.mobileNumber?.SubscriberNumber
-                                ? profileData.mobileNumber?.SubscriberNumber
-                                : ''
-                              }`}</Text> */}
-                            <Image
-                              source={require('../../../assets/Image/ismart.png')}
-                              style={{width: 35, height: 35}}
-                            />
-                          </View>
-                        </View>
-
-                        <View style={styles.inputbox}>
-                          <Text style={styles.inputtitle}>ID code</Text>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                              marginTop: 2,
-                            }}>
-                            {/* <Text
-                              style={
-                                styles.inputtext
-                              }>{`${profileData.idNo.Identification}-(${profileData.idNo.CheckDigit})`}</Text> */}
-                            <Image
-                              source={require('../../../assets/Image/ismart.png')}
-                              style={{width: 35, height: 35}}
-                            />
-                          </View>
-                        </View>
-
-                        <View style={{ ...styles.lastbox }}>
-                          <Text
-                            style={{
-                              ...styles.inputtitle,
-                              fontWeight: 'bold',
-                              color: '#000',
-                            }}>
-                            Profile Data Provided by iAM SMART
-                          </Text>
-                        </View>
-                      </View>
-                    ) : (
-                      <>
-                        <View style={{ alignSelf: 'center' }}>
+                    <View style={{ alignSelf: 'center' }}>
                           <ProfileButton />
                         </View>
                         <View
@@ -719,27 +627,8 @@ const Walletscreen = () => {
                             colleagues
                           </Text>
 
-                          {/* <TouchableOpacity
-                            style={{
-                              backgroundColor: COLOR.BLUE[300],
-                              marginTop: 20,
-                              padding: 5,
-                              paddingHorizontal: 15,
-                              borderRadius: 5,
-                            }}
-                            onPress={() => getmycredential()}>
-                            <Text
-                              style={{
-                                color: COLOR.WHITE[100],
-                                fontWeight: '700',
-                                fontSize: 15,
-                              }}>
-                              GET MY FIRST CREDENTIAL
-                            </Text>
-                          </TouchableOpacity> */}
+                  
                         </View>
-                      </>
-                    )}
                   </View>
                 )}
 
