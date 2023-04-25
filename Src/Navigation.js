@@ -8,6 +8,7 @@ import { AppState, Linking, StyleSheet, Text, View } from 'react-native';
 // Import Navigators from React Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 import Toast from 'react-native-toast-message'
 // Import Screens
 import SplashScreen from './SplashScreen';
@@ -246,15 +247,15 @@ const Rootnavigation = () => {
 
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
-  const [splash, setSplash] = useState(true)
+   const [splash, setSplash] = useState(true)
 
-  useEffect(() => {
-    setTimeout(() => {
+  // useEffect(() => {
+  //   setTimeout(() => {
 
-      setSplash(false)
+  //     setSplash(false)
 
-    }, 5000);
-  })
+  //   }, 5000);
+  // })
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (
@@ -420,7 +421,7 @@ const Rootnavigation = () => {
 
       <Stack.Navigator >
 
-        {splash ? (
+        {/* {splash ? (
           <Stack.Screen
             name="SplashScreen"
             component={SplashScreen}
@@ -428,15 +429,15 @@ const Rootnavigation = () => {
             options={{ headerShown: false }}
           />
         ) : (
-        <>
+        <> */}
           {loginstatus === true ? (
             <Stack.Screen name='Postauth' component={Postauth} options={{ headerShown: false }} />
           ) : (
 
             <Stack.Screen name='Preauth' component={Preauth} options={{ headerShown: false }} />
           )}
-        </>
-      )} 
+        {/* </>
+      )}  */}
 
       </Stack.Navigator>
 

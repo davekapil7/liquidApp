@@ -1,3 +1,4 @@
+import { log } from "react-native-reanimated";
 
 const initialState = {
  appState : "",
@@ -25,6 +26,7 @@ const appReducer = (state = initialState, action) => {
         cardList: action.payload,
       };
     case "ADD_PROFILE":
+      console.log("Payload",action.payload);
       return {
         ...state,
         profileData: action.payload,
