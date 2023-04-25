@@ -268,17 +268,17 @@ const LoginScreen = () => {
               type : "ADD_PROFILE",
               payload : responseJson.data?.user
             })
-            console.log("HEllo Login2" , responseJson.data?.user );
+           
             AsyncStorage.setItem('login', 'true');
-            console.log("HEllo Login3" , responseJson.data.expires );
+      
             AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
-            console.log("HEllo Login4" ,responseJson.data.expires );
+
             dispatch({
               type: "SET_LOGIN",
               payload:true
             })
-            console.log("HEllo Logi5n" , responseJson.data?.user );
-          // handlebiomatric()
+      
+           handlebiomatric()
             //navigation.navigate('P', { screen: 'Otpscreen', params: { screen: type, email: email } });
           } else {
             Toast.show({
