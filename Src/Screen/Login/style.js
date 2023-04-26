@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {COLOR} from '../../Constant/color';
 
 export const styles = StyleSheet.create({
@@ -57,6 +57,7 @@ export const styles = StyleSheet.create({
   textinputView: {
     backgroundColor: COLOR.WHITE[100],
     borderRadius: 10,
+    paddingVertical: Platform.OS === "ios" ?  10 : 0,
     paddingHorizontal: 15,
     marginTop:15,
     color:COLOR.BLACK[100]
