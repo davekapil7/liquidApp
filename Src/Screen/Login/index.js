@@ -353,7 +353,7 @@ const LoginScreen = () => {
 
           if (success) {
             dispatch({
-              type: "SET_LOGIN",
+              type: "SET_LOGIN",      
               payload:true
             })
            // navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});

@@ -148,7 +148,7 @@ const Otpscreen = params => {
           })
           initialapicall();
          //  navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
-          handlebiomatric();
+       //   handlebiomatric();
         } else {
           Toast.show({
             topOffset: 100,
