@@ -196,6 +196,9 @@ const Walletscreen = () => {
     state => state?.certificate?.verificationId,
   );
 
+  useEffect(()=>{
+    text()
+  },[])
   useEffect(() => {
     if (!cardData) {
       getData();
@@ -289,7 +292,7 @@ const Walletscreen = () => {
           console.log("responce ===>", responseJson.data);
           dispatch({
             type:"ADD_PROFILE",
-            payload : responseJson.data?.data?.details
+            payload : responseJson.data?.user
           })
         }
       })

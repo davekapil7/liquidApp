@@ -384,7 +384,7 @@ const Rootnavigation = () => {
   }
 
   const getProfile = () => {
-
+console.log("====================>")
     axiosInstance
       .get(
         'iamsmart/getProfile', {
