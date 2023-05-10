@@ -76,10 +76,11 @@ export const getProfile = (dispatch) => {
         let profileData = JSON.stringify(responseJson.data.profile);
         profileData = JSON.parse(profileData);
         console.log('Profile Data', profileData);
-        dispatch({
-          type: 'ADD_PROFILE',
-          payload: responseJson.data.profile.Eme,
-        });
+        // dispatch({
+        //   type: 'ADD_PROFILE',
+        //   payload: responseJson.data.profile.Eme,
+        // });
+        dispatch({ type: 'ADD_IMSMARTDATA', payload: responseJson.data.profile.Eme });
       }
     })
     .catch(function (error) {

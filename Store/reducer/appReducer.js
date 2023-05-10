@@ -6,6 +6,7 @@ const initialState = {
  cardList: [],
  email: '',
  profileData: {},
+ imsmartdata : {}
 };
 
 const appReducer = (state = initialState, action) => {
@@ -25,6 +26,11 @@ const appReducer = (state = initialState, action) => {
         ...state,
         cardList: action.payload,
       };
+      case "ADD_IMSMARTDATA" : 
+      return{
+        ...state,
+        imsmartdata : action.payload
+      }
     case "ADD_PROFILE":
       console.log("Payload",action.payload);
       return {

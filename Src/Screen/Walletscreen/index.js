@@ -55,6 +55,7 @@ const Walletscreen = () => {
   const cardData = useSelector(state => state.appstate.cardList);
   const email = useSelector(state => state.appstate.email);
   const profileData = useSelector(state => state?.appstate?.profileData);
+  const imsmartData = useSelector(state => state?.appstate?.imsmartdata);
   const [currentcard, setCurrentcard] = useState();
   const [currentproof, setCurrentproof] = useState('');
   const proof = useSelector(state => state?.certificate.proofdata);
@@ -130,11 +131,16 @@ const Walletscreen = () => {
       });
   };
 
+  // useEffect(() => {
+  //   if (profileData && profileData.birthDate) {
+  //     setLoader(false);
+  //   }
+  // }, [profileData]);
   useEffect(() => {
-    if (profileData && profileData.birthDate) {
+    if (imsmartData && imsmartData.birthDate) {
       setLoader(false);
     }
-  }, [profileData]);
+  }, [imsmartData]);
 
   useEffect(() => {
     if (email && email.length > 0) {
@@ -593,7 +599,99 @@ const Walletscreen = () => {
                         </Text>
                       </TouchableOpacity>
                     </View>
-                    <View style={{ alignSelf: 'center' }}>
+                    {Object.keys(imsmartData).length > 0 ? (
+                      <View style={{ flex: 1, width: '100%', marginBottom: 35 }}>
+                        <View style={styles.inputbox}>
+                          <Text style={styles.inputtitle}>FULL NAME</Text>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              marginTop: 2,
+                            }}>
+                            <Text style={styles.inputtext}>
+                              {imsmartData.name}
+                            </Text>
+                            <Image
+                              source={require('../../../assets/Image/ismart.png')}
+                              style={{width: 35, height: 35}}
+                            />
+                          </View>
+                        </View>
+
+                        <View style={styles.inputbox}>
+                          <Text style={styles.inputtitle}>Birth date</Text>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              marginTop: 2,
+                            }}>
+                            <Text style={styles.inputtext}>
+                              {birthDayConverter(imsmartData.birthDate)}
+                            </Text>
+                            <Image
+                              source={require('../../../assets/Image/ismart.png')}
+                              style={{width: 35, height: 35}}
+                            />
+                          </View>
+                        </View>
+
+                        <View style={styles.inputbox}>
+                          <Text style={styles.inputtitle}>Phone number</Text>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              marginTop: 2,
+                            }}>
+                            <Text style={styles.inputtext}>{`(${profileData.mobileNumber?.CountryCode
+                                ? imsmartData.mobileNumber?.CountryCode
+                                : ''
+                              })-${imsmartData.mobileNumber?.SubscriberNumber
+                                ? imsmartData.mobileNumber?.SubscriberNumber
+                                : ''
+                              }`}</Text>
+                            <Image
+                              source={require('../../../assets/Image/ismart.png')}
+                              style={{width: 35, height: 35}}
+                            />
+                          </View>
+                        </View>
+
+                        <View style={styles.inputbox}>
+                          <Text style={styles.inputtitle}>ID code</Text>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              marginTop: 2,
+                            }}>
+                            <Text
+                              style={
+                                styles.inputtext
+                              }>{`${imsmartData.idNo.Identification}-(${imsmartData.idNo.CheckDigit})`}</Text>
+                            <Image
+                              source={require('../../../assets/Image/ismart.png')}
+                              style={{width: 35, height: 35}}
+                            />
+                          </View>
+                        </View>
+
+                        <View style={{ ...styles.lastbox }}>
+                          <Text
+                            style={{
+                              ...styles.inputtitle,
+                              fontWeight: 'bold',
+                              color: '#000',
+                            }}>
+                            Profile Data Provided by iAM SMART
+                          </Text>
+                        </View>
+                      </View>
+                    ) : (
+                      <>
+                        <View style={{ alignSelf: 'center' }}>
                           <ProfileButton />
                         </View>
                         <View
@@ -632,6 +730,48 @@ const Walletscreen = () => {
 
                   
                         </View>
+                      </>
+                    )}
+
+                    {/* <View style={{ alignSelf: 'center' }}>
+                          <ProfileButton />
+                        </View>
+                        <View
+                          style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            width: '100%',
+                          }}>
+                          <Icon
+                            name="file-certificate-outline"
+                            type="material-community"
+                            size={90}
+                            color={COLOR.BLUE[300]}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 25,
+                              color: COLOR.BLACK[100],
+                              fontWeight: '600',
+                            }}>
+                            Let's get your first credential
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 17,
+                              color: COLOR.BLACK[100],
+                              fontWeight: '400',
+                              marginTop: 15,
+                              width: '75%',
+                              textAlign: 'center',
+                            }}>
+                            You can self issue your own credential or receive a
+                            testimonial from your business partners or
+                            colleagues
+                          </Text>
+
+                  
+                        </View> */}
                   </View>
                 )}
 
