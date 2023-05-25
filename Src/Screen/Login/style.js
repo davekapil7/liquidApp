@@ -6,6 +6,10 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLOR.PRIMARY,
   },
+  keyContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     alignItems: 'center',
@@ -97,7 +101,7 @@ export const styles = StyleSheet.create({
     color:COLOR.GRAY[300]
   },
   buttonView: {
-    width: '70%',
+    width: 150,
     backgroundColor: COLOR.GREEN[100],
     alignSelf: 'center',
     height: 32,

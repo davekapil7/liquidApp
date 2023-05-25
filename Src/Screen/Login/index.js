@@ -8,6 +8,8 @@ import {
   Animated,
   TouchableOpacity,
   Alert,
+  ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -250,9 +252,9 @@ const LoginScreen = () => {
   };
 
   const handlepasswordLogin = () => {
-    console.log("PPPPP" , typeof password);
+    console.log("PPPPP", typeof password);
     if (email.length > 0 && password.length > 0) {
-      let dataToSend = { email: email , password : password };
+      let dataToSend = { email: email, password: password };
 
       axiosInstance
         .post('auth/LoginByPassword', dataToSend)
@@ -263,22 +265,22 @@ const LoginScreen = () => {
           if (responseJson?.data?.data === 'Authorized') {
             // setOtpInput(true);
             // Alert.alert('OTP SENT');
-            console.log("HEllo Login1" , responseJson.data?.user );
+            console.log("HEllo Login1", responseJson.data?.user);
             dispatch({
-              type : "ADD_PROFILE",
-              payload : responseJson.data?.user
+              type: "ADD_PROFILE",
+              payload: responseJson.data?.user
             })
-           
+
             AsyncStorage.setItem('login', 'true');
-      
+
             AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
 
             dispatch({
               type: "SET_LOGIN",
-              payload:true
+              payload: true
             })
-      
-           handlebiomatric()
+
+            handlebiomatric()
             //navigation.navigate('P', { screen: 'Otpscreen', params: { screen: type, email: email } });
           } else {
             Toast.show({
@@ -347,289 +349,296 @@ const LoginScreen = () => {
   const handlebiomatric = async () => {
     await rnBiometrics.isSensorAvailable().then(resultObject => {
       rnBiometrics
-        .simplePrompt({promptMessage: 'Confirm fingerprint'})
+        .simplePrompt({ promptMessage: 'Confirm fingerprint' })
         .then(resultObject => {
-          const {success} = resultObject;
+          const { success } = resultObject;
 
           if (success) {
             dispatch({
-              type: "SET_LOGIN",      
-              payload:true
+              type: "SET_LOGIN",
+              payload: true
             })
-           // navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
+            // navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
           } else {
-           
+
             Toast.show({
               topOffset: 100,
               type: "error",
               text1: "ERROR",
-             text2: `Fingerprint not exist or were deleted . Please add fingerprint in system`,
+              text2: `Fingerprint not exist or were deleted . Please add fingerprint in system`,
               visibilityTime: 3000,
               props: {
-                text1NumberOfLines:2 //number of how many lines you want
+                text1NumberOfLines: 2 //number of how many lines you want
               }
             });
           }
         })
         .catch(e => {
-       //   Alert.alert('Fail login with senser . Please try with login');
+          //   Alert.alert('Fail login with senser . Please try with login');
           Toast.show({
             topOffset: 100,
             type: "error",
             text1: "ERROR",
-           text2: `Fail login with senser . Please try with login`,
+            text2: `Fail login with senser . Please try with login`,
             visibilityTime: 3000,
             props: {
-              text1NumberOfLines:2 //number of how many lines you want
+              text1NumberOfLines: 2 //number of how many lines you want
             }
           });
           AsyncStorage.removeItem('login');
           dispatch({
             type: "SET_LOGIN",
-            payload:false
+            payload: false
           })
         });
     });
   };
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
-      <View style={styles.container}>
-        <View style={styles.cardView}>
-          <Text style={styles.starttext}>{STR.GET}</Text>
-          <Text style={styles.starttext}>{STR.START}</Text>
+    // <SafeAreaView style={styles.safeContainer}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={-70}
+        style={styles.keyContainer}>
+        <View style={styles.container}>
+          <View style={styles.cardView}>
+            <Text style={styles.starttext}>{STR.GET}</Text>
+            <Text style={styles.starttext}>{STR.START}</Text>
 
-          <View style={styles.tabView}>
-            <TouchableOpacity
-              style={{
-                ...styles.tabbar,
-                borderBottomColor:
-                  type == STR.REGISTER ? COLOR.GREEN[100] : COLOR.GRAY[300],
-              }}
-              onPress={() => {
-                setType(STR.REGISTER), setEmail('') , setPassword('');
-              }}>
-              <View
+            <View style={styles.tabView}>
+              <TouchableOpacity
                 style={{
-                  ...styles.iconView,
-                  borderColor:
+                  ...styles.tabbar,
+                  borderBottomColor:
                     type == STR.REGISTER ? COLOR.GREEN[100] : COLOR.GRAY[300],
+                }}
+                onPress={() => {
+                  setType(STR.REGISTER), setEmail(''), setPassword('');
                 }}>
-                <Icon
-                  name="pencil"
-                  type="octicon"
-                  color={
-                    type == STR.REGISTER ? COLOR.GREEN[100] : COLOR.GRAY[300]
-                  }
-                  size={25}
-                />
-              </View>
-
-              <Text style={styles.tabtitle}>{STR.REGISTER}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                ...styles.tabbar,
-                borderBottomColor:
-                  type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300],
-              }}
-              onPress={() => {
-                setType(STR.LOGIN), setEmail('');
-              }}>
-              <View
-                style={{
-                  ...styles.iconView,
-                  borderColor:
-                    type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300],
-                }}>
-                <Icon
-                  name="user"
-                  type="feather"
-                  color={type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300]}
-                  size={42}
-                />
-              </View>
-
-              <Text style={styles.tabtitle}>{STR.LOGIN}</Text>
-            </TouchableOpacity>
-          </View>
-
-          {type === STR.REGISTER && (
-            <View style={styles.registerView}>
-              <View
-                style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <View style={{ width: "50%" }}>
-                  <TextInput
-                    placeholder="First name"
-                    placeholderTextColor={'gray'}
-
-                    style={{ ...styles.textinputView, width: '94%' }}
-                    onChangeText={text => setFirstName(text)}
-                    onEndEditing={() => validation("firstname")}
-                    value={firstname}
-                  />
-                  {firstvalid &&
-                    <Text style={{ color: "red", marginTop: 2 }}>{firstname.length > 0 ? "*First Name must be alphabet" : "*Please enter your first name"} </Text>
-                  }
-                </View>
-                <View style={{ width: "50%", alignItems: "flex-end" }}>
-                  <TextInput
-                    placeholder="Last name"
-                    placeholderTextColor={'gray'}
-                    style={{ ...styles.textinputView, width: '94%' }}
-                    onChangeText={text => setLastName(text)}
-                    onEndEditing={() => validation("lastname")}
-                    value={lastname}
-                  />
-                  {lastvalid &&
-                    <Text style={{ color: "red", marginTop: 2 }}>{lastname.length > 0 ? "*Last Name must be alphabet" : "*Please enter your last name"} </Text>
-                  }
-                </View>
-              </View>
-
-              <TextInput
-                placeholder={'Enter Email'}
-                placeholderTextColor={COLOR.GRAY[300]}
-                style={styles.textinputView}
-                onChangeText={text => setEmail(text)}
-                onEndEditing={() => validation("email")}
-                value={email}
-              />
-              {emailvalid &&
-                <Text style={{ color: "red", marginTop: 2 }}>{email.length > 0 ? "*Enter valid email id" : "*Please enter your email"} </Text>
-              }
-              <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity
-                  onPress={() => setShow(true)}
+                <View
                   style={{
-                    ...styles.textinputView,
-                    justifyContent: 'center',
-                    padding: 10,
-                    width: '22%',
+                    ...styles.iconView,
+                    borderColor:
+                      type == STR.REGISTER ? COLOR.GREEN[100] : COLOR.GRAY[300],
                   }}>
-                  <Text
-                    style={{
-                      color: 'black',
-                      fontSize: 12,
-                    }}>
-                    {countryCode && countryCode.length > 0 ? countryCode : '--'}
-                  </Text>
-                </TouchableOpacity>
-                <View style={{ width: "75%" }}>
+                  <Icon
+                    name="pencil"
+                    type="octicon"
+                    color={
+                      type == STR.REGISTER ? COLOR.GREEN[100] : COLOR.GRAY[300]
+                    }
+                    size={25}
+                  />
+                </View>
 
+                <Text style={styles.tabtitle}>{STR.REGISTER}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  ...styles.tabbar,
+                  borderBottomColor:
+                    type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300],
+                }}
+                onPress={() => {
+                  setType(STR.LOGIN), setEmail('');
+                }}>
+                <View
+                  style={{
+                    ...styles.iconView,
+                    borderColor:
+                      type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300],
+                  }}>
+                  <Icon
+                    name="user"
+                    type="feather"
+                    color={type == STR.LOGIN ? COLOR.GREEN[100] : COLOR.GRAY[300]}
+                    size={42}
+                  />
+                </View>
 
-                  <TextInput
-                    placeholder={'Enter Mobile'}
-                    placeholderTextColor={COLOR.GRAY[300]}
+                <Text style={styles.tabtitle}>{STR.LOGIN}</Text>
+              </TouchableOpacity>
+            </View>
+
+            {type === STR.REGISTER && (
+              <View style={styles.registerView}>
+                <View
+                  style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <View style={{ width: "50%" }}>
+                    <TextInput
+                      placeholder="First name"
+                      placeholderTextColor={'gray'}
+
+                      style={{ ...styles.textinputView, width: '94%' }}
+                      onChangeText={text => setFirstName(text)}
+                      onEndEditing={() => validation("firstname")}
+                      value={firstname}
+                    />
+                    {firstvalid &&
+                      <Text style={{ color: "red", marginTop: 2 }}>{firstname.length > 0 ? "*First Name must be alphabet" : "*Please enter your first name"} </Text>
+                    }
+                  </View>
+                  <View style={{ width: "50%", alignItems: "flex-end" }}>
+                    <TextInput
+                      placeholder="Last name"
+                      placeholderTextColor={'gray'}
+                      style={{ ...styles.textinputView, width: '94%' }}
+                      onChangeText={text => setLastName(text)}
+                      onEndEditing={() => validation("lastname")}
+                      value={lastname}
+                    />
+                    {lastvalid &&
+                      <Text style={{ color: "red", marginTop: 2 }}>{lastname.length > 0 ? "*Last Name must be alphabet" : "*Please enter your last name"} </Text>
+                    }
+                  </View>
+                </View>
+
+                <TextInput
+                  placeholder={'Enter Email'}
+                  placeholderTextColor={COLOR.GRAY[300]}
+                  style={styles.textinputView}
+                  onChangeText={text => setEmail(text)}
+                  onEndEditing={() => validation("email")}
+                  value={email}
+                />
+                {emailvalid &&
+                  <Text style={{ color: "red", marginTop: 2 }}>{email.length > 0 ? "*Enter valid email id" : "*Please enter your email"} </Text>
+                }
+                <View style={{ flexDirection: 'row' }}>
+                  <TouchableOpacity
+                    onPress={() => setShow(true)}
                     style={{
                       ...styles.textinputView,
-                      width: '100%',
-                      marginLeft: 10,
-                    }}
-                    onChangeText={text => setNumber(text)}
+                      justifyContent: 'center',
+                      padding: 10,
+                      width: '22%',
+                    }}>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 12,
+                      }}>
+                      {countryCode && countryCode.length > 0 ? countryCode : '--'}
+                    </Text>
+                  </TouchableOpacity>
+                  <View style={{ width: "75%" }}>
 
-                    onEndEditing={() => validation("number")}
-                    value={number}
-                    keyboardType={'numeric'}
-                    maxLength={10}
-                  />
-                  {/* 
+
+                    <TextInput
+                      placeholder={'Enter Mobile'}
+                      placeholderTextColor={COLOR.GRAY[300]}
+                      style={{
+                        ...styles.textinputView,
+                        width: '100%',
+                        marginLeft: 10,
+                      }}
+                      onChangeText={text => setNumber(text)}
+
+                      onEndEditing={() => validation("number")}
+                      value={number}
+                      keyboardType={'numeric'}
+                      maxLength={10}
+                    />
+                    {/* 
                   {numbervalid &&
                     <Text style={{ color: "red", marginTop: 2, marginLeft: 10, }}>{number.length > 0 ? "*Ener 10 digit number" : "*Please enter your email"} </Text>
                   } */}
+                  </View>
                 </View>
-              </View>
 
-              <TextInput
-                placeholder="Password"
-                placeholderTextColor={'gray'}
-                style={styles.textinputView}
-                secureTextEntry={true}
-                onChangeText={text => setPassword(text)}
-                value={password}
-              />
+                <TextInput
+                  placeholder="Password"
+                  placeholderTextColor={'gray'}
+                  style={styles.textinputView}
+                  secureTextEntry={true}
+                  onChangeText={text => setPassword(text)}
+                  value={password}
+                />
 
-              {/* {passwordvalid &&
+                {/* {passwordvalid &&
                 <Text style={{ color: "red", marginTop: 2, marginLeft: 10, }}>{password.length > 0 ? "*" : "*Please enter your password"} </Text>
               } */}
-              <TextInput
-                placeholder="Confirm password"
-                placeholderTextColor={'gray'}
-                style={styles.textinputView}
-                secureTextEntry={true}
-                onChangeText={text => setConfirmpas(text)}
-                value={confirmpass}
-              />
-              {/* {confirmpasswordvalid &&
+                <TextInput
+                  placeholder="Confirm password"
+                  placeholderTextColor={'gray'}
+                  style={styles.textinputView}
+                  secureTextEntry={true}
+                  onChangeText={text => setConfirmpas(text)}
+                  value={confirmpass}
+                />
+                {/* {confirmpasswordvalid &&
                 <Text style={{ color: "red", marginTop: 2, marginLeft: 10, }}>{confirmpass.length > 0 ? "*Ener 10 digit number" : "*Please enter your password"} </Text>
               } */}
-              <TextInput
-                placeholder={'company name'}
-                placeholderTextColor={COLOR.GRAY[300]}
-                style={styles.textinputView}
-                onChangeText={text => setCompanyname(text)}
-                value={companyname}
-              />
-              <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
+                <TextInput
+                  placeholder={'company name'}
+                  placeholderTextColor={COLOR.GRAY[300]}
+                  style={styles.textinputView}
+                  onChangeText={text => setCompanyname(text)}
+                  value={companyname}
+                />
+                <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
 
-              <TouchableOpacity
-                style={{ ...styles.buttonView, backgroundColor: firstname.length === 0 || lastname.length === 0 || email.length === 0 || password.length === 0 || confirmpass.length === 0 || companyname.length === 0 ? "rgba(49,195,151,0.2)" : "#31C397" }}
-                onPress={() => handleregister()}
-                disabled={firstname.length === 0 || lastname.length === 0 || email.length === 0 || password.length === 0 || confirmpass.length === 0 || companyname.length === 0 ? true : false}>
-                <Text style={styles.bottontext}>{STR.CONTINUE}</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ ...styles.buttonView, backgroundColor: firstname.length === 0 || lastname.length === 0 || email.length === 0 || password.length === 0 || confirmpass.length === 0 || companyname.length === 0 ? "rgba(49,195,151,0.2)" : "#31C397" }}
+                  onPress={() => handleregister()}
+                  disabled={firstname.length === 0 || lastname.length === 0 || email.length === 0 || password.length === 0 || confirmpass.length === 0 || companyname.length === 0 ? true : false}>
+                  <Text style={styles.bottontext}>{STR.CONTINUE}</Text>
+                </TouchableOpacity>
 
-              <CountryPicker
-                show={show}
-                // when picker button press you will get the country object with dial code
-                pickerButtonOnPress={item => {
-                  setCountryCode(item.dial_code);
-                  setShow(false);
-                }}
-              />
-            </View>
-          )}
+                <CountryPicker
+                  show={show}
+                  // when picker button press you will get the country object with dial code
+                  pickerButtonOnPress={item => {
+                    setCountryCode(item.dial_code);
+                    setShow(false);
+                  }}
+                />
+              </View>
+            )}
 
-          {type === STR.LOGIN && (
-            <View style={styles.registerView}>
-              <TextInput
-                placeholder={'Enter Email'}
-                placeholderTextColor={COLOR.GRAY[300]}
-                style={styles.textinputView}
-                onChangeText={text => setEmail(text)}
-                value={email}
-              />
-               <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
+            {type === STR.LOGIN && (
+              <View style={styles.registerView}>
+                <TextInput
+                  placeholder={'Enter Email'}
+                  placeholderTextColor={COLOR.GRAY[300]}
+                  style={styles.textinputView}
+                  onChangeText={text => setEmail(text)}
+                  value={email}
+                />
+                <Text style={styles.infotext}>{STR.REGISTERINFO}</Text>
 
-<TouchableOpacity
-                style={{...styles.buttonView,height:45}}
-                onPress={() => handleLogin()}>
-                <Text style={{...styles.bottontext}}>Login with OTP</Text>
-              </TouchableOpacity>
-              <Text style={{fontSize:18 , textAlign:"center",color:"black",fontWeight:"bold"}}>Or </Text>
-              <Text style={{fontSize:18, textAlign:"center",color:"black",fontWeight:"bold"}}>login with Password</Text>
+                <TouchableOpacity
+                  style={{ ...styles.buttonView, height: 45 }}
+                  onPress={() => handleLogin()}>
+                  <Text style={{ ...styles.bottontext }}>Login with OTP</Text>
+                </TouchableOpacity>
+                <Text style={{ fontSize: 18, textAlign: "center", color: "black", fontWeight: "bold" }}>Or </Text>
+                <Text style={{ fontSize: 18, textAlign: "center", color: "black", fontWeight: "bold" }}>login with Password</Text>
 
-              <TextInput
-                placeholder={'Enter Password'}
-                placeholderTextColor={COLOR.GRAY[300]}
-                style={styles.textinputView}
-                secureTextEntry={true}
-                onChangeText={text => setPassword(text)}
-                value={password}
-              />
-       
-             
+                <TextInput
+                  placeholder={'Enter Password'}
+                  placeholderTextColor={COLOR.GRAY[300]}
+                  style={styles.textinputView}
+                  secureTextEntry={true}
+                  onChangeText={text => setPassword(text)}
+                  value={password}
+                />
 
-              <TouchableOpacity
-                style={{...styles.buttonView,height:45}}
-                onPress={() => handlepasswordLogin()}>
-                <Text style={styles.bottontext}>{STR.CONTINUE}</Text>
-              </TouchableOpacity>
-            </View>
-          )}
+
+
+                <TouchableOpacity
+                  style={{ ...styles.buttonView, height: 45 }}
+                  onPress={() => handlepasswordLogin()}>
+                  <Text style={styles.bottontext}>{STR.CONTINUE}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+        {/* </SafeAreaView> */}
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
