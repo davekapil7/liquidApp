@@ -208,6 +208,7 @@ const LoginScreen = () => {
                   placeholder="Enter Email" //dummy@abc.com
                   placeholderTextColor="#8b9cb5"
                   autoCapitalize="none"
+                  textContentType="none"
                   keyboardType="email-address"
                   returnKeyType="next"
                   onSubmitEditing={() =>
