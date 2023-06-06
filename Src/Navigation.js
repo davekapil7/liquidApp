@@ -12,7 +12,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Toast from 'react-native-toast-message'
 // Import Screens
 import SplashScreen from './SplashScreen';
-// import SplashScreen from './Screen/SplashScreen';
+
 import LoginScreen from './Screen/Login';
 import SignLoginScreen from './SignLogin';
 import RegisterScreen from './RegisterScreen';
@@ -46,61 +46,11 @@ const linking = {
   prefixes: ["https://api.liquid.com.hk/", 'liquid://'],
 };
 
-const Auth = () => {
-  // Stack Navigator for Login and Sign up Screen
-  return (
-    <Stack.Navigator
-      // initialRouteName="Otpscreen"
-      initialRouteName="OnbordingScreen"
-    >
-      <Stack.Screen
-        name="LoginScreen"
-        component={LoginScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="OnbordingScreen"
-        component={OnbordingScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="InfoScreen"
-        component={InfoScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Otpscreen"
-        component={Otpscreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="SignLoginScreen"
-        component={SignLoginScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="RegisterScreen"
-        component={RegisterScreen}
-        options={{
-          title: 'Register', //Set Header Title
-          headerStyle: {
-            backgroundColor: '#307ecc', //Set Header color
-          },
-          headerTintColor: '#fff', //Set Header text color
-          headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
-          },
-        }}
-      />
-    </Stack.Navigator>
-  );
-};
-
 const Preauth = () => {
   return (
     <Stack.Navigator
       initialRouteName="OnbordingScreen"
-    // initialRouteName="SplashScreen"
+
     >
       <Stack.Screen
         name="LoginScreen"
@@ -150,8 +100,7 @@ const Preauth = () => {
 const Postauth = () => {
   return (
     <Stack.Navigator
-      // initialRouteName="Otpscreen"
-      // initialRouteName="OnbordingScreen"
+
       initialRouteName='Tabnavigationroute'
     >
 
@@ -238,24 +187,16 @@ const Postauth = () => {
     </Stack.Navigator>
   );
 }
+
 const Rootnavigation = () => {
-  const appstatus = useSelector(state => state?.appstate?.appState);
+
   const loginstatus = useSelector(state => state?.appstate?.login);
-  const [login, setLogin] = useState(false)
 
   const dispatch = useDispatch();
 
   const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
-   const [splash, setSplash] = useState(true)
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-
-  //     setSplash(false)
-
-  //   }, 5000);
-  // })
+// Check app status 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (
@@ -267,7 +208,7 @@ const Rootnavigation = () => {
 
       appState.current = nextAppState;
       dispatch({ type: 'CHANGE_STATE', payload: appState.current });
-      setAppStateVisible(appState.current);
+
       console.log('AppState', appState.current);
     });
     return () => {
@@ -275,11 +216,13 @@ const Rootnavigation = () => {
     };
   }, []);
 
+  // get string 
   function getStringBetween(str, start, end) {
     const result = str.match(new RegExp(start + "(.*)" + end));
     return result[1];
   }
 
+  // call when jump from website or other app 
   useEffect(() => {
     Linking.addEventListener('url', (url) => {
       let linkUrl = url.url;
@@ -296,15 +239,17 @@ const Rootnavigation = () => {
     });
   }, [])
 
+  // Check login status
+
   const getloginstatus = async () => {
     const login = await AsyncStorage.getItem('login')
 
-    console.log("!!!!!!",login);
+    console.log("!!!!!!", login);
     if (login === "true") {
       console.log("HEllo true");
       dispatch({
         type: "SET_LOGIN",
-        payload:true
+        payload: true
       })
 
     } else {
@@ -313,13 +258,11 @@ const Rootnavigation = () => {
         payload: false
       })
     }
-  
+
   }
   useEffect(() => {
     getloginstatus()
   }, [loginstatus])
-
-  console.log("EEEE",loginstatus);
 
   const getAuthToken = async (state, code) => {
 
@@ -384,7 +327,7 @@ const Rootnavigation = () => {
   }
 
   const getProfile = () => {
-console.log("====================>")
+    console.log("====================>")
     axiosInstance
       .get(
         'iamsmart/getProfile', {
@@ -399,7 +342,7 @@ console.log("====================>")
           profileData = JSON.parse(profileData);
           console.log("Profile Data", profileData);
           dispatch({ type: 'ADD_IMSMARTDATA', payload: responseJson.data.profile.Eme });
-       //   dispatch({ type: 'ADD_PROFILE', payload: responseJson.data.profile.Eme });
+          //   dispatch({ type: 'ADD_PROFILE', payload: responseJson.data.profile.Eme });
         }
       })
       .catch(function (error) {
@@ -431,12 +374,12 @@ console.log("====================>")
           />
         ) : (
         <> */}
-          {loginstatus === true ? (
-            <Stack.Screen name='Postauth' component={Postauth} options={{ headerShown: false }} />
-          ) : (
+        {loginstatus === true ? (
+          <Stack.Screen name='Postauth' component={Postauth} options={{ headerShown: false }} />
+        ) : (
 
-            <Stack.Screen name='Preauth' component={Preauth} options={{ headerShown: false }} />
-          )}
+          <Stack.Screen name='Preauth' component={Preauth} options={{ headerShown: false }} />
+        )}
         {/* </>
       )}  */}
 
