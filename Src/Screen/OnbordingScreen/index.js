@@ -5,6 +5,7 @@ import {COLOR} from '../../Constant/color';
 import {Onbording} from '../../Constant/json';
 import {styles} from './style';
 import {useNavigation} from '@react-navigation/native';
+import LAText from '../../Components/LAText';
 
 const OnbordingScreen = () => {
     const navigation = useNavigation();
@@ -12,28 +13,25 @@ const OnbordingScreen = () => {
     <View style={styles.container}>
       <View style={styles.swiperView}>
         <Swiper
-          dotColor={COLOR.GRAY[300]}
+          dotColor={COLOR.GRAY[400]}
           activeDotColor={COLOR.BLACK[100]}
-          dotStyle={{width: 6, height: 6, borderRadius: 6, marginRight: 15}}
+          dotStyle={{width: 6, height: 6, borderRadius: 6, marginRight: 20}}
           activeDotStyle={{
-            width: 12,
-            height: 12,
-            borderRadius: 12,
+            width: 6,
+            height: 6,
+            borderRadius: 6,
             marginRight: 15,
           }}>
           {Onbording.map((item, i) => {
             return (
               <View
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
+                style={styles.swipercontainer}>
                 <Image
                   source={item.img}
-                  style={{width: '80%', height: '30%'}}
+                  style={styles.image}
                 />
                 <Text style={styles.titletext}>{item.title}</Text>
+                {/* <LAText title={item.title}/> */}
                 <Text style={styles.desctext}>{item.desc}</Text>
 
                 {item.desc2 && (
@@ -51,14 +49,7 @@ const OnbordingScreen = () => {
       </View>
 
       <TouchableOpacity
-        style={{
-          width: '65%',
-          backgroundColor: COLOR.GREEN[100],
-          height: 40,
-          borderRadius: 25,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
+        style={styles.button}
         onPress={() => navigation.navigate('Preauth' ,{screen: "InfoScreen"})}>
         <Text style={{fontSize:15,color:COLOR.WHITE[100],fontWeight:"400"}}>GET STARTED</Text>
       </TouchableOpacity>
