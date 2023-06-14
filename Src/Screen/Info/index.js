@@ -39,81 +39,41 @@ const InfoScreen = () => {
       <View style={styles.container}>
         <View style={styles.cardView}>
           <Text
-            style={{
-              fontSize: 27,
-              fontWeight: 'bold',
-              color: COLOR.BLACK[100],
-              textAlign: 'center',
-            }}>
+            style={styles.starttext}>
             {STR.INFO.TITLE}
           </Text>
 
           <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '400',
-              color: COLOR.BLACK[100],
-              marginTop: 15,
-
-              textAlign: 'center',
-            }}>
+            style={styles.securetext}>
             {STR.INFO.SECURELY}
           </Text>
 
           <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '400',
-              color: COLOR.BLACK[100],
-              marginTop: 15,
-
-              textAlign: 'center',
-            }}>
+            style={styles.securetext}>
             {STR.INFO.CERTIFICATE}
           </Text>
 
           <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '600',
-              color: COLOR.BLACK[100],
-              marginTop: 15,
-
-              textAlign: 'center',
-            }}>
+            style={styles.protecttext}>
             {STR.INFO.PROTECT}
           </Text>
 
           <Text
-            style={{
-              fontSize: 14,
-              fontWeight: '300',
-              color: COLOR.BLACK[100],
-
-              textAlign: 'center',
-            }}>
+            style={{...styles.securetext , color:COLOR.GRAY[500]}}>
             {STR.INFO.TERMCONDITION}
           </Text>
 
           <TouchableOpacity
-            style={{
-              width: '90%',
-              backgroundColor: COLOR.GREEN[100],
-              height: 40,
-              marginTop: 15,
-              borderRadius: 25,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            style={styles.button}
             onPress={() => 
             //  console.log("HEllo")
            navigation.navigate('Preauth' ,{screen:'LoginScreen'})
             }>
             <Text
               style={{
-                fontSize: 15,
+                fontSize: 12,
                 color: COLOR.WHITE[100],
-                fontWeight: '400',
+                fontWeight: '700',
               }}>
               CONTINUE
             </Text>

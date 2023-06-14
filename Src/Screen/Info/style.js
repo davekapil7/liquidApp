@@ -10,20 +10,50 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor:COLOR.WHITE[100]
   },
   cardView: {
-    backgroundColor: COLOR.GRAY[200],
+    backgroundColor: COLOR.SECONDRY,
     paddingHorizontal:30,
     
     padding: 20,
-    borderRadius: 10,
+    borderRadius: 20,
     width: '85%',
+    height:"65%",
     alignItems: 'center',
+    justifyContent:"space-between"
   },
   starttext: {
-    fontSize: 25,
+    fontSize: 24,
+    fontWeight: '600',
+    lineHeight:36,
     color: COLOR.BLACK[100],
-    fontWeight: '700',
+    textAlign: 'center',
+  },
+  securetext :{
+    fontSize: 12,
+    fontWeight: '400',
+    color: COLOR.BLACK[100],
+    lineHeight:18,
+
+    textAlign: 'center',
+  },
+  protecttext:{
+    fontSize: 13,
+    fontWeight: '600',
+    color: COLOR.BLACK[100],
+    marginTop: 15,
+
+    textAlign: 'center',
+  },
+  button : {
+    width: 180,
+    backgroundColor: COLOR.PRIMARY,
+    height: 30,
+    marginTop: 15,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   tabView: {
     width: '95%',
