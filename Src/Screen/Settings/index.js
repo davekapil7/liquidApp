@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Switch } from 'react-native';
+import { View, Text, TouchableOpacity, Switch, StyleSheet } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 
 import {
@@ -16,6 +16,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../Constant/axios';
 import { Toast } from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
+import PoppinsText from '../../Components/LAText/Poppinstext';
+import { Image } from 'react-native';
+import { IMG } from '../../Constant/image';
 const Settingscreen = () => {
   const navigation = useNavigation();
 
@@ -35,7 +38,7 @@ const Settingscreen = () => {
   };
 
   const wallet = () => {
-    navigation.navigate('Postauth' ,{screen: 'Walletconnection'});
+    navigation.navigate('Postauth', { screen: 'Walletconnection' });
   };
 
   const deletewallet = () => {
@@ -44,8 +47,8 @@ const Settingscreen = () => {
   };
 
   const logout = () => {
-   
-   // navigation.navigate("Preauth")
+
+    // navigation.navigate("Preauth")
     axiosInstance
       .get(
         'auth/logout',
@@ -56,7 +59,7 @@ const Settingscreen = () => {
         })
         console.log("Logged out");
         AsyncStorage.removeItem('login')
-      //  navigation.navigate('Preauth' ,{screen: "OnbordingScreen"})
+        //  navigation.navigate('Preauth' ,{screen: "OnbordingScreen"})
       })
       .catch(function (error) {
         //  setErrortext(responseJson?.data?.error);
@@ -68,10 +71,10 @@ const Settingscreen = () => {
           topOffset: 100,
           type: "error",
           text1: "ERROR",
-         text2: `Somthing Went Wrong Scan Again`,
+          text2: `Somthing Went Wrong Scan Again`,
           visibilityTime: 3000,
           props: {
-            text1NumberOfLines:2 //number of how many lines you want
+            text1NumberOfLines: 2 //number of how many lines you want
           }
         });
       });
@@ -83,7 +86,7 @@ const Settingscreen = () => {
         copy(parameter);
         break;
       case 'recovery':
-        navigation.navigate('Postauth' ,{screen:'Walletpinscreen',  params: 'recovery' });
+        navigation.navigate('Postauth', { screen: 'Walletpinscreen', params: 'recovery' });
         break;
 
       case 'wallet':
@@ -99,11 +102,11 @@ const Settingscreen = () => {
         break;
 
       case 'Walletpin':
-        navigation.navigate('Postauth' ,{screen: 'Walletpinscreen',  params: 'Wallet' });
+        navigation.navigate('Postauth', { screen: 'Walletpinscreen', params: 'Wallet' });
         break;
 
       case 'recover':
-        navigation.navigate('Postauth' ,{screen: 'Recoverscreen'});
+        navigation.navigate('Postauth', { screen: 'Recoverscreen' });
         break;
       default:
         break;
@@ -116,7 +119,7 @@ const Settingscreen = () => {
       scan={true}
       setting={false}
       back={true}>
-      <View style={{ height: '100%', alignItems: 'center' }}>
+      <View style={{ height: '100%', alignItems: 'center', marginTop: 20 }}>
         {seetingjson.map((item, i) => {
           const subdata = item.subitem;
 
@@ -124,38 +127,21 @@ const Settingscreen = () => {
             <View
               style={{
                 width: '95%',
-                backgroundColor: COLOR.WHITE[100],
+                backgroundColor: COLOR.SECONDRY,
                 marginBottom: 10,
-                borderRadius: 10,
+                borderRadius: 20,
                 padding: 10,
+                paddingVertical: 20
               }}>
               <View
                 style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    borderBottomWidth: 0.5,
-                    borderBottomColor: COLOR.GRAY[200],
-                    paddingBottom: 10,
-                    fontWeight: '600',
-                    color: COLOR.BLACK[100],
-                  }}>
-                  {item.title}
-                </Text>
+               
+                <PoppinsText title={item.title} textstyle={styles.title} />
                 {item.title == 'Email Addresses' && (
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('Postauth' ,{screen: 'EmailAddress'})}>
-                    <Text
-                      style={{
-                        backgroundColor: COLOR.BLUE[100],
-                        fontSize: 12,
-                        color: COLOR.BLUE[300],
-                        fontWeight: '600',
-                        paddingHorizontal: 3,
-                        borderRadius: 2,
-                      }}>
-                      ADD
-                    </Text>
+                    onPress={() => navigation.navigate('Postauth', { screen: 'EmailAddress' })}>
+                   
+                    <Image source={IMG.PLUS} style={{ width: 20, height: 20 }} />
                   </TouchableOpacity>
                 )}
               </View>
@@ -178,37 +164,22 @@ const Settingscreen = () => {
                       borderBottomColor: COLOR.GRAY[200],
                     }}>
                     {sub.stitle == 'RECOVER CREDENTIALS' ? (
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          color: COLOR.BLUE[300],
-                          fontWeight: '600',
-                          textAlign: 'center',
-                          width: '100%',
-                        }}>
-                        {sub.stitle}
-                      </Text>
+             
+                      <PoppinsText title={sub.stitle} textstyle={styles.subtitle} viewStyle={{width :"100%" }}/>
                     ) : (
-                      <Text
-                        style={{
-                          fontSize: sub.stitle == 'VERSION 3.31.0' ? 12 : 16,
-                          color:
-                            item.title == 'About ceal'
-                              ? sub.stitle == 'VERSION 3.31.0'
-                                ? COLOR.BLACK[100]
-                                : COLOR.BLUE[300]
-                              : COLOR.BLACK[100],
-                          fontWeight: '300',
-                        }}>
-                        {sub.stitle}
-                      </Text>
+                      
+                       <PoppinsText title={sub.stitle} textstyle={{...styles.subtitle , 
+                               color:
+                            item.title == 'About ceal' ? COLOR.PRIMARY : COLOR.BLACK[100]
+                             
+                    }} />
                     )}
 
                     {sub.stitle == 'Touch ID' ? (
                       <Switch
                         trackColor={{ false: '#767577', true: 'red' }}
                         thumbColor={isTouch === true ? '#f5dd4b' : '#f4f3f4'}
-                        //  thumbColor={"red"}
+     
 
                         ios_backgroundColor="#3e3e3e"
                         onValueChange={touch => setIsTouch(touch)}
@@ -228,7 +199,7 @@ const Settingscreen = () => {
                           <Icon
                             name={sub.iname}
                             type={sub.itype}
-                            color={COLOR.BLUE[300]}
+                            color={COLOR.PRIMARY}
                           />
                         )}
                       </>
@@ -327,3 +298,14 @@ const Settingscreen = () => {
 };
 
 export default Settingscreen;
+
+
+export const styles = StyleSheet.create({
+  title: {
+    fontSize: 15,
+    fontWeight: "700"
+  },
+  subtitle : {
+textAlign:"center",width:"100%"
+  }
+})

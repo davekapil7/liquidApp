@@ -19,52 +19,54 @@ import { STR } from '../Constant/string';
 import { Header as HeaderRNE, HeaderProps, Icon } from '@rneui/themed';
 import { COLOR } from '../Constant/color';
 import { Dimensions } from 'react-native';
+import { uppertabbar } from '../Constant/json';
+import { IMG } from '../Constant/image';
 
-const Theambackground = ({ children, scan, scanscreen, setting, back, title, subtitle, }) => {
+const Theambackground = ({ children, scan, scanscreen, setting, radius,back, title, subtitle, }) => {
   const navigation = useNavigation();
   const handlescan = () => {
-    navigation.navigate( 'Postauth' ,{screen: "Scanscreen"})
+    navigation.navigate('Postauth', { screen: "Scanscreen" })
   };
   const handlesetting = () => {
-    navigation.navigate('Postauth' ,{screen:'Settingscreen'});
+    navigation.navigate('Postauth', { screen: 'Settingscreen' });
   };
 
   const HEIGHT = Dimensions.get('window').height;
 
   return (
-    <View style={{ flex: 1, height: '100%' }}>
-      <ScrollView style={{ flex: 1, height: '100%' }}>
-        <View style={{ flex: 1, minHeight: HEIGHT }}>
-          <LinearGradient
-            start={{ x: 0.0, y: 0.4 }}
-            end={{ x: 0.85, y: 0.5 }}
-            locations={[0, 0.9]}
-            // start={{x: 0.0, y: 0.4}}
-            // end={{x: 0.8, y: 0.5}}
-            // locations={[0, 0.9]}
-            // colors={['#5d0981', '#e30cd1']}
-            colors={['#454dbc', '#bd59fa']}
-            style={{ flex: 1 }}>
-            <View
-              style={{
-                marginTop: 25,
-                paddingHorizontal: 15,
-                flexDirection: 'row',
-                width: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
+    <SafeAreaView style={{ flex: 1, height: '100%', backgroundColor: COLOR.PRIMARY }}>
+      <ScrollView style={{ flex: 1, height: '100%',backgroundColor:COLOR.WHITE[100] }}>
+        <View style={{
+          flex: 1,
+          minHeight: HEIGHT,
+height:"100%"
+        }}>
+
+          <View
+            style={{
+              //marginTop: 25,
+              padding: 19,
+
+              backgroundColor: COLOR.PRIMARY,
+              borderBottomLeftRadius: radius === false ? 0 : 40,
+              borderBottomRightRadius: radius === false ? 0 :  40,
+              width: '100%',
+          
+
+
+            }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
               {back &&
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                   <Icon
-                    name="chevron-back"
-                    type="ionicon"
+                    name="arrowleft"
+                    type="antdesign"
                     color={COLOR.WHITE[100]}
-                    size={35}
+                    size={25}
                   />
                 </TouchableOpacity>
               }
-              <View style={{ width: '70%' }}>
+              <View style={{ width: '65%' }}>
                 <Text
                   style={{
                     fontSize: 25,
@@ -84,11 +86,11 @@ const Theambackground = ({ children, scan, scanscreen, setting, back, title, sub
                 </Text>
               </View>
 
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
                 {scan && (
                   <TouchableOpacity onPress={() => handlescan()}>
                     <Icon
-                      name="line-scan"
+                      name="qrcode-scan"
                       size={25}
                       type="material-community"
                       color={COLOR.WHITE[100]}
@@ -97,7 +99,7 @@ const Theambackground = ({ children, scan, scanscreen, setting, back, title, sub
                 )}
                 {setting && (
                   <TouchableOpacity
-                    style={{ marginLeft: 10 }}
+                    style={{ marginLeft: 15 }}
                     onPress={() => handlesetting()}>
                     <Icon
                       name="settings-outline"
@@ -110,23 +112,54 @@ const Theambackground = ({ children, scan, scanscreen, setting, back, title, sub
               </View>
             </View>
 
-            <View
-              style={{
-                backgroundColor: COLOR.BLUE[100],
-
-                marginTop: 15,
-                height: '100%',
-                borderTopLeftRadius: scanscreen ? 0 : 15,
-                borderTopRightRadius: scanscreen ? 0 : 15,
-                padding: scanscreen ? 0 : 8,
-                paddingTop: scanscreen ? 0 : 15,
-              }}>
-              {children}
+            <View style={{
+              height: 43,
+              marginTop: 20,
+              borderColor: COLOR.WHITE[100],
+              width: "100%",
+              borderRadius: 20,
+              borderWidth: 2,
+              alignSelf: "center",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              alignItems: "center"
+            }}>
+              {/* <Image source={require("../../assets/Image/tabbar/home copy 1.png")} /> */}
+              {uppertabbar.map((tab, i) => {
+                return (
+                  <View>
+                   
+                    <Image source={tab.img} style={{ width: 25, height: 25, resizeMode: "" }} />
+                    {/* <Icon name={tab.activename}
+                      type={tab.activetype}
+                      color={COLOR.WHITE[100]}
+                      size={25}
+                    /> */}
+                  </View>
+                );
+              })}
             </View>
-          </LinearGradient>
+          </View>
+
+          <View
+            style={{
+              backgroundColor: COLOR.WHITE[100],
+              flex:1
+              // backgroundColor: COLOR.BLUE[100],
+
+              // marginTop: 15,
+              // height: '100%',
+              // borderTopLeftRadius: scanscreen ? 0 : 15,
+              // borderTopRightRadius: scanscreen ? 0 : 15,
+              // padding: scanscreen ? 0 : 8,
+              // paddingTop: scanscreen ? 0 : 15,
+            }}>
+            {children}
+          </View>
+
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

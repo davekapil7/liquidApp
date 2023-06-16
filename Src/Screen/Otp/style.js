@@ -1,7 +1,30 @@
-import {StyleSheet} from 'react-native';
-import {COLOR} from '../../Constant/color';
+import { StyleSheet } from 'react-native';
+import { COLOR } from '../../Constant/color';
 
 export const styles = StyleSheet.create({
+  titletext: {
+    fontSize: 24,
+    fontWeight: "600"
+  },
+  infotext: {
+    textAlign: "center",
+    marginTop: 25
+  },
+  buttontext: {
+color:COLOR.WHITE[100],
+fontWeight:"700"
+  },
+  button: {
+    position: "absolute",
+    bottom: 0,
+    height: 30,
+    backgroundColor: COLOR.PRIMARY,
+    width: 180,
+    borderRadius: 12,
+    alignItems: "center", justifyContent: "center"
+  },
+
+
   safeContainer: {
     flex: 1,
     backgroundColor: COLOR.PRIMARY,
@@ -9,46 +32,41 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-  backgroundColor:COLOR.PRIMARY,
-  justifyContent:"flex-end"
-  //  justifyContent:"center"
-   // justifyContent: 'center',
+    backgroundColor: COLOR.PRIMARY,
+    justifyContent: "flex-end"
+    //  justifyContent:"center"
+    // justifyContent: 'center',
   },
-  swiperView:{
-    height:"85%",
+  swiperView: {
+    height: "85%",
   },
-  titletext:{
-    fontSize:16,
-    fontWeight:"bold",
-  color:COLOR.BLACK[100],
-  marginTop:15,
+
+  desctext: {
+    width: "85%",
+    textAlign: "center", marginTop: 10,
+    lineHeight: 20,
+    fontSize: 16,
+    color: COLOR.BLACK[100]
   },
-  desctext:{
-    width:"85%",
-    textAlign:"center",marginTop:10,
-    lineHeight:20,
-    fontSize:16,
-    color:COLOR.BLACK[100]
+  introtext: {
+    marginTop: 15,
+    fontSize: 16,
+    color: COLOR.BLACK[100],
+    fontWeight: "bold"
   },
-  introtext:{
-    marginTop:15,
-    fontSize:16,
-    color:COLOR.BLACK[100],
-    fontWeight:"bold"
-  },
-    otpContainer: {
-      width:"100%",
+  otpContainer: {
+    width: "100%",
     marginTop: 30,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
     marginBottom: 20,
   },
-    otpInput: {
+  otpInput: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    color:"black",
+    color: "black",
     borderWidth: 1,
     borderColor: '#A3A9BC',
     borderRadius: 10,
@@ -60,5 +78,5 @@ export const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
 
- 
+
 });

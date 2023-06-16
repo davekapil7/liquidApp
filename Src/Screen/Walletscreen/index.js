@@ -44,6 +44,9 @@ import Credentials from './Credentials';
 import Professional from './Professional';
 import { onLoad } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 import { SvgUri } from 'react-native-svg';
+import Theambackground from '../../Components/Theambackground';
+import PoppinsText from '../../Components/LAText/Poppinstext';
+import LAButton from '../../Components/LAButton/Butto';
 
 const HEIGHT = Dimensions.get('screen').height;
 
@@ -60,7 +63,7 @@ const Walletscreen = () => {
   const [currentproof, setCurrentproof] = useState('');
   const proof = useSelector(state => state?.certificate.proofdata);
 
-  console.log("PRofile ==>",profileData);
+  console.log("PRofile ==>", profileData);
   const addcertificate = async id => {
     const result = await createProofforOR(id);
 
@@ -72,7 +75,7 @@ const Walletscreen = () => {
       //   proof: currentproof,
       //   card: id,
       // };
- 
+
       const newdata = { id: resid, iv: resiv, name: currentproof, card: id };
       const apidata = { id: resid, iv: resiv, name: currentproof };
       let oldarr = proof;
@@ -104,7 +107,7 @@ const Walletscreen = () => {
 
     dispatch({
       type: "SET_LOGIN",
-      payload:false
+      payload: false
     })
     //navigation.navigate('Preauth');
     axiosInstance
@@ -202,9 +205,9 @@ const Walletscreen = () => {
     state => state?.certificate?.verificationId,
   );
 
-  useEffect(()=>{
+  useEffect(() => {
     text()
-  },[])
+  }, [])
   useEffect(() => {
     if (!cardData) {
       getData();
@@ -286,7 +289,7 @@ const Walletscreen = () => {
   };
 
   const text = () => {
- 
+
     axiosInstance
       .get('/api/info', {
         params: {
@@ -297,8 +300,8 @@ const Walletscreen = () => {
         if (responseJson.status === 200) {
           console.log("responce ===>", responseJson.data);
           dispatch({
-            type:"ADD_PROFILE",
-            payload : responseJson.data?.user
+            type: "ADD_PROFILE",
+            payload: responseJson.data?.user
           })
         }
       })
@@ -338,14 +341,14 @@ const Walletscreen = () => {
 
   const [shareopen, setShareopen] = useState(false);
   const getmycredential = () => {
-    navigation.navigate('Postauth' ,{screen: 'Addscreen'});
+    navigation.navigate('Postauth', { screen: 'Addscreen' });
   };
 
   const scan = () => {
-    navigation.navigate('Postauth' ,{screen: 'Scanscreen'});
+    navigation.navigate('Postauth', { screen: 'Scanscreen' });
   };
   const setting = () => {
-    navigation.navigate('Postauth' ,{screen: 'Settingscreen'});
+    navigation.navigate('Postauth', { screen: 'Settingscreen' });
   };
 
   const share = () => {
@@ -353,7 +356,7 @@ const Walletscreen = () => {
   };
 
   const editdetail = () => {
-    navigation.navigate('Postauth' ,{screen: 'Editdetail'});
+    navigation.navigate('Postauth', { screen: 'Editdetail' });
   };
 
   if (loader) {
@@ -383,562 +386,671 @@ const Walletscreen = () => {
   };
 
   return (
-    <View style={styles.safeContainer}>
-      <ScrollView style={{ flex: 1, height: '100%' }}>
-        <LinearGradient
-          start={{ x: 0.0, y: 0.4 }}
-          end={{ x: 0.85, y: 0.5 }}
-          locations={[0, 0.9]}
-          colors={['#454dbc', '#bd59fa']}
-          style={{ flex: 1, height: '100%' }}>
-          <View style={{ flex: 1, minHeight: HEIGHT }}>
-            <View style={styles.headerContainer}>
-              <View>
-                <Text style={styles.titletext}>{STR.WALLET.TITLE}</Text>
-                <Text style={styles.welcometext}>
-                  {STR.WALLET.WELCOME}
-                  {Object.keys(profileData).length > 0
-                    ? ` ${profileData.firstname}`
-                    : 'User'}
-                </Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity onPress={() => scan()}>
-                  <Icon
-                    name="line-scan"
-                    size={25}
-                    type="material-community"
-                    color={COLOR.WHITE[100]}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{ marginLeft: 10 }}
-                  onPress={() => setting()}>
-                  <Icon
-                    name="settings-outline"
-                    size={25}
-                    type="ionicon"
-                    color={COLOR.WHITE[100]}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.container}>
-              <View style={{ height: 45 }}>
-                <ScrollView
-                  horizontal={true}
-                  style={{ height: 23 }}
-                  contentContainerStyle={{ height: 40 }}>
-                  <View style={styles.tabcontain}>
-                    {wallettype.map((type, i) => {
-                      return (
-                        <TouchableOpacity
-                          style={{
-                            ...styles.tabView,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-
-                            backgroundColor:
-                              selectedtype === i
-                                ? COLOR.BLUE[300]
-                                : COLOR.BLUE[200],
-
-                            borderTopLeftRadius: i == 0 ? 10 : 0,
-                            borderBottomLeftRadius: i === 0 ? 10 : 0,
-                            borderBottomRightRadius: i === 3 ? 10 : 0,
-                            borderTopRightRadius: i === 3 ? 10 : 0,
-                          }}
-                          onPress={() => handletype(i)}>
-                          <Icon
-                            name={type.iname}
-                            type={type.itype}
-                            size={15}
-                            color={
-                              selectedtype === i
-                                ? COLOR.WHITE[100]
-                                : COLOR.BLUE[300]
-                            }
-                          />
-                          <Text
-                            style={{
-                              marginLeft: 5,
-                              fontWeight: selectedtype === i ? 'bold' : '400',
-                              color:
-                                selectedtype === i
-                                  ? COLOR.WHITE[100]
-                                  : COLOR.BLUE[300],
-                              fontSize: 15,
-                            }}>
-                            {type.title}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
-                </ScrollView>
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  height: '100%',
-                  width: '100%',
-                }}>
-                {selectedtype === 0 && (
-                  <View
-                    style={{
-                      alignItems: 'flex-start',
-                      width: '100%',
-                      alignSelf: 'flex-start',
-                      flex: 1,
-                    }}>
-                    <View
-                      style={{
-                        backgroundColor: COLOR.WHITE[100],
-                        width: '100%',
-                        borderRadius: 15,
-                        padding: 15,
-                        marginTop: 10,
-                      }}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          borderBottomWidth: 0.5,
-                          paddingBottom: 15,
-                          borderBottomColor: COLOR.GRAY[100],
-                        }}>
-                        <View>
-                          <Text style={{ fontSize: 18, color: COLOR.BLACK[100] }}>
-                            {Object.keys(profileData).length > 0
-                              ? `${profileData.firstname} ${profileData.lastname}`
-                              : 'User'}
-                          </Text>
-                          <Text
-                            style={{
-                              fontSize: 13,
-                              marginTop: 10,
-                              color: COLOR.BLACK[100],
-                            }}>
-                            {Object.keys(profileData).length > 0
-                              ? profileData.email
-                              : '****@gmail.com'}
-                          </Text>
-                        </View>
-                        
-                        <View
-                          style={{
-                            width: 85,
-                            height: 85,
-                            borderRadius: 10,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: COLOR.BLUE[200],
-                          }}>
-                           {Object.keys(profileData).length > 0
-                              ? (
-                                <SvgUri
-                                height={85}
-                                width={75}
-                                uri={profileData?.logo}
-                              />
-                              )
-                              : (
-                                <Icon
-                                name="emoji-happy"
-                                color={COLOR.BLUE[300]}
-                                size={30}
-                                type="entypo"
-                              />
-                              )}
-                          {/* <Icon
-                            name="emoji-happy"
-                            color={COLOR.BLUE[300]}
-                            size={30}
-                            type="entypo"
-                          /> */}
-                        </View>
-                      </View>
-
-                      <TouchableOpacity
-                        style={{
-                          alignSelf: 'flex-end',
-                          padding: 10,
-                          backgroundColor: COLOR.BLUE[300],
-                          marginTop: 10,
-                          borderRadius: 5,
-                          flexDirection: 'row',
-                        }}
-                        onPress={() => share()}>
-                        <Icon
-                          name="qrcode-scan"
-                          type="material-community"
-                          size={20}
-                          color={COLOR.WHITE[100]}
-                        />
-                        <Text
-                          style={{
-                            marginLeft: 5,
-                            fontSize: 15,
-                            color: COLOR.WHITE[100],
-                            fontWeight: '800',
-                          }}>
-                          SHARE
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={{ alignSelf: 'center', marginTop: 5 }}
-                        onPress={() => editdetail()}>
-                        <Text
-                          style={{
-                            fontSize: 15,
-                            color: COLOR.BLUE[300],
-                            fontWeight: '600',
-                          }}>
-                          EDIT DETAILS
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                    {Object.keys(imsmartData).length > 0 ? (
-                      <View style={{ flex: 1, width: '100%', marginBottom: 35 }}>
-                        <View style={styles.inputbox}>
-                          <Text style={styles.inputtitle}>FULL NAME</Text>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                              marginTop: 2,
-                            }}>
-                            <Text style={styles.inputtext}>
-                              {imsmartData.name}
-                            </Text>
-                            <Image
-                              source={require('../../../assets/Image/ismart.png')}
-                              style={{width: 35, height: 35}}
-                            />
-                          </View>
-                        </View>
-
-                        <View style={styles.inputbox}>
-                          <Text style={styles.inputtitle}>Birth date</Text>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                              marginTop: 2,
-                            }}>
-                            <Text style={styles.inputtext}>
-                              {birthDayConverter(imsmartData.birthDate)}
-                            </Text>
-                            <Image
-                              source={require('../../../assets/Image/ismart.png')}
-                              style={{width: 35, height: 35}}
-                            />
-                          </View>
-                        </View>
-
-                        <View style={styles.inputbox}>
-                          <Text style={styles.inputtitle}>Phone number</Text>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                              marginTop: 2,
-                            }}>
-                            <Text style={styles.inputtext}>{`(${profileData.mobileNumber?.CountryCode
-                                ? imsmartData.mobileNumber?.CountryCode
-                                : ''
-                              })-${imsmartData.mobileNumber?.SubscriberNumber
-                                ? imsmartData.mobileNumber?.SubscriberNumber
-                                : ''
-                              }`}</Text>
-                            <Image
-                              source={require('../../../assets/Image/ismart.png')}
-                              style={{width: 35, height: 35}}
-                            />
-                          </View>
-                        </View>
-
-                        <View style={styles.inputbox}>
-                          <Text style={styles.inputtitle}>ID code</Text>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                              marginTop: 2,
-                            }}>
-                            <Text
-                              style={
-                                styles.inputtext
-                              }>{`${imsmartData.idNo.Identification}-(${imsmartData.idNo.CheckDigit})`}</Text>
-                            <Image
-                              source={require('../../../assets/Image/ismart.png')}
-                              style={{width: 35, height: 35}}
-                            />
-                          </View>
-                        </View>
-
-                        <View style={{ ...styles.lastbox }}>
-                          <Text
-                            style={{
-                              ...styles.inputtitle,
-                              fontWeight: 'bold',
-                              color: '#000',
-                            }}>
-                            Profile Data Provided by iAM SMART
-                          </Text>
-                        </View>
-                      </View>
-                    ) : (
-                      <>
-                        <View style={{ alignSelf: 'center' }}>
-                          <ProfileButton />
-                        </View>
-                        <View
-                          style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            width: '100%',
-                          }}>
-                          <Icon
-                            name="file-certificate-outline"
-                            type="material-community"
-                            size={90}
-                            color={COLOR.BLUE[300]}
-                          />
-                          <Text
-                            style={{
-                              fontSize: 25,
-                              color: COLOR.BLACK[100],
-                              fontWeight: '600',
-                            }}>
-                            Let's get your first credential
-                          </Text>
-                          <Text
-                            style={{
-                              fontSize: 17,
-                              color: COLOR.BLACK[100],
-                              fontWeight: '400',
-                              marginTop: 15,
-                              width: '75%',
-                              textAlign: 'center',
-                            }}>
-                            You can self issue your own credential or receive a
-                            testimonial from your business partners or
-                            colleagues
-                          </Text>
-
-                  
-                        </View>
-                      </>
-                    )}
-
-                    {/* <View style={{ alignSelf: 'center' }}>
-                          <ProfileButton />
-                        </View>
-                        <View
-                          style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            width: '100%',
-                          }}>
-                          <Icon
-                            name="file-certificate-outline"
-                            type="material-community"
-                            size={90}
-                            color={COLOR.BLUE[300]}
-                          />
-                          <Text
-                            style={{
-                              fontSize: 25,
-                              color: COLOR.BLACK[100],
-                              fontWeight: '600',
-                            }}>
-                            Let's get your first credential
-                          </Text>
-                          <Text
-                            style={{
-                              fontSize: 17,
-                              color: COLOR.BLACK[100],
-                              fontWeight: '400',
-                              marginTop: 15,
-                              width: '75%',
-                              textAlign: 'center',
-                            }}>
-                            You can self issue your own credential or receive a
-                            testimonial from your business partners or
-                            colleagues
-                          </Text>
-
-                  
-                        </View> */}
-                  </View>
-                )}
-
-                {selectedtype === 1 && (
-                  <View
-                    style={{
-                      alignItems: 'flex-start',
-                      width: '100%',
-                      height: '100%',
-                      alignSelf: 'flex-start',
-                      flex: 1,
-                    }}>
-                    <Certificate
-                      toMail={toMail}
-                      setMail={setToMail}
-                      setCard={setCurrentcard}
-                      setType={setSelectedType}
-                      handleproof={addcertificate}
-                      check={check}
-                    />
-                  </View>
-                )}
-
-                {selectedtype === 2 && (
-                  <View
-                    style={{
-                      alignItems: 'flex-start',
-                      width: '100%',
-                      height: '100%',
-                      alignSelf: 'flex-start',
-                      flex: 1,
-                    }}>
-                    <Credentials />
-                  </View>
-                )}
-
-                {selectedtype == 3 && (
-                  <View style={{ flex: 1 }}>
-                    <Professional
-                      changetype={setSelectedType}
-                      setProof={setCurrentproof}
-                      proofitem={proof}
-                      setcheck={setCheck}
-                    />
-                  </View>
-                )}
-              </View>
-            </View>
-          </View>
-        </LinearGradient>
-      </ScrollView>
-
-      <BottomSheet
-        isVisible={shareopen}
-        containerStyle={{
-          backgroundColor: 'rgba(255, 255, 255,0.6)',
-          //alignItems:"center",
-          justifyContent: 'center',
-        }}>
+    <Theambackground title={"Wallet"}
+      subtitle={`${STR.WALLET.WELCOME}${Object.keys(profileData).length > 0
+        ? ` ${profileData.firstname}`
+        : 'User Name'}`}
+      setting={true}
+      scan={true}
+      radius={false}>
+      <View style={{ flex: 1, height: "100%", alignItems: "center" }}>
         <View
           style={{
-            backgroundColor: COLOR.WHITE[100],
-            alignSelf: 'center',
-            width: '85%',
-            borderRadius: 25,
-            alignItems: 'center',
-            padding: 5,
-            elevation: 5,
-            shadowColor: 'black',
+            backgroundColor: COLOR.SECONDRY,
+            width: '94%',
+            borderRadius: 10,
+            padding: 15,
+            marginTop: 20
           }}>
-          <Text style={{ fontSize: 20, color: COLOR.BLUE[300] }}>Share</Text>
-          <Text
-            style={{
-              fontSize: 17,
-              marginTop: 15,
-              textAlign: 'center',
-              color: COLOR.BLACK[100],
-              lineHeight: 24,
-            }}>
-            Present this QR Code to the liquid App scanner so other may save
-            your contact details on their app, or to any camera application to
-            view it on a browser
-          </Text>
-
-          <Image
-            source={IMG.QRCODE}
-            style={{ width: 250, height: 250, resizeMode: 'stretch' }}
-          />
-
-          <TouchableOpacity
-            style={{
-              width: '70%',
-              marginTop: 15,
-              backgroundColor: COLOR.BLUE[300],
-              alignItems: 'center',
-              height: 50,
-              justifyContent: 'center',
-              borderRadius: 10,
-            }}>
-            <Text
-              style={{
-                fontSize: 20,
-                color: COLOR.WHITE[100],
-                fontWeight: 'bold',
-              }}>
-              SHARE VIA WEB LINKS
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              width: '70%',
-              marginTop: 15,
-              borderWidth: 1,
-              borderColor: COLOR.BLUE[300],
-              backgroundColor: COLOR.WHITE[100],
-              alignItems: 'center',
-              height: 50,
-              justifyContent: 'center',
-              borderRadius: 10,
-            }}
-            onPress={() => setShareopen(false)}>
-            <Text
-              style={{
-                fontSize: 20,
-                color: COLOR.BLUE[300],
-                fontWeight: 'bold',
-              }}>
-              CLOSE WINDOW
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </BottomSheet>
-
-      <Modal
-        transparent={true}
-        animationType={'none'}
-        visible={alertmodal}
-        onRequestClose={() => {
-          console.log('close modal');
-        }}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <View
             style={{
-              width: '80%',
-              alignItems: 'center',
-              paddingHorizontal: 10,
-              justifyContent: 'center',
-              backgroundColor: COLOR.BLUE[100],
-              paddingVertical: 50,
-              elevation: 15,
-              borderRadius: 15,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              borderBottomWidth: 1,
+              paddingBottom: 15,
+              borderBottomColor: "#000000",
             }}>
-            <Text
+            <View style={{ justifyContent: "center" }}>
+
+              <PoppinsText title={`${Object.keys(profileData).length > 0
+                ? `${profileData.firstname} ${profileData.lastname}`
+                : 'User'}`} />
+
+              <PoppinsText title={`${Object.keys(profileData).length > 0
+                ? profileData.email
+                : '****@gmail.com'}`}
+                textstyle={styles.emailtext} />
+            </View>
+
+            <View
               style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: 'black',
-                textAlign: 'center',
+                width: 85,
+                height: 85,
+                borderRadius: 10,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: COLOR.BLUE[200],
               }}>
-              Your verification ID has been proceed now the Professional screen
-              is ready with your verification Id
-            </Text>
+              {Object.keys(profileData).length > 0
+                ? (
+                  <SvgUri
+                    height={85}
+                    width={75}
+                    uri={profileData?.logo}
+                  />
+                )
+                : (
+                  <Image source={IMG.PROFILE} style={{ width: 70, height: 70 }} />
+                )}
+
+            </View>
           </View>
+
+          <View style={{ flexDirection: "row", marginTop: 15, justifyContent: "space-between" }}>
+            <TouchableOpacity
+              style={{ alignSelf: 'center', marginTop: 5 }}
+              onPress={() => editdetail()}>
+
+              <PoppinsText title={"EDIT DETAILS"} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                alignSelf: 'flex-end',
+
+                width: 114,
+                height: 30,
+                backgroundColor: COLOR.PRIMARY,
+
+                borderRadius: 12,
+
+                flexDirection: 'row',
+                alignItems: "center",
+                justifyContent: "space-evenly"
+              }}
+              onPress={() => share()}>
+              <Image source={IMG.SHARE} style={{ width: 25, height: 25 }} />
+
+              <PoppinsText title={"SHARE"} textstyle={{ fontWeight: '700', color: COLOR.WHITE[100] }} />
+            </TouchableOpacity>
+          </View>
+
         </View>
-      </Modal>
-    </View>
+
+        <View style={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingHorizontal: "15%"
+
+        }}>
+          <Image source={IMG.CREDS} style={{ width: 70, height: 70, marginTop: 25 }} />
+
+          <PoppinsText title={"Let’s get your first credential"} textstyle={styles.letstext} />
+          <PoppinsText title={"You can self issue your own credential or receive a testimonial from your business partners or colleagues"} textstyle={styles.letsmesg} />
+          <LAButton
+            title={"Create Company Credentials"}
+            viewStyle={{ width: 209, marginTop: 25 }}
+            handlepress={() => console.log('under production')} />
+        </View>
+      </View>
+
+    </Theambackground>
+    // <View style={styles.safeContainer}>
+    //   <ScrollView style={{ flex: 1, height: '100%' }}>
+    //     {/* <LinearGradient
+    //       start={{ x: 0.0, y: 0.4 }}
+    //       end={{ x: 0.85, y: 0.5 }}
+    //       locations={[0, 0.9]}
+    //       colors={['#454dbc', '#bd59fa']}
+    //       style={{ flex: 1, height: '100%' }}> */}
+    //       <View style={{ flex: 1, minHeight: HEIGHT }}>
+    //         <View style={styles.headerContainer}>
+    //           <View>
+    //             <Text style={styles.titletext}>{STR.WALLET.TITLE}</Text>
+    //             <Text style={styles.welcometext}>
+    //               {STR.WALLET.WELCOME}
+    //               {Object.keys(profileData).length > 0
+    //                 ? ` ${profileData.firstname}`
+    //                 : 'User'}
+    //             </Text>
+    //           </View>
+    //           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    //             <TouchableOpacity onPress={() => scan()}>
+    //               <Icon
+    //                 name="line-scan"
+    //                 size={25}
+    //                 type="material-community"
+    //                 color={COLOR.WHITE[100]}
+    //               />
+    //             </TouchableOpacity>
+    //             <TouchableOpacity
+    //               style={{ marginLeft: 10 }}
+    //               onPress={() => setting()}>
+    //               <Icon
+    //                 name="settings-outline"
+    //                 size={25}
+    //                 type="ionicon"
+    //                 color={COLOR.WHITE[100]}
+    //               />
+    //             </TouchableOpacity>
+    //           </View>
+    //         </View>
+
+    //         <View style={styles.container}>
+    //           <View style={{ height: 45 }}>
+    //             <ScrollView
+    //               horizontal={true}
+    //               style={{ height: 23 }}
+    //               contentContainerStyle={{ height: 40 }}>
+    //               <View style={styles.tabcontain}>
+    //                 {wallettype.map((type, i) => {
+    //                   return (
+    //                     <TouchableOpacity
+    //                       style={{
+    //                         ...styles.tabView,
+    //                         flexDirection: 'row',
+    //                         alignItems: 'center',
+
+    //                         backgroundColor:
+    //                           selectedtype === i
+    //                             ? COLOR.BLUE[300]
+    //                             : COLOR.BLUE[200],
+
+    //                         borderTopLeftRadius: i == 0 ? 10 : 0,
+    //                         borderBottomLeftRadius: i === 0 ? 10 : 0,
+    //                         borderBottomRightRadius: i === 3 ? 10 : 0,
+    //                         borderTopRightRadius: i === 3 ? 10 : 0,
+    //                       }}
+    //                       onPress={() => handletype(i)}>
+    //                       <Icon
+    //                         name={type.iname}
+    //                         type={type.itype}
+    //                         size={15}
+    //                         color={
+    //                           selectedtype === i
+    //                             ? COLOR.WHITE[100]
+    //                             : COLOR.BLUE[300]
+    //                         }
+    //                       />
+    //                       <Text
+    //                         style={{
+    //                           marginLeft: 5,
+    //                           fontWeight: selectedtype === i ? 'bold' : '400',
+    //                           color:
+    //                             selectedtype === i
+    //                               ? COLOR.WHITE[100]
+    //                               : COLOR.BLUE[300],
+    //                           fontSize: 15,
+    //                         }}>
+    //                         {type.title}
+    //                       </Text>
+    //                     </TouchableOpacity>
+    //                   );
+    //                 })}
+    //               </View>
+    //             </ScrollView>
+    //           </View>
+    //           <View
+    //             style={{
+    //               flex: 1,
+    //               height: '100%',
+    //               width: '100%',
+    //             }}>
+    //             {selectedtype === 0 && (
+    //               <View
+    //                 style={{
+    //                   alignItems: 'flex-start',
+    //                   width: '100%',
+    //                   alignSelf: 'flex-start',
+    //                   flex: 1,
+    //                 }}>
+    //                 <View
+    //                   style={{
+    //                     backgroundColor: COLOR.WHITE[100],
+    //                     width: '100%',
+    //                     borderRadius: 15,
+    //                     padding: 15,
+    //                     marginTop: 10,
+    //                   }}>
+    //                   <View
+    //                     style={{
+    //                       flexDirection: 'row',
+    //                       justifyContent: 'space-between',
+    //                       borderBottomWidth: 0.5,
+    //                       paddingBottom: 15,
+    //                       borderBottomColor: COLOR.GRAY[100],
+    //                     }}>
+    //                     <View>
+    //                       <Text style={{ fontSize: 18, color: COLOR.BLACK[100] }}>
+    //                         {Object.keys(profileData).length > 0
+    //                           ? `${profileData.firstname} ${profileData.lastname}`
+    //                           : 'User'}
+    //                       </Text>
+    //                       <Text
+    //                         style={{
+    //                           fontSize: 13,
+    //                           marginTop: 10,
+    //                           color: COLOR.BLACK[100],
+    //                         }}>
+    //                         {Object.keys(profileData).length > 0
+    //                           ? profileData.email
+    //                           : '****@gmail.com'}
+    //                       </Text>
+    //                     </View>
+
+    //                     <View
+    //                       style={{
+    //                         width: 85,
+    //                         height: 85,
+    //                         borderRadius: 10,
+    //                         alignItems: 'center',
+    //                         justifyContent: 'center',
+    //                         backgroundColor: COLOR.BLUE[200],
+    //                       }}>
+    //                        {Object.keys(profileData).length > 0
+    //                           ? (
+    //                             <SvgUri
+    //                             height={85}
+    //                             width={75}
+    //                             uri={profileData?.logo}
+    //                           />
+    //                           )
+    //                           : (
+    //                             <Icon
+    //                             name="emoji-happy"
+    //                             color={COLOR.BLUE[300]}
+    //                             size={30}
+    //                             type="entypo"
+    //                           />
+    //                           )}
+    //                       {/* <Icon
+    //                         name="emoji-happy"
+    //                         color={COLOR.BLUE[300]}
+    //                         size={30}
+    //                         type="entypo"
+    //                       /> */}
+    //                     </View>
+    //                   </View>
+
+    //                   <TouchableOpacity
+    //                     style={{
+    //                       alignSelf: 'flex-end',
+    //                       padding: 10,
+    //                       backgroundColor: COLOR.BLUE[300],
+    //                       marginTop: 10,
+    //                       borderRadius: 5,
+    //                       flexDirection: 'row',
+    //                     }}
+    //                     onPress={() => share()}>
+    //                     <Icon
+    //                       name="qrcode-scan"
+    //                       type="material-community"
+    //                       size={20}
+    //                       color={COLOR.WHITE[100]}
+    //                     />
+    //                     <Text
+    //                       style={{
+    //                         marginLeft: 5,
+    //                         fontSize: 15,
+    //                         color: COLOR.WHITE[100],
+    //                         fontWeight: '800',
+    //                       }}>
+    //                       SHARE
+    //                     </Text>
+    //                   </TouchableOpacity>
+    //                   <TouchableOpacity
+    //                     style={{ alignSelf: 'center', marginTop: 5 }}
+    //                     onPress={() => editdetail()}>
+    //                     <Text
+    //                       style={{
+    //                         fontSize: 15,
+    //                         color: COLOR.BLUE[300],
+    //                         fontWeight: '600',
+    //                       }}>
+    //                       EDIT DETAILS
+    //                     </Text>
+    //                   </TouchableOpacity>
+    //                 </View>
+    //                 {Object.keys(imsmartData).length > 0 ? (
+    //                   <View style={{ flex: 1, width: '100%', marginBottom: 35 }}>
+    //                     <View style={styles.inputbox}>
+    //                       <Text style={styles.inputtitle}>FULL NAME</Text>
+    //                       <View
+    //                         style={{
+    //                           flexDirection: 'row',
+    //                           justifyContent: 'space-between',
+    //                           marginTop: 2,
+    //                         }}>
+    //                         <Text style={styles.inputtext}>
+    //                           {imsmartData.name}
+    //                         </Text>
+    //                         <Image
+    //                           source={require('../../../assets/Image/ismart.png')}
+    //                           style={{width: 35, height: 35}}
+    //                         />
+    //                       </View>
+    //                     </View>
+
+    //                     <View style={styles.inputbox}>
+    //                       <Text style={styles.inputtitle}>Birth date</Text>
+    //                       <View
+    //                         style={{
+    //                           flexDirection: 'row',
+    //                           justifyContent: 'space-between',
+    //                           marginTop: 2,
+    //                         }}>
+    //                         <Text style={styles.inputtext}>
+    //                           {birthDayConverter(imsmartData.birthDate)}
+    //                         </Text>
+    //                         <Image
+    //                           source={require('../../../assets/Image/ismart.png')}
+    //                           style={{width: 35, height: 35}}
+    //                         />
+    //                       </View>
+    //                     </View>
+
+    //                     <View style={styles.inputbox}>
+    //                       <Text style={styles.inputtitle}>Phone number</Text>
+    //                       <View
+    //                         style={{
+    //                           flexDirection: 'row',
+    //                           justifyContent: 'space-between',
+    //                           marginTop: 2,
+    //                         }}>
+    //                         <Text style={styles.inputtext}>{`(${profileData.mobileNumber?.CountryCode
+    //                             ? imsmartData.mobileNumber?.CountryCode
+    //                             : ''
+    //                           })-${imsmartData.mobileNumber?.SubscriberNumber
+    //                             ? imsmartData.mobileNumber?.SubscriberNumber
+    //                             : ''
+    //                           }`}</Text>
+    //                         <Image
+    //                           source={require('../../../assets/Image/ismart.png')}
+    //                           style={{width: 35, height: 35}}
+    //                         />
+    //                       </View>
+    //                     </View>
+
+    //                     <View style={styles.inputbox}>
+    //                       <Text style={styles.inputtitle}>ID code</Text>
+    //                       <View
+    //                         style={{
+    //                           flexDirection: 'row',
+    //                           justifyContent: 'space-between',
+    //                           marginTop: 2,
+    //                         }}>
+    //                         <Text
+    //                           style={
+    //                             styles.inputtext
+    //                           }>{`${imsmartData.idNo.Identification}-(${imsmartData.idNo.CheckDigit})`}</Text>
+    //                         <Image
+    //                           source={require('../../../assets/Image/ismart.png')}
+    //                           style={{width: 35, height: 35}}
+    //                         />
+    //                       </View>
+    //                     </View>
+
+    //                     <View style={{ ...styles.lastbox }}>
+    //                       <Text
+    //                         style={{
+    //                           ...styles.inputtitle,
+    //                           fontWeight: 'bold',
+    //                           color: '#000',
+    //                         }}>
+    //                         Profile Data Provided by iAM SMART
+    //                       </Text>
+    //                     </View>
+    //                   </View>
+    //                 ) : (
+    //                   <>
+    //                     <View style={{ alignSelf: 'center' }}>
+    //                       <ProfileButton />
+    //                     </View>
+    //                     <View
+    //                       style={{
+    //                         flex: 1,
+    //                         alignItems: 'center',
+    //                         width: '100%',
+    //                       }}>
+    //                       <Icon
+    //                         name="file-certificate-outline"
+    //                         type="material-community"
+    //                         size={90}
+    //                         color={COLOR.BLUE[300]}
+    //                       />
+    //                       <Text
+    //                         style={{
+    //                           fontSize: 25,
+    //                           color: COLOR.BLACK[100],
+    //                           fontWeight: '600',
+    //                         }}>
+    //                         Let's get your first credential
+    //                       </Text>
+    //                       <Text
+    //                         style={{
+    //                           fontSize: 17,
+    //                           color: COLOR.BLACK[100],
+    //                           fontWeight: '400',
+    //                           marginTop: 15,
+    //                           width: '75%',
+    //                           textAlign: 'center',
+    //                         }}>
+    //                         You can self issue your own credential or receive a
+    //                         testimonial from your business partners or
+    //                         colleagues
+    //                       </Text>
+
+
+    //                     </View>
+    //                   </>
+    //                 )}
+
+    //                 {/* <View style={{ alignSelf: 'center' }}>
+    //                       <ProfileButton />
+    //                     </View>
+    //                     <View
+    //                       style={{
+    //                         flex: 1,
+    //                         alignItems: 'center',
+    //                         width: '100%',
+    //                       }}>
+    //                       <Icon
+    //                         name="file-certificate-outline"
+    //                         type="material-community"
+    //                         size={90}
+    //                         color={COLOR.BLUE[300]}
+    //                       />
+    //                       <Text
+    //                         style={{
+    //                           fontSize: 25,
+    //                           color: COLOR.BLACK[100],
+    //                           fontWeight: '600',
+    //                         }}>
+    //                         Let's get your first credential
+    //                       </Text>
+    //                       <Text
+    //                         style={{
+    //                           fontSize: 17,
+    //                           color: COLOR.BLACK[100],
+    //                           fontWeight: '400',
+    //                           marginTop: 15,
+    //                           width: '75%',
+    //                           textAlign: 'center',
+    //                         }}>
+    //                         You can self issue your own credential or receive a
+    //                         testimonial from your business partners or
+    //                         colleagues
+    //                       </Text>
+
+
+    //                     </View> */}
+    //               </View>
+    //             )}
+
+    //             {selectedtype === 1 && (
+    //               <View
+    //                 style={{
+    //                   alignItems: 'flex-start',
+    //                   width: '100%',
+    //                   height: '100%',
+    //                   alignSelf: 'flex-start',
+    //                   flex: 1,
+    //                 }}>
+    //                 <Certificate
+    //                   toMail={toMail}
+    //                   setMail={setToMail}
+    //                   setCard={setCurrentcard}
+    //                   setType={setSelectedType}
+    //                   handleproof={addcertificate}
+    //                   check={check}
+    //                 />
+    //               </View>
+    //             )}
+
+    //             {selectedtype === 2 && (
+    //               <View
+    //                 style={{
+    //                   alignItems: 'flex-start',
+    //                   width: '100%',
+    //                   height: '100%',
+    //                   alignSelf: 'flex-start',
+    //                   flex: 1,
+    //                 }}>
+    //                 <Credentials />
+    //               </View>
+    //             )}
+
+    //             {selectedtype == 3 && (
+    //               <View style={{ flex: 1 }}>
+    //                 <Professional
+    //                   changetype={setSelectedType}
+    //                   setProof={setCurrentproof}
+    //                   proofitem={proof}
+    //                   setcheck={setCheck}
+    //                 />
+    //               </View>
+    //             )}
+    //           </View>
+    //         </View>
+    //       </View>
+    //     {/* </LinearGradient> */}
+    //   </ScrollView>
+
+    //   <BottomSheet
+    //     isVisible={shareopen}
+    //     containerStyle={{
+    //       backgroundColor: 'rgba(255, 255, 255,0.6)',
+    //       //alignItems:"center",
+    //       justifyContent: 'center',
+    //     }}>
+    //     <View
+    //       style={{
+    //         backgroundColor: COLOR.WHITE[100],
+    //         alignSelf: 'center',
+    //         width: '85%',
+    //         borderRadius: 25,
+    //         alignItems: 'center',
+    //         padding: 5,
+    //         elevation: 5,
+    //         shadowColor: 'black',
+    //       }}>
+    //       <Text style={{ fontSize: 20, color: COLOR.BLUE[300] }}>Share</Text>
+    //       <Text
+    //         style={{
+    //           fontSize: 17,
+    //           marginTop: 15,
+    //           textAlign: 'center',
+    //           color: COLOR.BLACK[100],
+    //           lineHeight: 24,
+    //         }}>
+    //         Present this QR Code to the liquid App scanner so other may save
+    //         your contact details on their app, or to any camera application to
+    //         view it on a browser
+    //       </Text>
+
+    //       <Image
+    //         source={IMG.QRCODE}
+    //         style={{ width: 250, height: 250, resizeMode: 'stretch' }}
+    //       />
+
+    //       <TouchableOpacity
+    //         style={{
+    //           width: '70%',
+    //           marginTop: 15,
+    //           backgroundColor: COLOR.BLUE[300],
+    //           alignItems: 'center',
+    //           height: 50,
+    //           justifyContent: 'center',
+    //           borderRadius: 10,
+    //         }}>
+    //         <Text
+    //           style={{
+    //             fontSize: 20,
+    //             color: COLOR.WHITE[100],
+    //             fontWeight: 'bold',
+    //           }}>
+    //           SHARE VIA WEB LINKS
+    //         </Text>
+    //       </TouchableOpacity>
+
+    //       <TouchableOpacity
+    //         style={{
+    //           width: '70%',
+    //           marginTop: 15,
+    //           borderWidth: 1,
+    //           borderColor: COLOR.BLUE[300],
+    //           backgroundColor: COLOR.WHITE[100],
+    //           alignItems: 'center',
+    //           height: 50,
+    //           justifyContent: 'center',
+    //           borderRadius: 10,
+    //         }}
+    //         onPress={() => setShareopen(false)}>
+    //         <Text
+    //           style={{
+    //             fontSize: 20,
+    //             color: COLOR.BLUE[300],
+    //             fontWeight: 'bold',
+    //           }}>
+    //           CLOSE WINDOW
+    //         </Text>
+    //       </TouchableOpacity>
+    //     </View>
+    //   </BottomSheet>
+
+    //   <Modal
+    //     transparent={true}
+    //     animationType={'none'}
+    //     visible={alertmodal}
+    //     onRequestClose={() => {
+    //       console.log('close modal');
+    //     }}>
+    //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    //       <View
+    //         style={{
+    //           width: '80%',
+    //           alignItems: 'center',
+    //           paddingHorizontal: 10,
+    //           justifyContent: 'center',
+    //           backgroundColor: COLOR.BLUE[100],
+    //           paddingVertical: 50,
+    //           elevation: 15,
+    //           borderRadius: 15,
+    //         }}>
+    //         <Text
+    //           style={{
+    //             fontSize: 18,
+    //             fontWeight: 'bold',
+    //             color: 'black',
+    //             textAlign: 'center',
+    //           }}>
+    //           Your verification ID has been proceed now the Professional screen
+    //           is ready with your verification Id
+    //         </Text>
+    //       </View>
+    //     </View>
+    //   </Modal>
+    // </View>
   );
 };
 

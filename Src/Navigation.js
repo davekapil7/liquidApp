@@ -49,8 +49,8 @@ const linking = {
 const Preauth = () => {
   return (
     <Stack.Navigator
-      initialRouteName="OnbordingScreen"
-
+   //   initialRouteName="OnbordingScreen"
+   initialRouteName="Otpscreen"
     >
       <Stack.Screen
         name="LoginScreen"
@@ -190,8 +190,8 @@ const Postauth = () => {
 
 const Rootnavigation = () => {
 
-  const loginstatus = useSelector(state => state?.appstate?.login);
-
+ // const loginstatus = useSelector(state => state?.appstate?.login);
+ const loginstatus = true
   const dispatch = useDispatch();
 
   const appState = useRef(AppState.currentState);
@@ -364,24 +364,13 @@ const Rootnavigation = () => {
     <NavigationContainer linking={linking}>
 
       <Stack.Navigator >
-
-        {/* {splash ? (
-          <Stack.Screen
-            name="SplashScreen"
-            component={SplashScreen}
-            // Hiding header for Splash Screen
-            options={{ headerShown: false }}
-          />
-        ) : (
-        <> */}
         {loginstatus === true ? (
           <Stack.Screen name='Postauth' component={Postauth} options={{ headerShown: false }} />
         ) : (
 
           <Stack.Screen name='Preauth' component={Preauth} options={{ headerShown: false }} />
         )}
-        {/* </>
-      )}  */}
+      
 
       </Stack.Navigator>
 

@@ -2,6 +2,32 @@ import { StyleSheet } from 'react-native';
 import { COLOR } from '../../Constant/color';
 
 export const styles = StyleSheet.create({
+
+  emailtext: {
+    fontSize: 15,
+    color: COLOR.BLACK[100],
+    marginTop: 8
+  },
+  letstext: {
+    fontSize: 15,
+    fontWeight: "700",
+    marginTop: 15
+  },
+  letsmesg: {
+    textAlign: "center", marginTop: 15
+  },
+
+
+
+
+
+
+
+
+
+
+
+
   safeContainer: {
     flex: 1,
     height: "100%",

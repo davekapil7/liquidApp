@@ -1,13 +1,78 @@
-import {Platform, StyleSheet} from 'react-native';
-import {COLOR} from '../../Constant/color';
+import { Platform, StyleSheet } from 'react-native';
+import { COLOR } from '../../Constant/color';
 
 export const styles = StyleSheet.create({
+  title: {
+    fontWeight: "600",
+    fontSize: 24
+  },
+  cordContain: {
+    flex: 1,
+    padding: 0,
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  tabcontain: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  tabview: { width: "40%", alignItems: "center" },
+  borderview: { width: "100%", marginTop: 10, borderRadius: 8, backgroundColor: COLOR.PRIMARY, height: 4 },
+  tabtext: {
+    fontWeight: "400",
+    lineHeight: 18
+  },
+  textinputView: {
+    backgroundColor: COLOR.WHITE[100],
+    borderRadius: 5,
+    width: "100%",
+    height: 31,
+    //paddingVertical: Platform.OS === "ios" ? 10 : 0,
+    paddingHorizontal: 15,
+    marginTop: 15,
+    color: COLOR.BLACK[100]
+  },
+  messagetext: {
+    color: COLOR.BLACK[100],
+    width: "100%", textAlign: "left"
+  },
+  infotext: {
+    textAlign: 'center',
+    fontSize: 12,
+    marginTop: '5%',
+    color: COLOR.GRAY[500]
+  },
+  button: {
+    width: 180,
+    backgroundColor: COLOR.PRIMARY,
+    height: 30,
+    marginTop: 15,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttontext: {
+    color: COLOR.WHITE[100],
+    fontWeight: "700"
+  },
+
+
+
+
+
+
+
+
+
   safeContainer: {
     flex: 1,
     backgroundColor: COLOR.PRIMARY,
   },
   keyContainer: {
     flex: 1,
+    width: "100%",
     alignItems: 'center',
   },
   container: {
@@ -27,12 +92,12 @@ export const styles = StyleSheet.create({
     color: COLOR.BLACK[100],
     fontWeight: '700',
   },
-  tabView: {
-    width: '95%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: '5%',
-  },
+  // tabView: {
+  //   width: '95%',
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   marginTop: '5%',
+  // },
   tabbar: {
     width: '48%',
     alignItems: 'center',
@@ -58,14 +123,7 @@ export const styles = StyleSheet.create({
     width: '90%',
     marginTop: 10,
   },
-  textinputView: {
-    backgroundColor: COLOR.WHITE[100],
-    borderRadius: 10,
-    paddingVertical: Platform.OS === "ios" ?  10 : 0,
-    paddingHorizontal: 15,
-    marginTop:15,
-    color:COLOR.BLACK[100]
-  },
+
   numberView: {
     width: '100%',
     height: 45,
@@ -94,12 +152,7 @@ export const styles = StyleSheet.create({
   passinput: {
     flex: 1,
   },
-  infotext: {
-    textAlign: 'center',
-    fontSize: 12,
-    marginTop: '5%',
-    color:COLOR.GRAY[300]
-  },
+
   buttonView: {
     width: 150,
     backgroundColor: COLOR.GREEN[100],

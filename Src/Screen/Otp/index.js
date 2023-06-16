@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,18 +8,20 @@ import {
   TextInput,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
-import {COLOR} from '../../Constant/color';
-import {Onbording} from '../../Constant/json';
-import {styles} from './style';
-import {useNavigation} from '@react-navigation/native';
+import { COLOR } from '../../Constant/color';
+import { Onbording } from '../../Constant/json';
+import { styles } from './style';
+import { useNavigation } from '@react-navigation/native';
 import OtpInputs from 'react-native-otp-inputs';
-import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../Constant/axios';
-import {useDispatch, useSelector} from 'react-redux';
-import {getCarddata} from '../../Function/Apicall';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCarddata } from '../../Function/Apicall';
 import Toast from 'react-native-toast-message';
+import CardView from '../../Components/Cardview';
+import PoppinsText from '../../Components/LAText/Poppinstext';
 const Otpscreen = params => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -55,13 +57,13 @@ const Otpscreen = params => {
     }
   };
 
-  
+
   const handleotp = () => {
     const code = otp.join('');
     console.log(typeof code)
     console.log(code);
     console.log('HELLO');
-    let dataToSend = {otp: code};
+    let dataToSend = { otp: code };
     // console.log(dataToSend, 'fshsh');
     axiosInstance
       .post('auth/verify-otp', dataToSend)
@@ -70,8 +72,8 @@ const Otpscreen = params => {
         if (responseJson?.data?.data === 'Authorized') {
           // dispatch({ type: 'ADD_EXPIRY', payload: responseJson.data.expires });
           dispatch({
-            type : "ADD_PROFILE",
-            payload : responseJson.data?.user
+            type: "ADD_PROFILE",
+            payload: responseJson.data?.user
           })
           AsyncStorage.setItem('login', 'true');
 
@@ -83,22 +85,22 @@ const Otpscreen = params => {
           );
           dispatch({
             type: "SET_LOGIN",
-            payload:true
+            payload: true
           })
 
           initialapicall();
-       //   navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
+          //   navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
 
-         //   handlebiomatric();
+          //   handlebiomatric();
         } else {
           Toast.show({
             topOffset: 100,
             type: "error",
             text1: "ERROR",
-           text2: `Please Enter right OTP`,
+            text2: `Please Enter right OTP`,
             visibilityTime: 3000,
             props: {
-              text1NumberOfLines:2 //number of how many lines you want
+              text1NumberOfLines: 2 //number of how many lines you want
             }
           });
         }
@@ -110,10 +112,10 @@ const Otpscreen = params => {
           topOffset: 100,
           type: "error",
           text1: "ERROR",
-         text2: `Please enter right otp`,
+          text2: `Please enter right otp`,
           visibilityTime: 3000,
           props: {
-            text1NumberOfLines:2 //number of how many lines you want
+            text1NumberOfLines: 2 //number of how many lines you want
           }
         });
       });
@@ -127,7 +129,7 @@ const Otpscreen = params => {
     console.log(typeof code)
     console.log(code);
     console.log('HELLO');
-    let dataToSend = {data: datatoken, otp: code};
+    let dataToSend = { data: datatoken, otp: code };
     console.log(dataToSend, datatoken, 'fshsh');
     axiosInstance
       .post('auth/verifySignupOtp', dataToSend)
@@ -136,28 +138,28 @@ const Otpscreen = params => {
         if (responseJson?.data?.error === false) {
           // dispatch({ type: 'ADD_EXPIRY', payload: responseJson.data.expires });
           dispatch({
-            type : "ADD_PROFILE",
-            payload : responseJson.data?.user
+            type: "ADD_PROFILE",
+            payload: responseJson.data?.user
           })
           AsyncStorage.setItem('login', 'true');
 
           AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
           dispatch({
             type: "SET_LOGIN",
-            payload:true
+            payload: true
           })
           initialapicall();
-         //  navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
-       //   handlebiomatric();
+          //  navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
+          //   handlebiomatric();
         } else {
           Toast.show({
             topOffset: 100,
             type: "error",
             text1: "ERROR",
-           text2: `Please enter right otp`,
+            text2: `Please enter right otp`,
             visibilityTime: 3000,
             props: {
-              text1NumberOfLines:2 //number of how many lines you want
+              text1NumberOfLines: 2 //number of how many lines you want
             }
           });
           // Alert.alert('Please Enter Right OTP');
@@ -171,10 +173,10 @@ const Otpscreen = params => {
           topOffset: 100,
           type: "error",
           text1: "ERROR",
-         text2: `Please enter right OTP`,
+          text2: `Please enter right OTP`,
           visibilityTime: 3000,
           props: {
-            text1NumberOfLines:2 //number of how many lines you want
+            text1NumberOfLines: 2 //number of how many lines you want
           }
         });
       });
@@ -183,91 +185,61 @@ const Otpscreen = params => {
   const handlebiomatric = async () => {
     await rnBiometrics.isSensorAvailable().then(resultObject => {
       rnBiometrics
-        .simplePrompt({promptMessage: 'Confirm fingerprint'})
+        .simplePrompt({ promptMessage: 'Confirm fingerprint' })
         .then(resultObject => {
-          const {success} = resultObject;
+          const { success } = resultObject;
 
           if (success) {
             dispatch({
               type: "SET_LOGIN",
-              payload:true
+              payload: true
             })
-           // navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
+            // navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
           } else {
-           
+
             Toast.show({
               topOffset: 100,
               type: "error",
               text1: "ERROR",
-             text2: `Fingerprint not exist or were deleted . Please add fingerprint in system`,
+              text2: `Fingerprint not exist or were deleted . Please add fingerprint in system`,
               visibilityTime: 3000,
               props: {
-                text1NumberOfLines:2 //number of how many lines you want
+                text1NumberOfLines: 2 //number of how many lines you want
               }
             });
           }
         })
         .catch(e => {
-       //   Alert.alert('Fail login with senser . Please try with login');
+          //   Alert.alert('Fail login with senser . Please try with login');
           Toast.show({
             topOffset: 100,
             type: "error",
             text1: "ERROR",
-           text2: `Fail login with senser . Please try with login`,
+            text2: `Fail login with senser . Please try with login`,
             visibilityTime: 3000,
             props: {
-              text1NumberOfLines:2 //number of how many lines you want
+              text1NumberOfLines: 2 //number of how many lines you want
             }
           });
           AsyncStorage.removeItem('login');
           dispatch({
             type: "SET_LOGIN",
-            payload:false
+            payload: false
           })
         });
     });
   };
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          backgroundColor: COLOR.WHITE[100],
-          marginTop: '100%',
-          height: '60%',
-          width: '100%',
-        }}></View>
+    <CardView>
+      <View style={{ flex: 1, alignItems: "center" }}>
+        <PoppinsText title={"Confirm OTP"}
+          textstyle={styles.titletext} />
 
-      <View
-        style={{
-          position: 'absolute',
-          backgroundColor: 'white',
-          flex: 1,
-          width: '90%',
-          height: '75%',
-          borderTopLeftRadius: 25,
-          borderTopRightRadius: 25,
-          alignItems: 'center',
-          padding: 15,
-          // marginTop: '20%',
-        }}>
-        <Text
-          style={{fontSize: 25, color: COLOR.BLACK[100], fontWeight: '600'}}>
-          Confirm OTP
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            marginTop: 18,
-            textAlign: 'center',
-            color: COLOR.BLACK[100],
-            fontWeight: '300',
-          }}>
-          Please enter the verification code that we have sent to the email id{' '}
-          {email}
-        </Text>
+        <PoppinsText title={"Please enter the verification code that we have sent to the email address!"}
+          textstyle={styles.infotext} />
 
-        {/* <OtpInputs
+        <OtpInputs
           handleChange={code => setOtp(code)}
           numberOfInputs={6}
           style={{
@@ -275,120 +247,192 @@ const Otpscreen = params => {
             justifyContent: 'space-evenly',
             width: '100%',
             flexDirection: 'row',
-            marginTop: "10%",
+
+            marginTop: 25,
           }}
           inputStyles={{
-            width: 50,
+            width: 30,
             height: 60,
             // backgroundColor: COLOR.GRAY[300],
-            borderRadius: 10,
+            borderBottomWidth: 2,
+            elevation: 5,
             alignSelf: 'center',
             textAlign: 'center',
-            borderBottomWidth: 1,
-            borderBottomColor: COLOR.BLACK[100],
-            fontSize: 20,
+            fontSize: 25,
             color: COLOR.BLACK[100],
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        /> */}
-        <View style={styles.otpContainer}>
-          {otp.map((value, index) => (
-            <TextInput
-              key={index}
-              ref={ref => (inputs.current[index] = ref)}
-              style={styles.otpInput}
-              keyboardType="number-pad"
-              maxLength={1}
-              value={value}
-              onChangeText={text => handleOtpChange(index, text)}
-            />
-          ))}
-        </View>
 
-        <TouchableOpacity
-          style={{
-            width: '60%',
-            backgroundColor: COLOR.GREEN[100],
-            height: 40,
-            marginTop: '20%',
-            borderRadius: 25,
             alignItems: 'center',
             justifyContent: 'center',
           }}
-          onPress={() => {
-            if (screen === 'Register Account') {
-              handleregisterotp();
-            } else {
-              handleotp();
-            }
-          }}>
-          <Text
-            style={{
-              fontSize: 15,
-              color: COLOR.WHITE[100],
-              fontWeight: '400',
-            }}>
-            Verify
-          </Text>
+        />
+
+        <TouchableOpacity style={styles.button} onPress={() => handleotp()}>
+
+          <PoppinsText title={"VERIFY"}
+            textstyle={styles.buttontext} />
         </TouchableOpacity>
       </View>
-      {/* <Text
-        style={{
-          marginBottom: '15%',
-          fontSize: 25,
-          color: COLOR.WHITE[100],
-          fontWeight: '700',
-        }}>
-        Otp verification
-      </Text>
-      <OtpInputs
-        handleChange={code => setOtp(code)}
-        numberOfInputs={6}
-        style={{
-          alignItems: 'center',
-          justifyContent: 'space-evenly',
-          width: '100%',
-          flexDirection: 'row',
-        }}
-        inputStyles={{
-          width: 50,
-          height: 60,
-          // backgroundColor: COLOR.GRAY[300],
-          borderRadius: 10,
-          elevation: 5,
-          alignSelf: 'center',
-          textAlign: 'center',
-          fontSize: 25,
-          color: COLOR.WHITE[100],
+    </CardView>
+    // <View style={styles.container}>
+    //   <View
+    //     style={{
+    //       backgroundColor: COLOR.WHITE[100],
+    //       marginTop: '100%',
+    //       height: '60%',
+    //       width: '100%',
+    //     }}></View>
 
-          shadowColor: 'white',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      />
+    //   <View
+    //     style={{
+    //       position: 'absolute',
+    //       backgroundColor: 'white',
+    //       flex: 1,
+    //       width: '90%',
+    //       height: '75%',
+    //       borderTopLeftRadius: 25,
+    //       borderTopRightRadius: 25,
+    //       alignItems: 'center',
+    //       padding: 15,
+    //       // marginTop: '20%',
+    //     }}>
+    //     <Text
+    //       style={{fontSize: 25, color: COLOR.BLACK[100], fontWeight: '600'}}>
+    //       Confirm OTP
+    //     </Text>
+    //     <Text
+    //       style={{
+    //         fontSize: 16,
+    //         marginTop: 18,
+    //         textAlign: 'center',
+    //         color: COLOR.BLACK[100],
+    //         fontWeight: '300',
+    //       }}>
+    //       Please enter the verification code that we have sent to the email id{' '}
+    //       {email}
+    //     </Text>
 
-      <TouchableOpacity
-        style={{
-          width: '50%',
-          backgroundColor: COLOR.GREEN[100],
-          height: 40,
-          marginTop: '15%',
-          borderRadius: 25,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        onPress={() => handleotp()}>
-        <Text
-          style={{
-            fontSize: 15,
-            color: COLOR.WHITE[100],
-            fontWeight: '400',
-          }}>
-          CONTINUE
-        </Text>
-      </TouchableOpacity> */}
-    </View>
+    //     {/* <OtpInputs
+    //       handleChange={code => setOtp(code)}
+    //       numberOfInputs={6}
+    //       style={{
+    //         alignItems: 'center',
+    //         justifyContent: 'space-evenly',
+    //         width: '100%',
+    //         flexDirection: 'row',
+    //         marginTop: "10%",
+    //       }}
+    //       inputStyles={{
+    //         width: 50,
+    //         height: 60,
+    //         // backgroundColor: COLOR.GRAY[300],
+    //         borderRadius: 10,
+    //         alignSelf: 'center',
+    //         textAlign: 'center',
+    //         borderBottomWidth: 1,
+    //         borderBottomColor: COLOR.BLACK[100],
+    //         fontSize: 20,
+    //         color: COLOR.BLACK[100],
+    //         alignItems: 'center',
+    //         justifyContent: 'center',
+    //       }}
+    //     /> */}
+    //     <View style={styles.otpContainer}>
+    //       {otp.map((value, index) => (
+    //         <TextInput
+    //           key={index}
+    //           ref={ref => (inputs.current[index] = ref)}
+    //           style={styles.otpInput}
+    //           keyboardType="number-pad"
+    //           maxLength={1}
+    //           value={value}
+    //           onChangeText={text => handleOtpChange(index, text)}
+    //         />
+    //       ))}
+    //     </View>
+
+    //     <TouchableOpacity
+    //       style={{
+    //         width: '60%',
+    //         backgroundColor: COLOR.GREEN[100],
+    //         height: 40,
+    //         marginTop: '20%',
+    //         borderRadius: 25,
+    //         alignItems: 'center',
+    //         justifyContent: 'center',
+    //       }}
+    //       onPress={() => {
+    //         if (screen === 'Register Account') {
+    //           handleregisterotp();
+    //         } else {
+    //           handleotp();
+    //         }
+    //       }}>
+    //       <Text
+    //         style={{
+    //           fontSize: 15,
+    //           color: COLOR.WHITE[100],
+    //           fontWeight: '400',
+    //         }}>
+    //         Verify
+    //       </Text>
+    //     </TouchableOpacity>
+    //   </View>
+    //   {/* <Text
+    //     style={{
+    //       marginBottom: '15%',
+    //       fontSize: 25,
+    //       color: COLOR.WHITE[100],
+    //       fontWeight: '700',
+    //     }}>
+    //     Otp verification
+    //   </Text>
+    //   <OtpInputs
+    //     handleChange={code => setOtp(code)}
+    //     numberOfInputs={6}
+    //     style={{
+    //       alignItems: 'center',
+    //       justifyContent: 'space-evenly',
+    //       width: '100%',
+    //       flexDirection: 'row',
+    //     }}
+    //     inputStyles={{
+    //       width: 50,
+    //       height: 60,
+    //       // backgroundColor: COLOR.GRAY[300],
+    //       borderRadius: 10,
+    //       elevation: 5,
+    //       alignSelf: 'center',
+    //       textAlign: 'center',
+    //       fontSize: 25,
+    //       color: COLOR.WHITE[100],
+
+    //       shadowColor: 'white',
+    //       alignItems: 'center',
+    //       justifyContent: 'center',
+    //     }}
+    //   />
+
+    //   <TouchableOpacity
+    //     style={{
+    //       width: '50%',
+    //       backgroundColor: COLOR.GREEN[100],
+    //       height: 40,
+    //       marginTop: '15%',
+    //       borderRadius: 25,
+    //       alignItems: 'center',
+    //       justifyContent: 'center',
+    //     }}
+    //     onPress={() => handleotp()}>
+    //     <Text
+    //       style={{
+    //         fontSize: 15,
+    //         color: COLOR.WHITE[100],
+    //         fontWeight: '400',
+    //       }}>
+    //       CONTINUE
+    //     </Text>
+    //   </TouchableOpacity> */}
+    // </View>
   );
 };
 

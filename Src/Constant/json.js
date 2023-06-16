@@ -47,6 +47,49 @@ export const tabbar = [
   },
 ];
 
+export const uppertabbar = [
+  {
+    id: 1,
+    title: 'ADD',
+    activename: 'home',
+    activetype: 'entypo',
+    img : IMG.U_TAB_1,
+    // inactivename: 'plus',
+    // inactivetype: 'antdesign',
+    nav: 'Addscreen',
+  },
+  {
+    id: 2,
+    title: 'WALLET',
+    activename: 'file-certificate',
+    activetype: 'material-community',
+    img : IMG.U_TAB_2,
+    // inactivename: 'wallet-outline',
+    // inactivetype: 'ionicon',
+    nav: 'Walletscreen',
+  },
+  {
+    id: 3,
+    title: 'CONTACTS',
+    activename: 'user',
+    activetype: 'font-awesome',
+    img : IMG.U_TAB_3,
+    // inactivename: 'user-o',
+    // inactivetype: 'font-awesome',
+    nav: 'Contactscreen',
+  },
+  {
+    id: 4,
+    title: 'SERVICES',
+    activename: 'briefcase-variant',
+    activetype: 'material-community',
+    img : IMG.U_TAB_4,
+    // inactivename: 'briefcase-variant-outline',
+    // inactivetype: 'material-community',
+    nav: 'Servicescreen',
+  },
+];
+
 export const wallettype = [
   {
     id: 0,
