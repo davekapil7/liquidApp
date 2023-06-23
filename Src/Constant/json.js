@@ -1,4 +1,6 @@
 import {IMG} from './image';
+import { NAV } from './navkey';
+import { STR } from './string';
 
 export const Logintab = [
   {
@@ -56,7 +58,7 @@ export const uppertabbar = [
     img : IMG.U_TAB_1,
     // inactivename: 'plus',
     // inactivetype: 'antdesign',
-    nav: 'Addscreen',
+    nav: 'Walletscreen',
   },
   {
     id: 2,
@@ -66,7 +68,7 @@ export const uppertabbar = [
     img : IMG.U_TAB_2,
     // inactivename: 'wallet-outline',
     // inactivetype: 'ionicon',
-    nav: 'Walletscreen',
+    nav: NAV.CREDENTIAL_SRC,
   },
   {
     id: 3,
@@ -76,7 +78,7 @@ export const uppertabbar = [
     img : IMG.U_TAB_3,
     // inactivename: 'user-o',
     // inactivetype: 'font-awesome',
-    nav: 'Contactscreen',
+    nav: NAV.LIST_SRC,
   },
   {
     id: 4,
@@ -86,7 +88,7 @@ export const uppertabbar = [
     img : IMG.U_TAB_4,
     // inactivename: 'briefcase-variant-outline',
     // inactivetype: 'material-community',
-    nav: 'Servicescreen',
+    nav: NAV.USERDETAIL,
   },
 ];
 
@@ -353,3 +355,21 @@ export const proof = [
     issurancedate: '12/15/2012',
   },
 ];
+
+export const list = [
+  {
+    id : STR.LIST.DUMMY_ID,
+    name : STR.LIST.DUMMY_NAME,
+    
+  },
+  {
+    id : STR.LIST.DUMMY_ID,
+    name : STR.LIST.DUMMY_NAME,
+    
+  },
+  {
+    id : STR.LIST.DUMMY_ID,
+    name : STR.LIST.DUMMY_NAME,
+    
+  },
+]

@@ -1,9 +1,10 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../Constant/axios';
 import axiosLocal from '../Constant/axioslocal';
 import Toast from 'react-native-toast-message'
 
-export const getAuthToken = (state, code) =>{
-  let dataToSend = {state: state, code: code};
+export const getAuthToken = (state, code) => {
+  let dataToSend = { state: state, code: code };
 
   axiosInstance
     .post('iamsmart/getauthtokenformobile', dataToSend)
@@ -23,10 +24,10 @@ export const getAuthToken = (state, code) =>{
         topOffset: 100,
         type: "error",
         text1: "ERROR",
-       text2: `Something went wrong , Please try again`,
+        text2: `Something went wrong , Please try again`,
         visibilityTime: 3000,
         props: {
-          text1NumberOfLines:2 //number of how many lines you want
+          text1NumberOfLines: 2 //number of how many lines you want
         }
       });
     });
@@ -55,10 +56,10 @@ export const getProfileForMobile = () => {
         topOffset: 100,
         type: "error",
         text1: "ERROR",
-       text2: `Something went wrong , Please try again`,
+        text2: `Something went wrong , Please try again`,
         visibilityTime: 3000,
         props: {
-          text1NumberOfLines:2 //number of how many lines you want
+          text1NumberOfLines: 2 //number of how many lines you want
         }
       });
     });
@@ -88,10 +89,10 @@ export const getProfile = (dispatch) => {
         topOffset: 100,
         type: "error",
         text1: "ERROR",
-       text2: `Something went wrong , Please try again`,
+        text2: `Something went wrong , Please try again`,
         visibilityTime: 3000,
         props: {
-          text1NumberOfLines:2 //number of how many lines you want
+          text1NumberOfLines: 2 //number of how many lines you want
         }
       });
     });
@@ -106,7 +107,7 @@ export const getCarddata = dispatch => {
           'Card data',
           JSON.stringify(responseJson?.data?.data?.items),
         );
-        dispatch({type: 'ADD_CARDS', payload: responseJson?.data?.data?.items});
+        dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
       }
     })
     .catch(function (error) {
@@ -114,23 +115,23 @@ export const getCarddata = dispatch => {
         topOffset: 100,
         type: "error",
         text1: "ERROR",
-       text2: `Something went wrong , Please try again`,
+        text2: `Something went wrong , Please try again`,
         visibilityTime: 3000,
         props: {
-          text1NumberOfLines:2 //number of how many lines you want
+          text1NumberOfLines: 2 //number of how many lines you want
         }
       });
     });
 };
 
-export const sendToverification = async (verificationId , email) => {
+export const sendToverification = async (verificationId, email) => {
   var myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/json');
 
   var raw = JSON.stringify({
     to: email,
     data: {
-      verificaitonId : verificationId
+      verificaitonId: verificationId
     },
   });
 
@@ -163,10 +164,10 @@ export const sendToverification = async (verificationId , email) => {
         topOffset: 100,
         type: "error",
         text1: "ERROR",
-       text2: `Something went wrong , Please try again`,
+        text2: `Something went wrong , Please try again`,
         visibilityTime: 3000,
         props: {
-          text1NumberOfLines:2 //number of how many lines you want
+          text1NumberOfLines: 2 //number of how many lines you want
         }
       });
       return false;
@@ -176,7 +177,7 @@ export const sendToverification = async (verificationId , email) => {
 };
 
 export const getProofdata = (verificationId, dispatch) => {
-const res =   axiosInstance
+  const res = axiosInstance
     .get(`/verifier/getRequest?verification_id=${verificationId}`)
     .then(function (responseJson) {
       if (responseJson.status === 200) {
@@ -198,19 +199,19 @@ const res =   axiosInstance
         topOffset: 100,
         type: "error",
         text1: "ERROR",
-       text2: `Something went wrong , Please try again`,
+        text2: `Something went wrong , Please try again`,
         visibilityTime: 3000,
         props: {
-          text1NumberOfLines:2 //number of how many lines you want
+          text1NumberOfLines: 2 //number of how many lines you want
         }
       });
       return "error"
     });
 
-    return res
+  return res
 };
 export const createProofforOR = async id => {
-  let dataToSend = {item_id: id};
+  let dataToSend = { item_id: id };
   // console.log(dataToSend, 'fshsh');
   const result = axiosInstance
     .post('auth/create-proof-qr', dataToSend)
@@ -223,23 +224,23 @@ export const createProofforOR = async id => {
         topOffset: 100,
         type: "error",
         text1: "ERROR",
-       text2: `Something went wrong , Please try again`,
+        text2: `Something went wrong , Please try again`,
         visibilityTime: 3000,
         props: {
-          text1NumberOfLines:2 //number of how many lines you want
+          text1NumberOfLines: 2 //number of how many lines you want
         }
       });
       //Hide Loader
       return 'error';
-    
+
     });
 
   return result;
 };
 
 export const updateVerification = async (verificationId, proofitem) => {
-  console.log("%%%%%",verificationId , proofitem);
-  let dataToSend = {verification_id: verificationId, did: proofitem};
+  console.log("%%%%%", verificationId, proofitem);
+  let dataToSend = { verification_id: verificationId, did: proofitem };
 
   const result = axiosInstance
     .post('/verifier/updateDIDForVerificationId', dataToSend)
@@ -253,15 +254,205 @@ export const updateVerification = async (verificationId, proofitem) => {
         topOffset: 100,
         type: "error",
         text1: "ERROR",
-       text2: `Something went wrong , Please try again`,
+        text2: `Something went wrong , Please try again`,
         visibilityTime: 3000,
         props: {
-          text1NumberOfLines:2 //number of how many lines you want
+          text1NumberOfLines: 2 //number of how many lines you want
         }
       });
       return 'error';
-   
+
     });
 
   return result;
 };
+
+
+///NEw flow 
+
+export const login = async (email, dispatch) => {
+
+  if (email.length > 0) {
+    let dataToSend = { email: email };
+
+    const result = await axiosInstance
+      .post('/auth/login', dataToSend)
+      .then(function (responseJson) {
+        console.log(typeof responseJson.status, 'ressss');
+
+        // If server response message same as Data Matched
+        if (responseJson.status === 200) {
+          console.log("#####",);
+
+
+          return true
+
+        } else {
+          console.log('Please check your email id');
+          Toast.show({
+            topOffset: 100,
+            type: "error",
+            text1: "ERROR",
+            text2: `Something went wrong Please check your email`,
+            visibilityTime: 2000,
+            props: {
+              text1NumberOfLines: 2 //number of how many lines you want
+            }
+          });
+
+          // Alert.alert('Please check your email');
+          console.log('Please check your email id or password');
+          return false
+        }
+      })
+      .catch(function (error) {
+
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+          text2: `Something went wrong Please check your network connection or after sme time`,
+          visibilityTime: 2000,
+          props: {
+            text1NumberOfLines: 2 //number of how many lines you want
+          }
+        });
+        return false
+      });
+
+    return result
+
+  }
+}
+
+export const loginotp = async (otp, dispatch, cardlength) => {
+  console.log("OTP", otp);
+
+
+  let dataToSend = { otp: otp };
+
+  const result = await axiosInstance
+    .post('auth/verify-otp', dataToSend)
+    .then(function (responseJson) {
+      console.log('Verified user', responseJson.data, 'responce');
+      if (responseJson?.data?.data === 'Authorized') {
+
+        dispatch({
+          type: "ADD_PROFILE",
+          payload: responseJson.data?.user
+        })
+        AsyncStorage.setItem('login', 'true');
+
+        AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
+
+        AsyncStorage.setItem(
+          'isIamSmartCreated',
+          JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated),
+        );
+        dispatch({
+          type: "SET_LOGIN",
+          payload: true
+        })
+
+        if (cardlength === 0) {
+          getCarddatA(dispatch);
+        }
+
+        //   navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
+
+        //   handlebiomatric();
+      } else {
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+          text2: `Please Enter right OTP`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines: 2 //number of how many lines you want
+          }
+        });
+      }
+    })
+    .catch(error => {
+      //Hide Loader
+
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+        text2: `Please enter right otp`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines: 2 //number of how many lines you want
+        }
+      });
+    });
+}
+
+export const createcompanyrequest = async (id, name) => {
+
+
+  let dataToSend = { company_name: name, ci_number: id };
+
+  const result = axiosInstance
+    .post('company/request_company', dataToSend)
+    .then(function (responseJson) {
+
+      return responseJson
+    })
+    .catch(error => {
+      console.log("Errror", error);
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+        text2: `Something went wrong , Please try again`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines: 2 //number of how many lines you want
+        }
+      });
+      //Hide Loader
+      return 'error';
+
+    });
+
+  return result;
+};
+
+export const getCompanydetail = () => {
+  const res = axiosInstance
+    .get(`/company/getCompany`)
+    .then(function (responseJson) {
+      console.log("Company detail", responseJson?.data);
+      if (responseJson.status === 200) {
+
+        const res = responseJson?.data?.data;
+
+
+        return res
+
+      }
+    })
+    .catch(function (error) {
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+        text2: `Something went wrong , Please try again`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines: 2 //number of how many lines you want
+        }
+      });
+      return "error"
+    });
+
+  return res
+}
+
+
+///// Im smart data 
+
+

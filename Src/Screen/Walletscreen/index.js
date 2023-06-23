@@ -35,6 +35,7 @@ import axiosInstance from '../../Constant/axios';
 import {
   createProofforOR,
   getCarddata,
+  getCompanydetail,
   getProfile,
   getProfileForMobile,
   getProofdata,
@@ -47,6 +48,7 @@ import { SvgUri } from 'react-native-svg';
 import Theambackground from '../../Components/Theambackground';
 import PoppinsText from '../../Components/LAText/Poppinstext';
 import LAButton from '../../Components/LAButton/Butto';
+import { NAV } from '../../Constant/navkey';
 
 const HEIGHT = Dimensions.get('screen').height;
 
@@ -63,7 +65,16 @@ const Walletscreen = () => {
   const [currentproof, setCurrentproof] = useState('');
   const proof = useSelector(state => state?.certificate.proofdata);
 
-  console.log("PRofile ==>", profileData);
+  // console.log("PRofile ==>", profileData);
+
+
+  const getcompay = () =>{
+    getCompanydetail()
+  }
+  useEffect(() =>{
+getcompay()
+  },[])
+  
   const addcertificate = async id => {
     const result = await createProofforOR(id);
 
@@ -134,11 +145,6 @@ const Walletscreen = () => {
       });
   };
 
-  // useEffect(() => {
-  //   if (profileData && profileData.birthDate) {
-  //     setLoader(false);
-  //   }
-  // }, [profileData]);
   useEffect(() => {
     if (imsmartData && imsmartData.birthDate) {
       setLoader(false);
@@ -385,6 +391,7 @@ const Walletscreen = () => {
     // }
   };
 
+
   return (
     <Theambackground title={"Wallet"}
       subtitle={`${STR.WALLET.WELCOME}${Object.keys(profileData).length > 0
@@ -490,7 +497,7 @@ const Walletscreen = () => {
           <LAButton
             title={"Create Company Credentials"}
             viewStyle={{ width: 209, marginTop: 25 }}
-            handlepress={() => console.log('under production')} />
+            handlepress={() => navigation.navigate(NAV.CREDENTIAL_SRC)} />
         </View>
       </View>
 

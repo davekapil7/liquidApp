@@ -22,7 +22,7 @@ import { Dimensions } from 'react-native';
 import { uppertabbar } from '../Constant/json';
 import { IMG } from '../Constant/image';
 
-const Theambackground = ({ children, scan, scanscreen, setting, radius,back, title, subtitle, }) => {
+const Theambackground = ({ children, scan, scanscreen, scroll, setting, radius, back, title, subtitle, }) => {
   const navigation = useNavigation();
   const handlescan = () => {
     navigation.navigate('Postauth', { screen: "Scanscreen" })
@@ -35,11 +35,11 @@ const Theambackground = ({ children, scan, scanscreen, setting, radius,back, tit
 
   return (
     <SafeAreaView style={{ flex: 1, height: '100%', backgroundColor: COLOR.PRIMARY }}>
-      <ScrollView style={{ flex: 1, height: '100%',backgroundColor:COLOR.WHITE[100] }}>
+      <ScrollView scrollEnabled={scroll === false ? false : true} style={{ flex: 1, height: '100%', backgroundColor: COLOR.WHITE[100] }}>
         <View style={{
           flex: 1,
           minHeight: HEIGHT,
-height:"100%"
+          height: "100%"
         }}>
 
           <View
@@ -49,9 +49,9 @@ height:"100%"
 
               backgroundColor: COLOR.PRIMARY,
               borderBottomLeftRadius: radius === false ? 0 : 40,
-              borderBottomRightRadius: radius === false ? 0 :  40,
+              borderBottomRightRadius: radius === false ? 0 : 40,
               width: '100%',
-          
+
 
 
             }}>
@@ -128,8 +128,9 @@ height:"100%"
               {uppertabbar.map((tab, i) => {
                 return (
                   <View>
-                   
-                    <Image source={tab.img} style={{ width: 25, height: 25, resizeMode: "" }} />
+                    <TouchableOpacity onPress={() => navigation.navigate(tab.nav)}>
+                      <Image source={tab.img} style={{ width: 25, height: 25 }} />
+                    </TouchableOpacity>
                     {/* <Icon name={tab.activename}
                       type={tab.activetype}
                       color={COLOR.WHITE[100]}
@@ -144,7 +145,7 @@ height:"100%"
           <View
             style={{
               backgroundColor: COLOR.WHITE[100],
-              flex:1
+              flex: 1
               // backgroundColor: COLOR.BLUE[100],
 
               // marginTop: 15,

@@ -15,5 +15,8 @@ export const IMG = {
   PROFILE : require('../../assets/Image/profile.png'),
   SHARE : require('../../assets/Image/share.png'),
   CREDS : require('../../assets/Image/creds.png'),
-  PLUS : require("../../assets/Image/plus.png")
+  PLUS : require("../../assets/Image/plus.png"),
+  ISMART : require("../../assets/Image/ismart.png"),
+  PERSONAL : require("../../assets/Image/personal.png"),
+  IMSMART_2 : require("../../assets/Image/im.png")
 };

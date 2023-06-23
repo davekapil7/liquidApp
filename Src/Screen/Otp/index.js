@@ -18,7 +18,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../../Constant/axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCarddata } from '../../Function/Apicall';
+import { getCarddata, loginotp } from '../../Function/Apicall';
 import Toast from 'react-native-toast-message';
 import CardView from '../../Components/Cardview';
 import PoppinsText from '../../Components/LAText/Poppinstext';
@@ -59,66 +59,71 @@ const Otpscreen = params => {
 
 
   const handleotp = () => {
-    const code = otp.join('');
-    console.log(typeof code)
-    console.log(code);
-    console.log('HELLO');
-    let dataToSend = { otp: code };
-    // console.log(dataToSend, 'fshsh');
-    axiosInstance
-      .post('auth/verify-otp', dataToSend)
-      .then(function (responseJson) {
-        console.log('Verified user', responseJson.data, 'responce');
-        if (responseJson?.data?.data === 'Authorized') {
-          // dispatch({ type: 'ADD_EXPIRY', payload: responseJson.data.expires });
-          dispatch({
-            type: "ADD_PROFILE",
-            payload: responseJson.data?.user
-          })
-          AsyncStorage.setItem('login', 'true');
 
-          AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
+    const cardlength = cardData.length
 
-          AsyncStorage.setItem(
-            'isIamSmartCreated',
-            JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated),
-          );
-          dispatch({
-            type: "SET_LOGIN",
-            payload: true
-          })
+    loginotp(otp , dispatch , cardlength)
+    // console.log("OTP" , otp);
+    // // const code = otp.join('');
+    // // console.log(typeof code)
+    // // console.log(code);
+  
+    // let dataToSend = { otp: otp };
+    // // console.log(dataToSend, 'fshsh');
+    // axiosInstance
+    //   .post('auth/verify-otp', dataToSend)
+    //   .then(function (responseJson) {
+    //     console.log('Verified user', responseJson.data, 'responce');
+    //     if (responseJson?.data?.data === 'Authorized') {
+    //       // dispatch({ type: 'ADD_EXPIRY', payload: responseJson.data.expires });
+    //       dispatch({
+    //         type: "ADD_PROFILE",
+    //         payload: responseJson.data?.user
+    //       })
+    //       AsyncStorage.setItem('login', 'true');
 
-          initialapicall();
-          //   navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
+    //       AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
 
-          //   handlebiomatric();
-        } else {
-          Toast.show({
-            topOffset: 100,
-            type: "error",
-            text1: "ERROR",
-            text2: `Please Enter right OTP`,
-            visibilityTime: 3000,
-            props: {
-              text1NumberOfLines: 2 //number of how many lines you want
-            }
-          });
-        }
-      })
-      .catch(error => {
-        //Hide Loader
+    //       AsyncStorage.setItem(
+    //         'isIamSmartCreated',
+    //         JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated),
+    //       );
+    //       dispatch({
+    //         type: "SET_LOGIN",
+    //         payload: true
+    //       })
 
-        Toast.show({
-          topOffset: 100,
-          type: "error",
-          text1: "ERROR",
-          text2: `Please enter right otp`,
-          visibilityTime: 3000,
-          props: {
-            text1NumberOfLines: 2 //number of how many lines you want
-          }
-        });
-      });
+    //       initialapicall();
+    //       //   navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
+
+    //       //   handlebiomatric();
+    //     } else {
+    //       Toast.show({
+    //         topOffset: 100,
+    //         type: "error",
+    //         text1: "ERROR",
+    //         text2: `Please Enter right OTP`,
+    //         visibilityTime: 3000,
+    //         props: {
+    //           text1NumberOfLines: 2 //number of how many lines you want
+    //         }
+    //       });
+    //     }
+    //   })
+    //   .catch(error => {
+    //     //Hide Loader
+
+    //     Toast.show({
+    //       topOffset: 100,
+    //       type: "error",
+    //       text1: "ERROR",
+    //       text2: `Please enter right otp`,
+    //       visibilityTime: 3000,
+    //       props: {
+    //         text1NumberOfLines: 2 //number of how many lines you want
+    //       }
+    //     });
+    //   });
   };
 
 

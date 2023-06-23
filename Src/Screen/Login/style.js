@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLOR.WHITE[100],
     borderRadius: 5,
     width: "100%",
-    height: 31,
+    height: 41,
     //paddingVertical: Platform.OS === "ios" ? 10 : 0,
     paddingHorizontal: 15,
     marginTop: 15,

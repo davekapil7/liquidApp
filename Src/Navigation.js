@@ -39,6 +39,8 @@ import Testimonial from './Screen/Addscreen/Testimonial';
 import axiosInstance from './Constant/axios';
 import Cardinfo from './Screen/Walletscreen/CardInfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoginIMSmart from './Screen/Walletscreen/Loginimsmart';
+import { NAV } from './Constant/navkey';
 
 const Stack = createStackNavigator();
 
@@ -49,8 +51,8 @@ const linking = {
 const Preauth = () => {
   return (
     <Stack.Navigator
-   //   initialRouteName="OnbordingScreen"
-   initialRouteName="Otpscreen"
+      initialRouteName="OnbordingScreen"
+    // initialRouteName="Otpscreen"
     >
       <Stack.Screen
         name="LoginScreen"
@@ -58,6 +60,7 @@ const Preauth = () => {
         options={{ headerShown: false }}
       />
 
+    
       <Stack.Screen
         name="OnbordingScreen"
         component={OnbordingScreen}
@@ -120,6 +123,11 @@ const Postauth = () => {
         name="Testimonial"
         component={Testimonial}
         // Hiding header for Navigation Drawer
+        options={{ headerShown: false }}
+      />
+        <Stack.Screen
+        name={NAV.LOGIN_IM_SMART}
+        component={LoginIMSmart}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -190,13 +198,13 @@ const Postauth = () => {
 
 const Rootnavigation = () => {
 
- // const loginstatus = useSelector(state => state?.appstate?.login);
- const loginstatus = true
+  const loginstatus = useSelector(state => state?.appstate?.login);
+  //const loginstatus = true
   const dispatch = useDispatch();
 
   const appState = useRef(AppState.currentState);
 
-// Check app status 
+  // Check app status 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (
@@ -370,7 +378,7 @@ const Rootnavigation = () => {
 
           <Stack.Screen name='Preauth' component={Preauth} options={{ headerShown: false }} />
         )}
-      
+
 
       </Stack.Navigator>
 
