@@ -3,7 +3,8 @@ const initialState = {
     proofdata : [],
     verification:{},
     verificationId: '',
-    prrofdataApi : []
+    prrofdataApi : [],
+    companydetail : {},
    };
    
    const certificateReducer = (state = initialState, action) => {
@@ -27,6 +28,12 @@ const initialState = {
          return{
           ...state,
           verificationId : action.payload
+         }
+         case "ADD_COMPANY_DETAIL" : 
+     
+         return{
+          ...state,
+          companydetail : action.payload
          }
          case "CLEAR_ALL" : 
          return{

@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosInstance from '../Constant/axios';
 import axiosLocal from '../Constant/axioslocal';
 import Toast from 'react-native-toast-message'
+import { Linking } from 'react-native';
 
 export const getAuthToken = (state, code) => {
   let dataToSend = { state: state, code: code };
@@ -421,15 +422,18 @@ export const createcompanyrequest = async (id, name) => {
   return result;
 };
 
-export const getCompanydetail = () => {
-  const res = axiosInstance
+export const getCompanydetail = async (dispatch) => {
+  const result = await axiosInstance
     .get(`/company/getCompany`)
     .then(function (responseJson) {
-      console.log("Company detail", responseJson?.data);
+      console.log("Company detail", responseJson?.data?.result);
       if (responseJson.status === 200) {
 
-        const res = responseJson?.data?.data;
-
+        const res = responseJson?.data?.result;
+        dispatch({
+          type: "ADD_COMPANY_DETAIL",
+          payload: res
+        })
 
         return res
 
@@ -449,10 +453,76 @@ export const getCompanydetail = () => {
       return "error"
     });
 
-  return res
+
+  return result
 }
 
+export const holderverification = async (dummydata) => {
+
+
+  let dataToSend = dummydata
+
+  const result = axiosInstance
+    .post('/company/verify/shareHolder', dataToSend)
+    .then(function (responseJson) {
+console.log("##########",responseJson);
+      return responseJson?.status
+    })
+    .catch(error => {
+      console.log("Errror", error);
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+        text2: `Something went wrong , Please try again`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines: 2 //number of how many lines you want
+        }
+      });
+      //Hide Loader
+      return 'error';
+
+    });
+
+  return result;
+};
 
 ///// Im smart data 
 
+export const iAMSmartCall = async () => {
+  axiosInstance
+    .get('iamsmart/IAMSMART_login', {
+      params: {
+        source: 'android',
+        redirect_uri: 'https://api.liquid.com.hk/mobile/redirect',
+      },
+    })
+    .then(function (responseJson) {
+      if (responseJson.status === 200) {
+        // dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
+        console.log('Response for jump', responseJson.data.data);
+        //  setLoader(true);
 
+        let iAmSmartRes = responseJson?.data?.data;
+        console.log("H!");
+        if (iAmSmartRes.url && iAmSmartRes.url.length > 0) {
+          console.log("HEllo", iAmSmartRes.url)
+          Linking.openURL(iAmSmartRes.url);
+        }
+      }
+    })
+    .catch(function (error) {
+
+      Toast.show({
+        topOffset: 100,
+        type: "error",
+        text1: "ERROR",
+        text2: `Somthing Went Wrong Scan Again`,
+        visibilityTime: 3000,
+        props: {
+          text1NumberOfLines: 2 //number of how many lines you want
+        }
+      });
+    });
+};

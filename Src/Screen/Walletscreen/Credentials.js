@@ -156,6 +156,7 @@ const Credentials = () => {
         // let number = 12345678
         const res = await createcompanyrequest(companyname, number)
 
+        console.log("Resulat", res);
         if (res.status === 200) {
             setModal(true)
         }
@@ -264,9 +265,10 @@ const styles = StyleSheet.create({
         width: "100%",
         borderWidth: 1,
         borderRadius: 6,
-        height: 34,
+        height: 40,
         paddingHorizontal: 15,
-        fontSize: 15
+        fontSize: 15,
+        color:COLOR.BLACK[100]
 
     },
     button: {

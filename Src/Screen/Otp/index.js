@@ -260,7 +260,7 @@ const Otpscreen = params => {
             height: 60,
             // backgroundColor: COLOR.GRAY[300],
             borderBottomWidth: 2,
-            elevation: 5,
+         //   elevation: 5,
             alignSelf: 'center',
             textAlign: 'center',
             fontSize: 25,

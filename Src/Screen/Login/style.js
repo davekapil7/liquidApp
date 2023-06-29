@@ -15,11 +15,13 @@ export const styles = StyleSheet.create({
   },
   tabcontain: {
     width: "100%",
+
+    alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between"
   },
   tabview: { width: "40%", alignItems: "center" },
-  borderview: { width: "100%", marginTop: 10, borderRadius: 8, backgroundColor: COLOR.PRIMARY, height: 4 },
+  borderview: { width: "100%", marginTop: 4, borderRadius: 8, backgroundColor: COLOR.PRIMARY, height: 4 },
   tabtext: {
     fontWeight: "400",
     lineHeight: 18

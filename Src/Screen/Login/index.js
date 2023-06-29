@@ -255,12 +255,12 @@ const LoginScreen = () => {
   };
 
   const handlepasswordLogin = async () => {
-   const result = await login(email , dispatch)
+    const result = await login(email, dispatch)
 
-   if(result){
-    //handlebiomatric()
-    navigation.navigate('Otpscreen');
-   }
+    if (result) {
+      //handlebiomatric()
+      navigation.navigate('Otpscreen');
+    }
     // console.log("PPPPP", typeof password);
     // if (email.length > 0 ) {
     //   let dataToSend = { email: email };
@@ -403,10 +403,10 @@ const LoginScreen = () => {
     });
   };
 
-  const handlecontinue = () =>{
+  const handlecontinue = () => {
     if (STR.LOGIN === type) {
       handlepasswordLogin()
-    }else {
+    } else {
       handleregister()
     }
   }
@@ -421,6 +421,7 @@ const LoginScreen = () => {
           <PoppinsText title={"Let’s Get Started!"}
             textstyle={{ ...styles.title }} />
 
+<View>
           <View style={styles.tabcontain}>
 
             <TouchableOpacity style={styles.tabview} onPress={() => {
@@ -428,10 +429,10 @@ const LoginScreen = () => {
             }} >
               <PoppinsText title={"Register Account"}
                 textstyle={{ ...styles.tabtext, color: type == STR.REGISTER ? COLOR.BLACK[100] : COLOR.GRAY[500], }} />
-              <View style={{
+              {/* <View style={{
                 ...styles.borderview, backgroundColor:
                   type == STR.REGISTER ? COLOR.PRIMARY : COLOR.GRAY[500],
-              }} />
+              }} /> */}
 
             </TouchableOpacity>
             <View style={{ width: "20%" }}></View>
@@ -441,16 +442,42 @@ const LoginScreen = () => {
             }}>
               <PoppinsText title={"Login"}
                 textstyle={{ ...styles.tabtext, color: type == STR.LOGIN ? COLOR.BLACK[100] : COLOR.GRAY[500], }} />
+              {/* <View style={{
+                ...styles.borderview, backgroundColor:
+                  type == STR.LOGIN ? COLOR.PRIMARY : COLOR.GRAY[500],
+              }} /> */}
+
+            </TouchableOpacity>
+          </View>
+
+
+          <View style={{...styles.tabcontain , marginTop:0}}>
+
+            <View style={styles.tabview} onPress={() => {
+              setType(STR.REGISTER), setEmail(''), setPassword('');
+            }} >
+
+              <View style={{
+                ...styles.borderview, backgroundColor:
+                  type == STR.REGISTER ? COLOR.PRIMARY : COLOR.GRAY[500],
+              }} />
+
+            </View>
+            <View style={{ width: "20%" }}></View>
+
+            <View style={styles.tabview}>
+
               <View style={{
                 ...styles.borderview, backgroundColor:
                   type == STR.LOGIN ? COLOR.PRIMARY : COLOR.GRAY[500],
               }} />
 
-            </TouchableOpacity>
+            </View>
+          </View>
           </View>
 
           {type === STR.REGISTER &&
-            <View style={{width:"100%"}}>
+            <View style={{ width: "100%" }}>
               <View style={{ width: '100%' }}>
                 <TextInput
                   placeholder="Full Name (Official Name)"
@@ -521,7 +548,7 @@ const LoginScreen = () => {
 
               <PoppinsText title={"Password (please save in safe place)"}
                 textstyle={{ ...styles.messagetext }}
-                viewStyle={{ width: "100%" , marginTop : 15 }}
+                viewStyle={{ width: "100%", marginTop: 15 }}
               />
 
               <TextInput
@@ -637,7 +664,7 @@ const LoginScreen = () => {
             style={styles.button}
             onPress={() =>
               //  console.log("HEllo")
-             handlecontinue()
+              handlecontinue()
             }>
             <PoppinsText title={"CONTINUE"}
               textstyle={{ ...styles.buttontext }}

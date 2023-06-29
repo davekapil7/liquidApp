@@ -27,6 +27,8 @@ import { Icon } from '@rneui/themed';
 import LAButton from '../../Components/LAButton/Butto';
 import axiosInstance from '../../Constant/axios';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { useNavigation } from '@react-navigation/native';
+import { iAMSmartCall } from '../../Function/Apicall';
 
 
 const HEIGHT = Dimensions.get('screen').height;
@@ -34,49 +36,67 @@ const HEIGHT = Dimensions.get('screen').height;
 const Userdetail = () => {
     const dispatch = useDispatch();
     const profileData = useSelector(state => state?.appstate?.profileData);
+    const imsmartData = useSelector(state => state?.appstate?.imsmartdata);
+    const [birthdate, setBirthdate] = useState("")
+    const navigation = useNavigation()
 
     const [data, setData] = useState(false)
 
-    const iAMSmartCall = async () => {
-        axiosInstance
-          .get('iamsmart/IAMSMART_login', {
-            params: {
-              source: 'android',
-              redirect_uri: 'https://api.liquid.com.hk/mobile/redirect',
-            },
-          })
-          .then(function (responseJson) {
-            if (responseJson.status === 200) {
-              // dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
-              console.log('Response for jump', responseJson.data.data);
-            //  setLoader(true);
-    
-              let iAmSmartRes = responseJson?.data?.data;
-              console.log("H!");
-              if (iAmSmartRes.url && iAmSmartRes.url.length > 0) {
-                console.log("HEllo",iAmSmartRes.url)
-                                Linking.openURL(iAmSmartRes.url);
-              }
-            }
-          })
-          .catch(function (error) {
-            
-            Toast.show({
-              topOffset: 100,
-              type: "error",
-              text1: "ERROR",
-              text2: `Somthing Went Wrong Scan Again`,
-              visibilityTime: 3000,
-              props: {
-                text1NumberOfLines: 2 //number of how many lines you want
-              }
-            });
-          });
-      };
+    // const iAMSmartCall = async () => {
+    //     axiosInstance
+    //         .get('iamsmart/IAMSMART_login', {
+    //             params: {
+    //                 source: 'android',
+    //                 redirect_uri: 'https://api.liquid.com.hk/mobile/redirect',
+    //             },
+    //         })
+    //         .then(function (responseJson) {
+    //             if (responseJson.status === 200) {
+    //                 // dispatch({ type: 'ADD_CARDS', payload: responseJson?.data?.data?.items });
+    //                 console.log('Response for jump', responseJson.data.data);
+    //                 //  setLoader(true);
 
-      const handlePress = () =>{
+    //                 let iAmSmartRes = responseJson?.data?.data;
+    //                 console.log("H!");
+    //                 if (iAmSmartRes.url && iAmSmartRes.url.length > 0) {
+    //                     console.log("HEllo", iAmSmartRes.url)
+    //                     Linking.openURL(iAmSmartRes.url);
+    //                 }
+    //             }
+    //         })
+    //         .catch(function (error) {
+
+    //             Toast.show({
+    //                 topOffset: 100,
+    //                 type: "error",
+    //                 text1: "ERROR",
+    //                 text2: `Somthing Went Wrong Scan Again`,
+    //                 visibilityTime: 3000,
+    //                 props: {
+    //                     text1NumberOfLines: 2 //number of how many lines you want
+    //                 }
+    //             });
+    //         });
+    // };
+
+    const handlePress = () => {
+        if (data) {
+            navigation.navigate("Walletscreen")
+        }
         iAMSmartCall()
-      }
+    }
+
+    useEffect(() => {
+        if (Object.keys(imsmartData).length > 0) {
+            setData(true)
+            const date = imsmartData?.birthDate
+            const newdate = `${date.substring(0, 4)}-${date.substring(4, 6)}-${date.substring(6, 8)}`
+            setBirthdate(newdate)
+        } else {
+            setData(false)
+        }
+
+    }, [imsmartData])
 
     return (
         <Theambackground title={"Wallet"}
@@ -86,13 +106,15 @@ const Userdetail = () => {
             setting={true}
             scan={true}
             radius={false}>
-            <View style={{ flex: 1, height: "100%", padding: 25 ,marginBottom:90}}>
+            <View style={{ flex: 1, height: "100%", padding: 25, marginBottom: 90 }}>
                 <View style={{ marginTop: 15 }}>
                     <PoppinsText title={"English Name"}
                         textstyle={styles.name} />
                     <View style={styles.inputcontiner}>
                         <View style={{ ...styles.inputview, backgroundColor: data ? COLOR.GRAY[900] : COLOR.WHITE[100] }}>
-                            <Text style={styles.textstyle}>HHH</Text>
+                            <Text style={styles.textstyle}>{Object.keys(imsmartData).length > 0
+                                ? `${imsmartData?.enName?.UnstructuredName}`
+                                : 'User'}</Text>
                         </View>
                         {data &&
                             <Image source={IMG.ISMART}
@@ -106,7 +128,9 @@ const Userdetail = () => {
                         textstyle={styles.name} />
                     <View style={styles.inputcontiner}>
                         <View style={{ ...styles.inputview, backgroundColor: data ? COLOR.GRAY[900] : COLOR.WHITE[100] }}>
-                            <Text style={styles.textstyle}>HHH</Text>
+                            <Text style={styles.textstyle}>{Object.keys(imsmartData).length > 0
+                                ? `${imsmartData?.enName?.UnstructuredName}`
+                                : 'User'}</Text>
                         </View>
                         {data &&
                             <Image source={IMG.ISMART}
@@ -120,7 +144,9 @@ const Userdetail = () => {
                         textstyle={styles.name} />
                     <View style={styles.inputcontiner}>
                         <View style={{ ...styles.inputview, backgroundColor: data ? COLOR.GRAY[900] : COLOR.WHITE[100] }}>
-                            <Text style={styles.textstyle}>HHH</Text>
+                            <Text style={styles.textstyle}>{Object.keys(imsmartData).length > 0
+                                ? `(${imsmartData?.idNo?.CheckDigit}) - ${imsmartData?.idNo?.Identification}`
+                                : 'User'}</Text>
                         </View>
                         {data &&
                             <Image source={IMG.ISMART}
@@ -134,7 +160,9 @@ const Userdetail = () => {
                         textstyle={styles.name} />
                     <View style={styles.inputcontiner}>
                         <View style={{ ...styles.inputview, backgroundColor: data ? COLOR.GRAY[900] : COLOR.WHITE[100] }}>
-                            <Text style={styles.textstyle}>HHH</Text>
+                            <Text style={styles.textstyle}>{Object.keys(imsmartData).length > 0
+                                ? `${imsmartData?.gender}`
+                                : 'User'}</Text>
                         </View>
                         {data &&
                             <Image source={IMG.ISMART}
@@ -149,7 +177,9 @@ const Userdetail = () => {
                     <View style={styles.inputcontiner}>
                         <View style={{ ...styles.inputview, justifyContent: "space-between", alignItems: "center", flexDirection: "row", backgroundColor: data ? COLOR.GRAY[900] : COLOR.WHITE[100] }}>
 
-                            <Text style={styles.textstyle}>HHH</Text>
+                            <Text style={styles.textstyle}>{Object.keys(imsmartData).length > 0
+                                ? birthdate
+                                : 'User'}</Text>
                             <Icon name='md-calendar-sharp'
                                 type='ionicon' />
                         </View>

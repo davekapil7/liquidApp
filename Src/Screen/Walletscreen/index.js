@@ -68,8 +68,13 @@ const Walletscreen = () => {
   // console.log("PRofile ==>", profileData);
 
 
-  const getcompay = () =>{
-    getCompanydetail()
+  const getcompay = async () =>{
+   const result = await getCompanydetail(dispatch)
+   console.log("RESULAT IS ====>",result);
+   dispatch({
+    type : "ADD_COMPANY_DETAIL",
+    payload : result
+   })
   }
   useEffect(() =>{
 getcompay()
@@ -304,7 +309,7 @@ getcompay()
       })
       .then(function (responseJson) {
         if (responseJson.status === 200) {
-          console.log("responce ===>", responseJson.data);
+   
           dispatch({
             type: "ADD_PROFILE",
             payload: responseJson.data?.user
