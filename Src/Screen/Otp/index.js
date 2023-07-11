@@ -247,6 +247,7 @@ const Otpscreen = params => {
         <OtpInputs
           handleChange={code => setOtp(code)}
           numberOfInputs={6}
+          
           style={{
             alignItems: 'center',
             justifyContent: 'space-evenly',

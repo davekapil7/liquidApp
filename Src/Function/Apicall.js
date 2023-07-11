@@ -3,6 +3,7 @@ import axiosInstance from '../Constant/axios';
 import axiosLocal from '../Constant/axioslocal';
 import Toast from 'react-native-toast-message'
 import { Linking } from 'react-native';
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 
 export const getAuthToken = (state, code) => {
   let dataToSend = { state: state, code: code };
@@ -279,7 +280,7 @@ export const login = async (email, dispatch) => {
     const result = await axiosInstance
       .post('/auth/login', dataToSend)
       .then(function (responseJson) {
-        console.log(typeof responseJson.status, 'ressss');
+        console.log(responseJson.status, 'ressss', dataToSend);
 
         // If server response message same as Data Matched
         if (responseJson.status === 200) {
@@ -327,8 +328,8 @@ export const login = async (email, dispatch) => {
 }
 
 export const loginotp = async (otp, dispatch, cardlength) => {
-  console.log("OTP", otp);
-
+  // handlebiomatric(dispatch, responseJson);
+  // console.log("OTP", otp);
 
   let dataToSend = { otp: otp };
 
@@ -338,30 +339,12 @@ export const loginotp = async (otp, dispatch, cardlength) => {
       console.log('Verified user', responseJson.data, 'responce');
       if (responseJson?.data?.data === 'Authorized') {
 
-        dispatch({
-          type: "ADD_PROFILE",
-          payload: responseJson.data?.user
-        })
-        AsyncStorage.setItem('login', 'true');
-
-        AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
-
-        AsyncStorage.setItem(
-          'isIamSmartCreated',
-          JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated),
-        );
-        dispatch({
-          type: "SET_LOGIN",
-          payload: true
-        })
+        handlebiomatric(dispatch, responseJson);
 
         if (cardlength === 0) {
           getCarddatA(dispatch);
         }
 
-        //   navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
-
-        //   handlebiomatric();
       } else {
         Toast.show({
           topOffset: 100,
@@ -465,7 +448,7 @@ export const holderverification = async (dummydata) => {
   const result = axiosInstance
     .post('/company/verify/shareHolder', dataToSend)
     .then(function (responseJson) {
-console.log("##########",responseJson);
+      console.log("##########", responseJson);
       return responseJson?.status
     })
     .catch(error => {
@@ -525,4 +508,75 @@ export const iAMSmartCall = async () => {
         }
       });
     });
+};
+
+export const handlebiomatric = async (dispatch, responseJson) => {
+
+  const rnBiometrics = new ReactNativeBiometrics({
+    allowDeviceCredentials: true,
+  });
+
+  await rnBiometrics.isSensorAvailable().then(resultObject => {
+    rnBiometrics
+      .simplePrompt({ promptMessage: 'Confirm fingerprint' })
+      .then(resultObject => {
+        const { success } = resultObject;
+
+        if (success) {
+
+          dispatch({
+            type: "ADD_PROFILE",
+            payload: responseJson.data?.user
+          })
+          AsyncStorage.setItem('login', 'true');
+
+          AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
+
+          AsyncStorage.setItem(
+            'isIamSmartCreated',
+            JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated),
+          );
+          dispatch({
+            type: "SET_LOGIN",
+            payload: true
+          })
+
+          // dispatch({
+          //   type: "SET_LOGIN",
+          //   payload: true
+          // })
+          // navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
+        } else {
+
+          Toast.show({
+            topOffset: 100,
+            type: "error",
+            text1: "ERROR",
+            text2: `Fingerprint not exist or were deleted . Please add fingerprint in system`,
+            visibilityTime: 3000,
+            props: {
+              text1NumberOfLines: 2 //number of how many lines you want
+            }
+          });
+        }
+      })
+      .catch(e => {
+        //   Alert.alert('Fail login with senser . Please try with login');
+        Toast.show({
+          topOffset: 100,
+          type: "error",
+          text1: "ERROR",
+          text2: `Fail login with senser . Please try with login`,
+          visibilityTime: 3000,
+          props: {
+            text1NumberOfLines: 2 //number of how many lines you want
+          }
+        });
+        AsyncStorage.removeItem('login');
+        dispatch({
+          type: "SET_LOGIN",
+          payload: false
+        })
+      });
+  });
 };

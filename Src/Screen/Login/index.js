@@ -254,6 +254,7 @@ const LoginScreen = () => {
     }
   };
 
+  
   const handlepasswordLogin = async () => {
     const result = await login(email, dispatch)
 
