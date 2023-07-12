@@ -46,6 +46,18 @@ export const styles = StyleSheet.create({
     marginTop: '5%',
     color: COLOR.GRAY[500]
   },
+  alreadytext: {
+    textAlign: 'center',
+    fontWeight: "600",
+    fontSize: 12,
+    color: '#535353'
+  },
+  logintext: {
+    textAlign: 'center',
+    fontSize: 12,
+    color: "#001AFF",
+    fontWeight:"600"
+  },
   button: {
     width: 180,
     backgroundColor: COLOR.PRIMARY,

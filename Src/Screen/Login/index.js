@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IMG } from '../../Constant/image';
 import { STR } from '../../Constant/string';
 import { styles } from './style';
-import { Header as HeaderRNE, HeaderProps, Icon } from '@rneui/themed';
+
 import { COLOR } from '../../Constant/color';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
@@ -26,7 +26,7 @@ import { CountryPicker } from 'react-native-country-codes-picker';
 import Toast from 'react-native-toast-message';
 import CardView from '../../Components/Cardview';
 import PoppinsText from '../../Components/LAText/Poppinstext';
-import { login } from '../../Function/Apicall';
+import { login, otplogin, passwordlogin } from '../../Function/Apicall';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -71,32 +71,32 @@ const LoginScreen = () => {
 
   const handleregister = () => {
     // navigation.navigate("Otpscreen",{screen : type , email : email})
-    if (!firstname && !(firstname.length > 0)) {
-      alert('Please fill first name');
-      return;
-    }
-    if (!lastname && !(lastname.length > 0)) {
-      alert('Please fill last name');
-      return;
-    }
-    if (!email && !(email.length > 0)) {
-      alert('Please fill Email');
-      return;
-    }
-    if (!number && !(number.length > 0)) {
-      alert('Please fill Mobile number');
-      return;
-    }
-    if (!password && !(password.length > 0)) {
-      if (password !== confirmpass) {
-        alert('Please enter same password')
-        return;
-      }
-    }
-    if (!companyname && !(companyname.length > 0)) {
-      alert('Please Companyname');
-      return;
-    }
+    // if (!firstname && !(firstname.length > 0)) {
+    //   alert('Please fill first name');
+    //   return;
+    // }
+    // if (!lastname && !(lastname.length > 0)) {
+    //   alert('Please fill last name');
+    //   return;
+    // }
+    // if (!email && !(email.length > 0)) {
+    //   alert('Please fill Email');
+    //   return;
+    // }
+    // if (!number && !(number.length > 0)) {
+    //   alert('Please fill Mobile number');
+    //   return;
+    // }
+    // if (!password && !(password.length > 0)) {
+    //   if (password !== confirmpass) {
+    //     alert('Please enter same password')
+    //     return;
+    //   }
+    // }
+    // if (!companyname && !(companyname.length > 0)) {
+    //   alert('Please Companyname');
+    //   return;
+    // }
 
     const fullnumber = `${countryCode}${number}`;
 
@@ -124,13 +124,14 @@ const LoginScreen = () => {
           //  storeData(responseJson?.data?.data);
           // setType(STR.LOGIN)
 
-          navigation.navigate('Preauth', {
-            screen: 'Otpscreen', params: {
-              screen: type,
-              email: email,
-              data: responseJson?.data?.data,
-            }
-          });
+          // navigation.navigate('Preauth', {
+          //   screen: 'Otpscreen', params: {
+          //     screen: type,
+          //     email: email,
+          //     data: responseJson?.data?.data,
+          //   }
+          // });
+          navigation.navigate('Otpscreen', { params: 'register', data: responseJson?.data?.data });
           console.log('Registration Successful. Please Login to proceed');
         } else {
           // setErrortext(responseJson?.data?.error);
@@ -254,9 +255,19 @@ const LoginScreen = () => {
     }
   };
 
-  
-  const handlepasswordLogin = async () => {
-    const result = await login(email, dispatch)
+  const handlepasswordlogin = async () => {
+    const result = await passwordlogin(email, password, dispatch)
+
+    if (result) {
+      //handlebiomatric()
+      navigation.navigate('Otpscreen');
+    }
+
+  }
+
+
+  const handleotplogin = async () => {
+    const result = await otplogin(email, dispatch)
 
     if (result) {
       //handlebiomatric()
@@ -353,328 +364,405 @@ const LoginScreen = () => {
       } else {
         setNumbervalid(false)
       }
+    } else if (val === "password") {
+      if (!passRegex.test(password)) {
+        setPasswordvalid(true)
+      } else {
+        setPasswordvalid(false)
+      }
+    } else if (val === "confirmpass") {
+      if (password !== confirmpass) {
+        setConfirmPasswordvalid(true)
+      } else {
+        setConfirmPasswordvalid(false)
+      }
     }
   }
 
-  const handlebiomatric = async () => {
-    await rnBiometrics.isSensorAvailable().then(resultObject => {
-      rnBiometrics
-        .simplePrompt({ promptMessage: 'Confirm fingerprint' })
-        .then(resultObject => {
-          const { success } = resultObject;
+  // const handlebiomatric = async () => {
+  //   await rnBiometrics.isSensorAvailable().then(resultObject => {
+  //     rnBiometrics
+  //       .simplePrompt({ promptMessage: 'Confirm fingerprint' })
+  //       .then(resultObject => {
+  //         const { success } = resultObject;
 
-          if (success) {
-            dispatch({
-              type: "SET_LOGIN",
-              payload: true
-            })
-            // navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
-          } else {
+  //         if (success) {
+  //           dispatch({
+  //             type: "SET_LOGIN",
+  //             payload: true
+  //           })
+  //           // navigation.navigate('Postauth' ,{screen: 'Tabnavigationroute'});
+  //         } else {
 
-            Toast.show({
-              topOffset: 100,
-              type: "error",
-              text1: "ERROR",
-              text2: `Fingerprint not exist or were deleted . Please add fingerprint in system`,
-              visibilityTime: 3000,
-              props: {
-                text1NumberOfLines: 2 //number of how many lines you want
-              }
-            });
-          }
-        })
-        .catch(e => {
-          //   Alert.alert('Fail login with senser . Please try with login');
-          Toast.show({
-            topOffset: 100,
-            type: "error",
-            text1: "ERROR",
-            text2: `Fail login with senser . Please try with login`,
-            visibilityTime: 3000,
-            props: {
-              text1NumberOfLines: 2 //number of how many lines you want
-            }
-          });
-          AsyncStorage.removeItem('login');
-          dispatch({
-            type: "SET_LOGIN",
-            payload: false
-          })
-        });
-    });
-  };
+  //           Toast.show({
+  //             topOffset: 100,
+  //             type: "error",
+  //             text1: "ERROR",
+  //             text2: `Fingerprint not exist or were deleted . Please add fingerprint in system`,
+  //             visibilityTime: 3000,
+  //             props: {
+  //               text1NumberOfLines: 2 //number of how many lines you want
+  //             }
+  //           });
+  //         }
+  //       })
+  //       .catch(e => {
+  //         //   Alert.alert('Fail login with senser . Please try with login');
+  //         Toast.show({
+  //           topOffset: 100,
+  //           type: "error",
+  //           text1: "ERROR",
+  //           text2: `Fail login with senser . Please try with login`,
+  //           visibilityTime: 3000,
+  //           props: {
+  //             text1NumberOfLines: 2 //number of how many lines you want
+  //           }
+  //         });
+  //         AsyncStorage.removeItem('login');
+  //         dispatch({
+  //           type: "SET_LOGIN",
+  //           payload: false
+  //         })
+  //       });
+  //   });
+  // };
 
   const handlecontinue = () => {
     if (STR.LOGIN === type) {
-      handlepasswordLogin()
+      handlepasswordlogin()
     } else {
       handleregister()
     }
   }
 
+  const changetype = () => {
+    if (type === STR.REGISTER) {
+      setFirstName('')
+      setLastName('')
+      setCompanyname('')
+      setEmail('')
+      setNumber('')
+      setPassword('')
+      setConfirmpas('')
+      setType(STR.LOGIN)
+    } else {
+      setEmail('')
+      setPassword('')
+      setType(STR.REGISTER)
+    }
+  }
+
+
   return (
+
     <CardView>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={-70}
-        style={styles.keyContainer}>
-        <View style={styles.cordContain}>
-          <PoppinsText title={"Let’s Get Started!"}
-            textstyle={{ ...styles.title }} />
+      <ScrollView>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={-70}
+          style={styles.keyContainer}>
+          <View style={styles.cordContain}>
+            <PoppinsText title={"Let’s Get Started!"}
+              textstyle={{ ...styles.title }} />
 
-<View>
-          <View style={styles.tabcontain}>
+            <View>
+              <View style={styles.tabcontain}>
 
-            <TouchableOpacity style={styles.tabview} onPress={() => {
-              setType(STR.REGISTER), setEmail(''), setPassword('');
-            }} >
-              <PoppinsText title={"Register Account"}
-                textstyle={{ ...styles.tabtext, color: type == STR.REGISTER ? COLOR.BLACK[100] : COLOR.GRAY[500], }} />
-              {/* <View style={{
-                ...styles.borderview, backgroundColor:
-                  type == STR.REGISTER ? COLOR.PRIMARY : COLOR.GRAY[500],
-              }} /> */}
-
-            </TouchableOpacity>
-            <View style={{ width: "20%" }}></View>
-
-            <TouchableOpacity style={styles.tabview} onPress={() => {
-              setType(STR.LOGIN), setEmail('');
-            }}>
-              <PoppinsText title={"Login"}
-                textstyle={{ ...styles.tabtext, color: type == STR.LOGIN ? COLOR.BLACK[100] : COLOR.GRAY[500], }} />
-              {/* <View style={{
-                ...styles.borderview, backgroundColor:
-                  type == STR.LOGIN ? COLOR.PRIMARY : COLOR.GRAY[500],
-              }} /> */}
-
-            </TouchableOpacity>
-          </View>
+                <TouchableOpacity style={styles.tabview} onPress={() => {
+                  setType(STR.REGISTER), setEmail(''), setPassword('');
+                }} >
+                  <PoppinsText title={"Register Account"}
+                    textstyle={{ ...styles.tabtext, color: type == STR.REGISTER ? COLOR.BLACK[100] : COLOR.GRAY[500], }} />
 
 
-          <View style={{...styles.tabcontain , marginTop:0}}>
+                </TouchableOpacity>
+                <View style={{ width: "20%" }}></View>
 
-            <View style={styles.tabview} onPress={() => {
-              setType(STR.REGISTER), setEmail(''), setPassword('');
-            }} >
+                <TouchableOpacity style={styles.tabview} onPress={() => changetype()}>
+                  <PoppinsText title={"Login"}
+                    textstyle={{ ...styles.tabtext, color: type == STR.LOGIN ? COLOR.BLACK[100] : COLOR.GRAY[500], }} />
 
-              <View style={{
-                ...styles.borderview, backgroundColor:
-                  type == STR.REGISTER ? COLOR.PRIMARY : COLOR.GRAY[500],
-              }} />
 
-            </View>
-            <View style={{ width: "20%" }}></View>
-
-            <View style={styles.tabview}>
-
-              <View style={{
-                ...styles.borderview, backgroundColor:
-                  type == STR.LOGIN ? COLOR.PRIMARY : COLOR.GRAY[500],
-              }} />
-
-            </View>
-          </View>
-          </View>
-
-          {type === STR.REGISTER &&
-            <View style={{ width: "100%" }}>
-              <View style={{ width: '100%' }}>
-                <TextInput
-                  placeholder="Full Name (Official Name)"
-                  placeholderTextColor={COLOR.GRAY[500]}
-
-                  style={{ ...styles.textinputView, width: '100%' }}
-                  onChangeText={text => setFirstName(text)}
-                  onEndEditing={() => validation("firstname")}
-                  value={firstname}
-                />
-                {firstvalid &&
-                  <Text style={{ color: "red", marginTop: 2 }}>{firstname.length > 0 ? "*First Name must be alphabet" : "*Please enter your first name"} </Text>
-                }
+                </TouchableOpacity>
               </View>
 
-              <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity
-                  onPress={() => setShow(true)}
-                  style={{
-                    ...styles.textinputView,
-                    justifyContent: 'center',
-                    padding: 10,
-                    width: '22%',
-                    borderTopRightRadius: 0,
-                    borderBottomRightRadius: 0,
-                    borderRightWidth: 1,
-                    borderColor: COLOR.GRAY[500]
-                  }}>
-                  <Text
-                    style={{
-                      color: 'black',
-                      fontSize: 12,
-                    }}>
-                    +{countryCode && countryCode.length > 0 ? countryCode : '95'}
-                  </Text>
-                </TouchableOpacity>
-                <View style={{ width: "78%" }}>
-                  <TextInput
-                    placeholder={'Phone Number'}
-                    placeholderTextColor={COLOR.GRAY[300]}
-                    style={{
-                      ...styles.textinputView,
-                      width: '100%',
-                      borderTopLeftRadius: 0,
-                      borderTopLeftRadius: 0
-                      //  marginLe 10,
-                    }}
-                    onChangeText={text => setNumber(text)}
 
-                    onEndEditing={() => validation("number")}
-                    value={number}
-                    keyboardType={'numeric'}
-                    maxLength={10}
+              <View style={{ ...styles.tabcontain, marginTop: 0 }}>
+
+                <View style={styles.tabview} onPress={() => changetype()} >
+
+                  <View style={{
+                    ...styles.borderview, backgroundColor:
+                      type == STR.REGISTER ? COLOR.PRIMARY : COLOR.GRAY[500],
+                  }} />
+
+                </View>
+                <View style={{ width: "20%" }}></View>
+
+                <View style={styles.tabview}>
+
+                  <View style={{
+                    ...styles.borderview, backgroundColor:
+                      type == STR.LOGIN ? COLOR.PRIMARY : COLOR.GRAY[500],
+                  }} />
+
+                </View>
+              </View>
+            </View>
+
+            {type === STR.REGISTER &&
+              <View style={{ width: "100%" }}>
+                <View style={{ width: '100%' }}>
+                  <TextInput
+                    placeholder="First name"
+                    placeholderTextColor={COLOR.GRAY[500]}
+
+                    style={{ ...styles.textinputView, width: '100%' }}
+                    onChangeText={text => setFirstName(text)}
+                    onEndEditing={() => validation("firstname")}
+                    value={firstname}
                   />
-                  {numbervalid &&
-                    <Text style={{ color: "red", marginTop: 2, marginLeft: 10, }}>{number.length > 0 ? "*Ener 10 digit number" : "*Please enter your email"} </Text>
+                  {firstvalid &&
+                    <Text style={{ color: "red", marginTop: 2 }}>{firstname.length > 0 ? "*First Name must be alphabet" : "*Please enter your first name"} </Text>
                   }
                 </View>
-                <CountryPicker
-                  show={show}
-                  // when picker button press you will get the country object with dial code
-                  pickerButtonOnPress={item => {
-                    setCountryCode(item.dial_code);
-                    setShow(false);
-                  }}
-                />
-              </View>
 
-              <PoppinsText title={"Password (please save in safe place)"}
-                textstyle={{ ...styles.messagetext }}
-                viewStyle={{ width: "100%", marginTop: 15 }}
-              />
+                <View style={{ width: '100%' }}>
+                  <TextInput
+                    placeholder="Last name"
+                    placeholderTextColor={COLOR.GRAY[500]}
 
-              <TextInput
-                placeholder="Password"
-                placeholderTextColor={COLOR.GRAY[500]}
-                style={styles.textinputView}
-                secureTextEntry={true}
-                onChangeText={text => setPassword(text)}
-                value={password}
-              />
+                    style={{ ...styles.textinputView, width: '100%' }}
+                    onChangeText={text => setLastName(text)}
+                    onEndEditing={() => validation("lastname")}
+                    value={lastname}
+                  />
+                  {lastvalid &&
+                    <Text style={{ color: "red", marginTop: 2 }}>{lastname.length > 0 ? "*Lastname Name must be alphabet" : "*Please enter your first name"} </Text>
+                  }
+                </View>
 
-              {type === STR.REGISTER && passwordvalid &&
-                <Text style={{ color: "red", marginTop: 2, marginLeft: 10, }}>{password.length > 0 ? "*" : "*Please enter your password"} </Text>
-              }
-            </View>
-          }
-          {/* {type === STR.REGISTER &&
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                onPress={() => setShow(true)}
-                style={{
-                  ...styles.textinputView,
-                  justifyContent: 'center',
-                  padding: 10,
-                  width: '22%',
-                  borderTopRightRadius: 0,
-                  borderBottomRightRadius: 0,
-                  borderRightWidth: 1,
-                  borderColor: COLOR.GRAY[500]
-                }}>
-                <Text
-                  style={{
-                    color: 'black',
-                    fontSize: 12,
-                  }}>
-                  +{countryCode && countryCode.length > 0 ? countryCode : '95'}
-                </Text>
-              </TouchableOpacity>
-              <View style={{ width: "78%" }}>
-                <TextInput
-                  placeholder={'Phone Number'}
-                  placeholderTextColor={COLOR.GRAY[300]}
-                  style={{
-                    ...styles.textinputView,
-                    width: '100%',
-                    borderTopLeftRadius: 0,
-                    borderTopLeftRadius: 0
-                    //  marginLe 10,
-                  }}
-                  onChangeText={text => setNumber(text)}
+                <View style={{ width: '100%' }}>
+                  <TextInput
+                    placeholder="Company Name"
+                    placeholderTextColor={COLOR.GRAY[500]}
 
-                  onEndEditing={() => validation("number")}
-                  value={number}
-                  keyboardType={'numeric'}
-                  maxLength={10}
-                />
-                {numbervalid &&
-                  <Text style={{ color: "red", marginTop: 2, marginLeft: 10, }}>{number.length > 0 ? "*Ener 10 digit number" : "*Please enter your email"} </Text>
+                    style={{ ...styles.textinputView, width: '100%' }}
+                    onChangeText={text => setCompanyname(text)}
+                    onEndEditing={() => validation("firstname")}
+                    value={companyname}
+                  />
+
+                </View>
+                <View style={{ width: '100%' }}>
+                  <TextInput
+                    placeholder="Email"
+                    placeholderTextColor={COLOR.GRAY[500]}
+textContentType='emailAddress'
+                    style={{ ...styles.textinputView, width: '100%' }}
+                    onChangeText={text => setEmail(text)}
+                    onEndEditing={() => validation("email")}
+                    value={email}
+                  />
+                  {emailvalid &&
+                    <Text style={{ color: "red", marginTop: 2 }}>{emailvalid.length > 0 ? "*Enter correct email formate" : "*Please enter your email"} </Text>
+                  }
+
+                </View>
+
+                <View style={{ flexDirection: 'row' }}>
+                  <TouchableOpacity
+                    onPress={() => setShow(true)}
+                    style={{
+                      ...styles.textinputView,
+                      justifyContent: 'center',
+                      padding: 10,
+                      width: '22%',
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                      borderRightWidth: 1,
+                      borderColor: COLOR.GRAY[500]
+                    }}>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 12,
+                      }}>
+                      +{countryCode && countryCode.length > 0 ? countryCode : '95'}
+                    </Text>
+                  </TouchableOpacity>
+                  <View style={{ width: "78%" }}>
+                    <TextInput
+                      placeholder={'Phone Number'}
+                      placeholderTextColor={COLOR.GRAY[300]}
+                      style={{
+                        ...styles.textinputView,
+                        width: '100%',
+                        borderTopLeftRadius: 0,
+                        borderTopLeftRadius: 0
+                        //  marginLe 10,
+                      }}
+                      onChangeText={text => setNumber(text)}
+
+                      onEndEditing={() => validation("number")}
+                      value={number}
+                      keyboardType={'numeric'}
+                      maxLength={10}
+                    />
+                    {/* {numbervalid &&
+                      <Text style={{ color: "red", marginTop: 2, marginLeft: 10, }}>{number.length > 0 ? "*Ener 10 digit number" : "*Please enter your number"} </Text>
+                    } */}
+                  </View>
+                  <CountryPicker
+                    show={show}
+                    // when picker button press you will get the country object with dial code
+                    pickerButtonOnPress={item => {
+                      setCountryCode(item.dial_code);
+                      setShow(false);
+                    }}
+                  />
+                </View>
+
+
+                <View style={{ width: '100%' }}>
+                  <TextInput
+                    placeholder="Password"
+                    placeholderTextColor={COLOR.GRAY[500]}
+
+                    style={{ ...styles.textinputView, width: '100%' }}
+                    onChangeText={text => setPassword(text)}
+                    // onEndEditing={() => validation("password")}
+                    value={password}
+                  />
+                  {passwordvalid &&
+                    <Text style={{ color: "red", marginTop: 2 }}>{password.length > 0 ? "*Please enter strong password" : "*Please enter your password name"} </Text>
+                  }
+
+                </View>
+
+                <View style={{ width: '100%' }}>
+                  <TextInput
+                    placeholder="Confirm Password"
+                    placeholderTextColor={COLOR.GRAY[500]}
+
+                    style={{ ...styles.textinputView, width: '100%' }}
+                    onChangeText={text => setConfirmpas(text)}
+                    onEndEditing={() => validation("confirmpass")}
+                    value={confirmpass}
+                  />
+                  {confirmpasswordvalid &&
+                    <Text style={{ color: "red", marginTop: 2 }}>{confirmpass.length > 0 ? "*" : "*Please enter your first name"} </Text>
+                  }
+
+                </View>
+
+
+                {type === STR.REGISTER && passwordvalid &&
+                  <Text style={{ color: "red", marginTop: 2, marginLeft: 10, }}>{password.length > 0 ? "*Password does nit match" : "*Please enter your password"} </Text>
                 }
+
+                <PoppinsText title={"We need your details as your LIQUID WALLET will be based on it. We are not going to send you ads or spam email, or sell your information to a 3rd party."}
+                  textstyle={{ ...styles.infotext }}
+                  viewStyle={{ width: "100%" }}
+                />
+
+                <View style={{ flexDirection: "row", marginTop: 15, justifyContent: "center", alignItems: "center", width: "100%" }}>
+                  <PoppinsText title={"Already have an account? "}
+                    textstyle={{ ...styles.alreadytext }}
+
+                  />
+                  <TouchableOpacity style={{ alignItems: "flex-end" }} onPress={() => changetype()}>
+                    <PoppinsText title={"LOGIN"}
+                      textstyle={{ ...styles.logintext }}
+
+                    />
+                  </TouchableOpacity>
+
+                </View>
               </View>
-              <CountryPicker
-                show={show}
-                // when picker button press you will get the country object with dial code
-                pickerButtonOnPress={item => {
-                  setCountryCode(item.dial_code);
-                  setShow(false);
-                }}
+            }
+
+
+            {type === STR.LOGIN &&
+              <View style={{ width: '100%' }}>
+                <TextInput
+                  placeholder={'Enter Email'}
+                  placeholderTextColor={COLOR.GRAY[500]}
+                  style={styles.textinputView}
+                  textContentType='emailAddress'
+                  onChangeText={text => setEmail(text)}
+                  onEndEditing={() => validation("email")}
+                  value={email}
+                />
+                {emailvalid &&
+                  <Text style={{ color: "red", marginTop: 2 }}>{email.length > 0 ? "*Enter valid email id" : "*Please enter your email"} </Text>
+                }
+
+
+                <TextInput
+                  placeholder={'Password'}
+                  placeholderTextColor={COLOR.GRAY[500]}
+                  style={styles.textinputView}
+                  onChangeText={text => setPassword(text)}
+              //    onEndEditing={() => validation("password")}
+                  value={password}
+                />
+                {password &&
+                  <Text style={{ color: "red", marginTop: 2 }}>{email.length > 0 ? "*Enter valid email id" : "*Please enter your email"} </Text>
+                }
+                <PoppinsText title={"We need your details as your LIQUID WALLET will be based on it. We are not going to send you ads or spam email, or sell your information to a 3rd party."}
+                  textstyle={{ ...styles.infotext }}
+                  viewStyle={{ width: "100%" }}
+                />
+
+                <View style={{ flexDirection: "row", marginTop: 15, justifyContent: "center", alignItems: "center", width: "100%" }}>
+                  <PoppinsText title={"New to LIQUID?"}
+                    textstyle={{ ...styles.alreadytext }}
+
+                  />
+                  <TouchableOpacity style={{ alignItems: "flex-end" }} onPress={() => changetype()}>
+                    <PoppinsText title={" REGISTER"}
+                      textstyle={{ ...styles.logintext }}
+
+                    />
+                  </TouchableOpacity>
+
+                </View>
+
+                <View style={{ flexDirection: "row", marginTop: 15, justifyContent: "center", alignItems: "center", width: "100%" }}>
+                  <PoppinsText title={"Login with"}
+                    textstyle={{ ...styles.alreadytext }}
+
+                  />
+                  <TouchableOpacity style={{ alignItems: "flex-end" }} onPress={() => handleotplogin()}>
+                    <PoppinsText title={" OTP"}
+                      textstyle={{ ...styles.logintext }}
+
+                    />
+                  </TouchableOpacity>
+
+                </View>
+              </View>
+            }
+
+
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() =>
+                //  console.log("HEllo")
+                handlecontinue()
+              }>
+              <PoppinsText title={"CONTINUE"}
+                textstyle={{ ...styles.buttontext }}
               />
-            </View>
-          } */}
-          {/* {type === STR.REGISTER &&
-            <PoppinsText title={"Password (please save in safe place)"}
-              textstyle={{ ...styles.messagetext }}
-              viewStyle={{ width: "100%" }}
-            />
-          } */}
-          {/* {type === STR.REGISTER &&
-            <TextInput
-              placeholder="Password"
-              placeholderTextColor={COLOR.GRAY[500]}
-              style={styles.textinputView}
-              secureTextEntry={true}
-              onChangeText={text => setPassword(text)}
-              value={password}
-            />
-          } */}
+            </TouchableOpacity>
 
-
-
-
-          {type === STR.LOGIN &&
-            <View style={{ width: '100%' }}>
-              <TextInput
-                placeholder={'Enter Email'}
-                placeholderTextColor={COLOR.GRAY[500]}
-                style={styles.textinputView}
-                onChangeText={text => setEmail(text)}
-                onEndEditing={() => validation("email")}
-                value={email}
-              />
-              {emailvalid &&
-                <Text style={{ color: "red", marginTop: 2 }}>{email.length > 0 ? "*Enter valid email id" : "*Please enter your email"} </Text>
-              }
-            </View>
-          }
-          <PoppinsText title={"We need your details as your LIQUID WALLET will be based on it. We are not going to send you ads or spam email, or sell your information to a 3rd party."}
-            textstyle={{ ...styles.infotext }}
-            viewStyle={{ width: "100%" }}
-          />
-
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() =>
-              //  console.log("HEllo")
-              handlecontinue()
-            }>
-            <PoppinsText title={"CONTINUE"}
-              textstyle={{ ...styles.buttontext }}
-            />
-          </TouchableOpacity>
-
-        </View>
-      </KeyboardAvoidingView>
+          </View>
+        </KeyboardAvoidingView>
+      </ScrollView>
     </CardView>
+
     //  <SafeAreaView style={styles.safeContainer}>
     // <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     //   <KeyboardAvoidingView
