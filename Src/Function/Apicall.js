@@ -639,7 +639,7 @@ export const handlebiomatric = async (dispatch, responseJson) => {
   } else {
     const { biometryType } = await rnBiometrics.isSensorAvailable()
 
-    if (biometryType === BiometryTypes.TouchID) {
+    if (biometryType === BiometryTypes.FaceID) {
       //do something fingerprint specific
       rnBiometrics
         .simplePrompt({ promptMessage: 'Confirm fingerprint' })

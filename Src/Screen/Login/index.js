@@ -70,33 +70,7 @@ const LoginScreen = () => {
   }, [navigation]);
 
   const handleregister = () => {
-    // navigation.navigate("Otpscreen",{screen : type , email : email})
-    // if (!firstname && !(firstname.length > 0)) {
-    //   alert('Please fill first name');
-    //   return;
-    // }
-    // if (!lastname && !(lastname.length > 0)) {
-    //   alert('Please fill last name');
-    //   return;
-    // }
-    // if (!email && !(email.length > 0)) {
-    //   alert('Please fill Email');
-    //   return;
-    // }
-    // if (!number && !(number.length > 0)) {
-    //   alert('Please fill Mobile number');
-    //   return;
-    // }
-    // if (!password && !(password.length > 0)) {
-    //   if (password !== confirmpass) {
-    //     alert('Please enter same password')
-    //     return;
-    //   }
-    // }
-    // if (!companyname && !(companyname.length > 0)) {
-    //   alert('Please Companyname');
-    //   return;
-    // }
+    
 
     const fullnumber = `${countryCode}${number}`;
 
@@ -163,98 +137,6 @@ const LoginScreen = () => {
       });
   };
 
-  // const handlebiomatric = async () => {
-  //   await rnBiometrics.isSensorAvailable().then(resultObject => {
-  //     rnBiometrics
-  //       .simplePrompt({ promptMessage: 'Confirm fingerprint' })
-  //       .then(resultObject => {
-  //         const { success } = resultObject;
-
-  //         if (success) {
-  //           navigation.navigate('Postauth', { screen: 'Tabnavigationroute' });
-  //         } else {
-  //           // Alert.alert(
-  //           //   'Fingerprint not exist or were deleted . Please add fingerprint in system ',
-  //           // );
-  //           Toast.show({
-  //             topOffset: 100,
-  //             type: "error",
-  //             text1: "ERROR",
-  //             text2: `Fingerprint not exist or were deleted . Please add fingerprint in system`,
-  //             visibilityTime: 3000,
-  //             props: {
-  //               text1NumberOfLines: 2 //number of how many lines you want
-  //             }
-  //           });
-  //         }
-  //       })
-  //       .catch(e => {
-  //         Toast.show({
-  //           topOffset: 100,
-  //           type: "error",
-  //           text1: "ERROR",
-  //           text2: `Fail login with senser . Please try with login`,
-  //           visibilityTime: 3000,
-  //           props: {
-  //             text1NumberOfLines: 2 //number of how many lines you want
-  //           }
-  //         });
-  //         // Alert.alert('Fail login with senser . Please try with login');
-  //         AsyncStorage.removeItem('login');
-  //         dispatch({
-  //           type: "SET_LOGIN",
-  //           payload: false
-  //         })
-  //       });
-  //   });
-  // };
-
-  const handleLogin = () => {
-    if (email.length > 0) {
-      let dataToSend = { email: email };
-
-      axiosInstance
-        .post('auth/login', dataToSend)
-        .then(function (responseJson) {
-          console.log(responseJson, 'ressss');
-
-          // If server response message same as Data Matched
-          if (responseJson?.data?.data === 'OTP SENT') {
-            // setOtpInput(true);
-            // Alert.alert('OTP SENT');
-            navigation.navigate('Preauth', { screen: 'Otpscreen', params: { screen: type, email: email } });
-          } else {
-            Toast.show({
-              topOffset: 100,
-              type: "error",
-              text1: "ERROR",
-              text2: `Something went wrong Please check your email`,
-              visibilityTime: 2000,
-              props: {
-                text1NumberOfLines: 2 //number of how many lines you want
-              }
-            });
-
-            // Alert.alert('Please check your email');
-            console.log('Please check your email id or password');
-          }
-        })
-        .catch(function (error) {
-
-          Toast.show({
-            topOffset: 100,
-            type: "error",
-            text1: "ERROR",
-            text2: `Something went wrong Please check your network connection or after sme time`,
-            visibilityTime: 2000,
-            props: {
-              text1NumberOfLines: 2 //number of how many lines you want
-            }
-          });
-        });
-    }
-  };
-
   const handlepasswordlogin = async () => {
     const result = await passwordlogin(email, password, dispatch)
 
@@ -273,66 +155,7 @@ const LoginScreen = () => {
       //handlebiomatric()
       navigation.navigate('Otpscreen');
     }
-    // console.log("PPPPP", typeof password);
-    // if (email.length > 0 ) {
-    //   let dataToSend = { email: email };
-
-    //   axiosInstance
-    //     .post('/auth/login', dataToSend)
-    //     .then(function (responseJson) {
-    //       console.log(responseJson.status, 'ressss');
-
-    //       // If server response message same as Data Matched
-    //       if (responseJson.status === 200) {
-
-    //         console.log("HEllo Login1", responseJson.data?.user);
-    //         dispatch({
-    //           type: "ADD_PROFILE",
-    //           payload: responseJson.data?.user
-    //         })
-
-    //         AsyncStorage.setItem('login', 'true');
-
-    //         AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
-
-    //         dispatch({
-    //           type: "SET_LOGIN",
-    //           payload: true
-    //         })
-
-    //         handlebiomatric()
-    //         //navigation.navigate('P', { screen: 'Otpscreen', params: { screen: type, email: email } });
-    //       } else {
-    //         console.log('Please check your email id or password');
-    //         Toast.show({
-    //           topOffset: 100,
-    //           type: "error",
-    //           text1: "ERROR",
-    //           text2: `Something went wrong Please check your email`,
-    //           visibilityTime: 2000,
-    //           props: {
-    //             text1NumberOfLines: 2 //number of how many lines you want
-    //           }
-    //         });
-
-    //         // Alert.alert('Please check your email');
-    //         console.log('Please check your email id or password');
-    //       }
-    //     })
-    //     .catch(function (error) {
-
-    //       Toast.show({
-    //         topOffset: 100,
-    //         type: "error",
-    //         text1: "ERROR",
-    //         text2: `Something went wrong Please check your network connection or after sme time`,
-    //         visibilityTime: 2000,
-    //         props: {
-    //           text1NumberOfLines: 2 //number of how many lines you want
-    //         }
-    //       });
-    //     });
-    // }
+    
   };
 
   const validation = (val) => {

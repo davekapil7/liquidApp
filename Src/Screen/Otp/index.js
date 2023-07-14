@@ -60,9 +60,7 @@ const Otpscreen = params => {
 
 
   const handleregisterotp = () => {
-    console.log('HELLO Register');
   
-
     let dataToSend = { data: datatoken, otp: otp };
     console.log(dataToSend, datatoken, 'fshsh');
     axiosInstance
