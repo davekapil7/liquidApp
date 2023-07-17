@@ -411,7 +411,7 @@ textContentType='emailAddress'
                         color: 'black',
                         fontSize: 12,
                       }}>
-                      +{countryCode && countryCode.length > 0 ? countryCode : '95'}
+                      {countryCode && countryCode.length > 0 ? countryCode : '95'}
                     </Text>
                   </TouchableOpacity>
                   <View style={{ width: "78%" }}>
@@ -530,9 +530,9 @@ textContentType='emailAddress'
               //    onEndEditing={() => validation("password")}
                   value={password}
                 />
-                {password &&
+                {/* {password &&
                   <Text style={{ color: "red", marginTop: 2 }}>{email.length > 0 ? "*Enter valid email id" : "*Please enter your email"} </Text>
-                }
+                } */}
                 <PoppinsText title={"We need your details as your LIQUID WALLET will be based on it. We are not going to send you ads or spam email, or sell your information to a 3rd party."}
                   textstyle={{ ...styles.infotext }}
                   viewStyle={{ width: "100%" }}
