@@ -70,7 +70,7 @@ const LoginScreen = () => {
   }, [navigation]);
 
   const handleregister = () => {
-    
+
 
     const fullnumber = `${countryCode}${number}`;
 
@@ -155,7 +155,7 @@ const LoginScreen = () => {
       //handlebiomatric()
       navigation.navigate('Otpscreen');
     }
-    
+
   };
 
   const validation = (val) => {
@@ -380,8 +380,9 @@ const LoginScreen = () => {
                 <View style={{ width: '100%' }}>
                   <TextInput
                     placeholder="Email"
+                    autoCapitalize='none'
                     placeholderTextColor={COLOR.GRAY[500]}
-textContentType='emailAddress'
+                    textContentType='emailAddress'
                     style={{ ...styles.textinputView, width: '100%' }}
                     onChangeText={text => setEmail(text)}
                     onEndEditing={() => validation("email")}
@@ -451,7 +452,7 @@ textContentType='emailAddress'
                   <TextInput
                     placeholder="Password"
                     placeholderTextColor={COLOR.GRAY[500]}
-
+                    autoCapitalize='none'
                     style={{ ...styles.textinputView, width: '100%' }}
                     onChangeText={text => setPassword(text)}
                     // onEndEditing={() => validation("password")}
@@ -467,7 +468,7 @@ textContentType='emailAddress'
                   <TextInput
                     placeholder="Confirm Password"
                     placeholderTextColor={COLOR.GRAY[500]}
-
+                    autoCapitalize='none'
                     style={{ ...styles.textinputView, width: '100%' }}
                     onChangeText={text => setConfirmpas(text)}
                     onEndEditing={() => validation("confirmpass")}
@@ -510,6 +511,7 @@ textContentType='emailAddress'
               <View style={{ width: '100%' }}>
                 <TextInput
                   placeholder={'Enter Email'}
+                  autoCapitalize='none'
                   placeholderTextColor={COLOR.GRAY[500]}
                   style={styles.textinputView}
                   textContentType='emailAddress'
@@ -524,10 +526,11 @@ textContentType='emailAddress'
 
                 <TextInput
                   placeholder={'Password'}
+                  autoCapitalize='none'
                   placeholderTextColor={COLOR.GRAY[500]}
                   style={styles.textinputView}
                   onChangeText={text => setPassword(text)}
-              //    onEndEditing={() => validation("password")}
+                  //    onEndEditing={() => validation("password")}
                   value={password}
                 />
                 {/* {password &&
