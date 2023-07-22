@@ -219,6 +219,12 @@ export const seetingjson = [
         iname: null,
         toggle: true,
       },
+      {
+        sid: 3,
+        stitle: 'FingerPrint Authorize',
+        iname: null,
+        toggle: true,
+      },
     ],
   },
   {

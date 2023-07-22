@@ -26,7 +26,7 @@ import { CountryPicker } from 'react-native-country-codes-picker';
 import Toast from 'react-native-toast-message';
 import CardView from '../../Components/Cardview';
 import PoppinsText from '../../Components/LAText/Poppinstext';
-import { login, otplogin, passwordlogin } from '../../Function/Apicall';
+import { handlebiomatric, login, otplogin, passwordlogin } from '../../Function/Apicall';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -53,7 +53,7 @@ const LoginScreen = () => {
   const [emailvalid, setEmailvalid] = useState(false)
   const [numbervalid, setNumbervalid] = useState(false)
   const [passwordvalid, setPasswordvalid] = useState(false)
-
+  const [fingerauth, setFingerauth] = useState(false)
   const [confirmpasswordvalid, setConfirmPasswordvalid] = useState(false)
 
   const rnBiometrics = new ReactNativeBiometrics({
@@ -67,10 +67,16 @@ const LoginScreen = () => {
         handlebiomatric();
       }
     });
+    AsyncStorage.getItem('fingerlogin').then(value => {
+      console.log('Hello acyncn', value);
+      if (value === 'true') {
+        setFingerauth(true)
+      }
+    });
   }, [navigation]);
 
   const handleregister = () => {
-    
+
 
     const fullnumber = `${countryCode}${number}`;
 
@@ -138,7 +144,7 @@ const LoginScreen = () => {
   };
 
   const handlepasswordlogin = async () => {
-    const result = await passwordlogin(email, password, dispatch)
+    const result = await passwordlogin(email, password, fingerauth, dispatch)
 
     if (result) {
       //handlebiomatric()
@@ -155,7 +161,7 @@ const LoginScreen = () => {
       //handlebiomatric()
       navigation.navigate('Otpscreen');
     }
-    
+
   };
 
   const validation = (val) => {
@@ -381,7 +387,7 @@ const LoginScreen = () => {
                   <TextInput
                     placeholder="Email"
                     placeholderTextColor={COLOR.GRAY[500]}
-textContentType='emailAddress'
+                    textContentType='emailAddress'
                     style={{ ...styles.textinputView, width: '100%' }}
                     onChangeText={text => setEmail(text)}
                     onEndEditing={() => validation("email")}
@@ -527,7 +533,7 @@ textContentType='emailAddress'
                   placeholderTextColor={COLOR.GRAY[500]}
                   style={styles.textinputView}
                   onChangeText={text => setPassword(text)}
-              //    onEndEditing={() => validation("password")}
+                  //    onEndEditing={() => validation("password")}
                   value={password}
                 />
                 {/* {password &&

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -24,6 +24,7 @@ import CardView from '../../Components/Cardview';
 import PoppinsText from '../../Components/LAText/Poppinstext';
 const Otpscreen = params => {
   const navigation = useNavigation();
+  const [fingerauth  , setFingerauth]  = useState(false)
   const dispatch = useDispatch();
   const cardData = useSelector(state => state.appstate.cardList);
   
@@ -45,6 +46,16 @@ const Otpscreen = params => {
     }
   };
 
+  useEffect(() => {
+    
+    AsyncStorage.getItem('fingerlogin').then(value => {
+      console.log('Hello acyncn', value);
+      if (value === 'true') {
+        setFingerauth(true)
+      }
+    });
+  }, [navigation]);
+
   const handleotp = () => {
 
     const cardlength = cardData.length
@@ -52,7 +63,7 @@ const Otpscreen = params => {
     if(register === "register"){
       handleregisterotp()
     }else{
-      loginotp(otp , dispatch , cardlength)
+      loginotp(otp , fingerauth,  dispatch , cardlength)
     }
 
   };
@@ -69,7 +80,22 @@ const Otpscreen = params => {
         console.log('Verified user', responseJson.data, 'responce');
         if (responseJson?.data?.error === false) {
          
-          handlebiomatric(dispatch, responseJson);
+          dispatch({
+            type: "ADD_PROFILE",
+            payload: responseJson.data?.user
+          })
+          AsyncStorage.setItem('login', 'true');
+
+          AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
+
+          AsyncStorage.setItem(
+            'isIamSmartCreated',
+            JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated),
+          );
+          dispatch({
+            type: "SET_LOGIN",
+            payload: true
+          })
       
           initialapicall();
        

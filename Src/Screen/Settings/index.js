@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Switch, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Switch, StyleSheet, Modal } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 
 import {
@@ -26,8 +26,19 @@ const Settingscreen = () => {
 
   const [isTouch, setIsTouch] = useState(false);
   const [isEnable, setIsEnable] = useState(false);
+  const [fingermodal, setFingermodal] = useState(false)
   const dispatch = useDispatch();
 
+
+  useEffect(() => {
+    
+    AsyncStorage.getItem('fingerlogin').then(value => {
+      console.log('Hello acyncn', value);
+      if (value === 'true') {
+        setIsTouch(true)
+      }
+    });
+  }, [navigation]);
 
   const copy = parameter => {
     Clipboard.setString(parameter);
@@ -62,6 +73,7 @@ const Settingscreen = () => {
         //  navigation.navigate('Preauth' ,{screen: "OnbordingScreen"})
       })
       .catch(function (error) {
+        console.log("####",error);
         //  setErrortext(responseJson?.data?.error);
         // Toast.show('Somthing Went Wrong Scan Again', Toast.LONG, {
         //   backgroundColor: 'blue',
@@ -112,6 +124,28 @@ const Settingscreen = () => {
         break;
     }
   };
+
+  const handletouch = (touch) => {
+    console.log("$$$", touch);
+    if (touch === true) {
+      AsyncStorage.setItem("fingerlogin", "true")
+      setFingermodal(true)
+      setIsTouch(true)
+      setTimeout(() => {
+        setFingermodal(false)
+      }, 2000)
+
+    } else {
+      AsyncStorage.setItem("fingerlogin", "false")
+      setIsTouch(false)
+
+      setFingermodal(true)
+
+      setTimeout(() => {
+        setFingermodal(false)
+      }, 2000)
+    }
+  }
   return (
     <Theambackground
       title="Settings"
@@ -135,12 +169,12 @@ const Settingscreen = () => {
               }}>
               <View
                 style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-               
+
                 <PoppinsText title={item.title} textstyle={styles.title} />
                 {item.title == 'Email Addresses' && (
                   <TouchableOpacity
                     onPress={() => navigation.navigate('Postauth', { screen: 'EmailAddress' })}>
-                   
+
                     <Image source={IMG.PLUS} style={{ width: 20, height: 20 }} />
                   </TouchableOpacity>
                 )}
@@ -164,25 +198,26 @@ const Settingscreen = () => {
                       borderBottomColor: COLOR.GRAY[200],
                     }}>
                     {sub.stitle == 'RECOVER CREDENTIALS' ? (
-             
-                      <PoppinsText title={sub.stitle} textstyle={styles.subtitle} viewStyle={{width :"100%" }}/>
+
+                      <PoppinsText title={sub.stitle} textstyle={styles.subtitle} viewStyle={{ width: "100%" }} />
                     ) : (
-                      
-                       <PoppinsText title={sub.stitle} textstyle={{...styles.subtitle , 
-                               color:
-                            item.title == 'About ceal' ? COLOR.PRIMARY : COLOR.BLACK[100]
-                             
-                    }} />
+
+                      <PoppinsText title={sub.stitle} textstyle={{
+                        ...styles.subtitle,
+                        color:
+                          item.title == 'About ceal' ? COLOR.PRIMARY : COLOR.BLACK[100]
+
+                      }} />
                     )}
 
                     {sub.stitle == 'Touch ID' ? (
                       <Switch
                         trackColor={{ false: '#767577', true: 'red' }}
                         thumbColor={isTouch === true ? '#f5dd4b' : '#f4f3f4'}
-     
+
 
                         ios_backgroundColor="#3e3e3e"
-                        onValueChange={touch => setIsTouch(touch)}
+                        onValueChange={touch => handletouch(touch)}
                         value={isTouch}
                       />
                     ) : (
@@ -216,7 +251,17 @@ const Settingscreen = () => {
             </View>
           );
         })}
+
+        <Modal transparent={true} visible={fingermodal} style={{ height: "100%", paddingTop: "40%", width: "100%", justifyContent: "center", alignItems: "center" }}>
+          <View style={{ padding: 15, marginTop: "100%", backgroundColor: "white", width: "90%", alignSelf: "center" }}>
+            <Text style={{ fontSize: 20, fontWeight: "bold", color: "black" }}>Biomatric Login</Text>
+
+            <Text style={{ fontSize: 15, marginTop: 15, fontWeight: "500", color: "black" }}>{isTouch ? "Now you able to login with your biomatric (FingerPrint)" : "Your biomatric login disapiar"}</Text>
+          </View>
+        </Modal>
       </View>
+
+
 
       <BottomSheet isVisible={sheet}>
         <View style={{ flex: 1 }} onPress={() => setSheet(false)}>
@@ -293,6 +338,9 @@ const Settingscreen = () => {
           </View>
         </View>
       </BottomSheet>
+
+
+
     </Theambackground>
   );
 };
@@ -305,7 +353,7 @@ export const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700"
   },
-  subtitle : {
-textAlign:"center",width:"100%"
+  subtitle: {
+    textAlign: "center", width: "100%"
   }
 })

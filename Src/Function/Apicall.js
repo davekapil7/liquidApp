@@ -327,7 +327,7 @@ export const otplogin = async (email, dispatch) => {
   }
 }
 
-export const passwordlogin = async (email, password, dispatch) => {
+export const passwordlogin = async (email, password,fingerauth, dispatch) => {
 
   if (email.length > 0) {
     let dataToSend = {
@@ -341,9 +341,32 @@ export const passwordlogin = async (email, password, dispatch) => {
         console.log(responseJson.status, 'ressss', dataToSend);
 
         // If server response message same as Data Matched
+        console.log("!!!!",responseJson.data?.data);
         if (responseJson.status === 200) {
-
+console.log("!!!HEllologin");
+         // handlebiomatric(dispatch, responseJson)
+         if(fingerauth === true){
           handlebiomatric(dispatch, responseJson)
+         }else{
+
+        
+         dispatch({
+          type: "ADD_PROFILE",
+          payload: responseJson.data?.user
+        })
+        AsyncStorage.setItem('login', 'true');
+  
+        AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
+  
+        AsyncStorage.setItem(
+          'isIamSmartCreated',
+          JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated),
+        );
+        dispatch({
+          type: "SET_LOGIN",
+          payload: true
+        })
+      }
 
         } else {
           console.log('Please check your email id');
@@ -383,7 +406,7 @@ export const passwordlogin = async (email, password, dispatch) => {
   }
 }
 
-export const loginotp = async (otp, dispatch, cardlength) => {
+export const loginotp = async (otp,fingerauth, dispatch, cardlength) => {
 
   let dataToSend = { otp: otp };
 
@@ -393,7 +416,30 @@ export const loginotp = async (otp, dispatch, cardlength) => {
       console.log('Verified user', responseJson.data, 'responce');
       if (responseJson?.data?.data === 'Authorized') {
 
-        handlebiomatric(dispatch, responseJson);
+       // handlebiomatric(dispatch, responseJson);
+       console.log("@@@@@@@@@@@@@@@", fingerauth);
+if(fingerauth === true){
+handlebiomatric(dispatch , responseJson)
+}else{
+
+
+       dispatch({
+        type: "ADD_PROFILE",
+        payload: responseJson.data?.user
+      })
+      AsyncStorage.setItem('login', 'true');
+
+      AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
+
+      AsyncStorage.setItem(
+        'isIamSmartCreated',
+        JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated),
+      );
+      dispatch({
+        type: "SET_LOGIN",
+        payload: true
+      })
+    }
 
         if (cardlength === 0) {
           getCarddata(dispatch);
@@ -569,6 +615,14 @@ export const handlebiomatric = async (dispatch, responseJson) => {
   const rnBiometrics = new ReactNativeBiometrics({
     allowDeviceCredentials: true,
   });
+
+  const senceravailable = (await rnBiometrics.isSensorAvailable()).available
+
+
+  if(senceravailable === true){
+
+
+  console.log("!!!!!!!!!!",responseJson.data);
   if (Platform.OS === "android") {
 
 
@@ -704,4 +758,26 @@ export const handlebiomatric = async (dispatch, responseJson) => {
         });
     }
   }
+
+}else{
+
+  dispatch({
+    type: "ADD_PROFILE",
+    payload: responseJson.data?.user
+  })
+  AsyncStorage.setItem('login', 'true');
+
+  AsyncStorage.setItem('loginExpiry', responseJson.data.expires);
+
+  AsyncStorage.setItem(
+    'isIamSmartCreated',
+    JSON.stringify(responseJson.data.user.isIamSmartCredentialCreated),
+  );
+  dispatch({
+    type: "SET_LOGIN",
+    payload: true
+  })
+
+
+}
 };
