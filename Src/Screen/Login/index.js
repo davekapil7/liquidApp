@@ -386,6 +386,7 @@ const LoginScreen = () => {
                 <View style={{ width: '100%' }}>
                   <TextInput
                     placeholder="Email"
+                    autoCapitalize='none'
                     placeholderTextColor={COLOR.GRAY[500]}
                     textContentType='emailAddress'
                     style={{ ...styles.textinputView, width: '100%' }}
@@ -457,7 +458,7 @@ const LoginScreen = () => {
                   <TextInput
                     placeholder="Password"
                     placeholderTextColor={COLOR.GRAY[500]}
-
+                    autoCapitalize='none'
                     style={{ ...styles.textinputView, width: '100%' }}
                     onChangeText={text => setPassword(text)}
                     // onEndEditing={() => validation("password")}
@@ -473,7 +474,7 @@ const LoginScreen = () => {
                   <TextInput
                     placeholder="Confirm Password"
                     placeholderTextColor={COLOR.GRAY[500]}
-
+                    autoCapitalize='none'
                     style={{ ...styles.textinputView, width: '100%' }}
                     onChangeText={text => setConfirmpas(text)}
                     onEndEditing={() => validation("confirmpass")}
@@ -516,6 +517,7 @@ const LoginScreen = () => {
               <View style={{ width: '100%' }}>
                 <TextInput
                   placeholder={'Enter Email'}
+                  autoCapitalize='none'
                   placeholderTextColor={COLOR.GRAY[500]}
                   style={styles.textinputView}
                   textContentType='emailAddress'
@@ -530,6 +532,7 @@ const LoginScreen = () => {
 
                 <TextInput
                   placeholder={'Password'}
+                  autoCapitalize='none'
                   placeholderTextColor={COLOR.GRAY[500]}
                   style={styles.textinputView}
                   onChangeText={text => setPassword(text)}
