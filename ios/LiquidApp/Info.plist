@@ -40,7 +40,9 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string>$(PRODUCT_NAME) requires FaceID access to allows you quick and secure access.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We access photo library for personalized content creation and sharing securely.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

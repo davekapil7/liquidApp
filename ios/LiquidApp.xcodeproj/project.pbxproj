@@ -578,7 +578,7 @@
 				CODE_SIGN_ENTITLEMENTS = LiquidApp/LiquidApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 9GNG392969;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = LiquidApp/Info.plist;
@@ -587,7 +587,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -611,7 +611,7 @@
 				CODE_SIGN_ENTITLEMENTS = LiquidApp/LiquidApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 9GNG392969;
 				INFOPLIST_FILE = LiquidApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Liquid Wallet";
@@ -619,7 +619,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
